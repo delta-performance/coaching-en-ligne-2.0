@@ -311,7 +311,7 @@ select.inp option{background:var(--surface);}
         </div>
 
         <!-- CYCLES -->
-        <div id="sub-cycles" class="hidden" style="display:none;flex-direction:column;gap:1rem">
+        <div id="sub-cycles" class="hidden" style="flex-direction:column;gap:1rem">
           <div class="card" style="padding:2rem;border-color:rgba(240,165,0,.1)">
             <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">AJOUTER UN CYCLE</h4>
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.875rem;margin-bottom:1rem">
@@ -330,102 +330,43 @@ select.inp option{background:var(--surface);}
         <!-- EDITOR -->
         <div id="sub-editor" class="hidden card" style="padding:2rem">
           <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">ÉDITEUR DE SÉANCE</h4>
-          <!-- Selectors -->
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem;margin-bottom:1rem">
-            <select id="ed-cycle" class="inp" onchange="syncEditor()"></select>
-            <select id="ed-sess" class="inp" onchange="syncEditor()">
+          <!-- Selectors + mode -->
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem">
+            <select id="ed-cycle" class="inp" style="width:auto" onchange="syncEditor()"></select>
+            <select id="ed-sess" class="inp" style="width:auto" onchange="syncEditor()">
               <option value="A">Séance A</option><option value="B">Séance B</option><option value="C">Séance C</option><option value="D">Séance D</option>
             </select>
-            <select id="ed-exidx" class="inp" onchange="syncEditorEx()"></select>
-          </div>
-          <!-- Mode toggle -->
-          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;padding:1rem;background:var(--surface);border-radius:1rem;border:1px solid var(--border)">
-            <span style="font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:900;font-style:italic;text-transform:uppercase;color:var(--muted)">Mode séance :</span>
-            <button id="mode-circuit-btn" onclick="setSessMode('circuit')" style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.7rem;text-transform:uppercase;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)">⟳ Circuit</button>
-            <button id="mode-classic-btn" onclick="setSessMode('classic')" style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.7rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">≡ Classique</button>
-          </div>
-          <!-- Action buttons -->
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem">
-            <button class="btn btn-ghost btn-sm" onclick="addEx()">+ Ajouter ex.</button>
-            <button class="btn btn-ghost btn-sm" onclick="dupEx()">⧉ Dupliquer ex.</button>
+            <button id="mode-circuit-btn" onclick="setSessMode('circuit')" style="padding:.5rem 1rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)">⟳ Circuit</button>
+            <button id="mode-classic-btn" onclick="setSessMode('classic')" style="padding:.5rem 1rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">≡ Classique</button>
             <button class="btn btn-ghost btn-sm" onclick="dupCycle()">⧉ Dupliquer cycle</button>
-            <button class="btn btn-ghost btn-sm" onclick="toggleSuperset()" id="btn-superset" style="color:var(--gold);border-color:rgba(240,165,0,.3)">⇄ Superset</button>
-            <button class="btn btn-danger btn-sm" onclick="delEx()">🗑 Supp. ex.</button>
+            <button class="btn btn-ghost btn-sm" onclick="saveFullSession()" style="background:var(--gold);color:#1a0900;border-color:var(--gold)">💾 SAUVEGARDER</button>
           </div>
-          <div class="grid-2" style="gap:1.5rem">
-            <!-- Left: session params + exercise form -->
-            <div style="display:flex;flex-direction:column;gap:1rem">
-              <!-- Circuit params -->
-              <div id="circuit-params" style="background:var(--surface);padding:1.25rem;border-radius:1.25rem;border:1px solid var(--border)">
-                <p style="font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:rgba(240,165,0,.7);margin-bottom:1rem">Params circuit</p>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem">
-                  <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.4rem">Repos entre tours</label><input type="text" id="ed-rest" class="inp" placeholder="45s" oninput="liveRecap()"></div>
-                  <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.4rem">Nb tours</label><input type="number" id="ed-tours" class="inp" placeholder="3" oninput="liveRecap()"></div>
-                </div>
-                <button class="btn btn-ghost" style="width:100%;font-size:.7rem;padding:.6rem" onclick="saveSessParams()">SAUVEGARDER SÉANCE</button>
-              </div>
-              <!-- Exercise form -->
-              <div style="background:rgba(255,255,255,.02);padding:1.25rem;border-radius:1.25rem;border:1px solid var(--border);display:flex;flex-direction:column;gap:.75rem">
-                <p style="font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)">Exercice sélectionné</p>
-                <!-- DB search -->
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem">
-                  <div>
-                    <label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Zone</label>
-                    <select id="db-filter-zone" class="inp" style="font-size:.75rem;padding:.5rem" onchange="updateDbFilters()"><option value="">Toutes</option></select>
-                  </div>
-                  <div>
-                    <label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Pattern</label>
-                    <select id="db-filter-pattern" class="inp" style="font-size:.75rem;padding:.5rem" onchange="updateDbFilters()"><option value="">Tous</option></select>
-                  </div>
-                  <div>
-                    <label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Exercice</label>
-                    <select id="db-filter-ex" class="inp" style="font-size:.75rem;padding:.5rem" onchange="pickFromDb()"><option value="">Choisir...</option></select>
-                  </div>
-                </div>
-                <input type="text" id="ed-name" class="inp" placeholder="Nom de l'exercice" oninput="liveRecap()">
-                <textarea id="ed-desc" class="inp" rows="2" placeholder="Consignes..." oninput="liveRecap()"></textarea>
-                <input type="text" id="ed-video" class="inp" placeholder="URL vidéo">
-                <!-- Circuit-only fields -->
-                <div id="ed-circuit-fields" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
-                  <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.4rem">Tempo</label><input type="text" id="ed-tst" class="inp" placeholder="20s" oninput="liveRecap()"></div>
-                  <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.4rem">Volume/Reps</label><input type="text" id="ed-reps" class="inp" placeholder="10-12" oninput="liveRecap()"></div>
-                </div>
-                <!-- Classic-only fields -->
-                <div id="ed-classic-fields" class="hidden" style="display:none;flex-direction:column;gap:.75rem">
-                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem">
-                    <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.4rem">Reps</label><input type="text" id="ed-reps-c" class="inp" placeholder="10-12" oninput="liveRecap()"></div>
-                    <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.4rem">Tempo</label><input type="text" id="ed-tst-c" class="inp" placeholder="2-0-2" oninput="liveRecap()"></div>
-                    <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.4rem">Séries</label><input type="number" id="ed-sets" class="inp" placeholder="4" oninput="liveRecap()"></div>
-                  </div>
-                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem">
-                    <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.4rem">Récup série</label><input type="text" id="ed-rest-set" class="inp" placeholder="90s" oninput="liveRecap()"></div>
-                    <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.4rem">Récup exo</label><input type="text" id="ed-rest-ex" class="inp" placeholder="120s" oninput="liveRecap()"></div>
-                    <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.4rem">RPE cible</label><input type="text" id="ed-rpe-target" class="inp" placeholder="7-8" oninput="liveRecap()"></div>
-                  </div>
-                </div>
-                <!-- Superset toggle indicator -->
-                <div id="superset-indicator" class="hidden" style="background:rgba(240,165,0,.08);border:1px dashed rgba(240,165,0,.3);border-radius:.75rem;padding:.6rem;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;color:var(--gold)">⇄ Superset avec exercice suivant</div>
-                <button class="btn btn-gold" style="width:100%;padding:.75rem;font-size:.8rem" onclick="saveEx()">METTRE À JOUR</button>
-              </div>
+          <!-- Session-level params -->
+          <div id="ed-sess-params" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem;padding:1rem;background:var(--surface);border-radius:1rem;border:1px solid var(--border);align-items:flex-end">
+            <div id="ed-circuit-global" style="display:flex;gap:.75rem;flex-wrap:wrap">
+              <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Repos entre tours</label><input type="text" id="ed-rest" class="inp" style="width:110px" placeholder="45s"></div>
+              <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Nb de tours</label><input type="number" id="ed-tours" class="inp" style="width:80px" placeholder="3"></div>
             </div>
-            <!-- Right: recap + copy -->
-            <div style="display:flex;flex-direction:column;gap:1rem">
-              <div style="background:var(--surface);padding:1.25rem;border-radius:1.25rem;border:1px solid var(--border)">
-                <p style="font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:rgba(240,165,0,.7);margin-bottom:1rem">Récap séance</p>
-                <div id="editor-recap"></div>
-              </div>
-              <div style="background:rgba(255,255,255,.02);padding:1.25rem;border-radius:1.25rem;border:1px solid var(--border)">
-                <p style="font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Copier vers</p>
-                <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
-                  <button id="cm-ex"   onclick="setCopyMode('ex')"   style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.65rem;text-transform:uppercase;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)">Exercice</button>
-                  <button id="cm-sess" onclick="setCopyMode('sess')" style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.65rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Séance</button>
-                  <button id="cm-cyc"  onclick="setCopyMode('cyc')"  style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.65rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Cycle</button>
-                </div>
-                <p id="copy-desc" style="font-size:.65rem;color:var(--muted);font-style:italic;margin-bottom:.75rem">Copie l'exercice sélectionné</p>
-                <div id="copy-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.75rem"></div>
-                <button class="btn btn-ghost" style="width:100%;padding:.75rem;font-size:.75rem" onclick="doCopy()">COPIER VERS SÉLECTION</button>
-              </div>
+            <div style="flex:1;min-width:200px">
+              <label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Commentaire séance</label>
+              <input type="text" id="ed-sess-comment" class="inp" placeholder="Notes générales sur la séance...">
             </div>
+          </div>
+          <!-- Exercises list (full session view) -->
+          <div id="ed-exos-list" style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem"></div>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
+            <button class="btn btn-ghost btn-sm" onclick="addExEditor()">+ Ajouter un exercice</button>
+          </div>
+          <!-- Copy section -->
+          <div style="background:rgba(255,255,255,.02);padding:1.25rem;border-radius:1.25rem;border:1px solid var(--border)">
+            <p style="font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Copier vers d'autres cycles</p>
+            <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
+              <button id="cm-sess" onclick="setCopyMode('sess')" style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.65rem;text-transform:uppercase;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)">Séance</button>
+              <button id="cm-cyc"  onclick="setCopyMode('cyc')"  style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.65rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Cycle complet</button>
+            </div>
+            <p id="copy-desc" style="font-size:.65rem;color:var(--muted);font-style:italic;margin-bottom:.75rem">Copie la séance sélectionnée</p>
+            <div id="copy-grid" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
+            <button class="btn btn-ghost" style="width:100%;padding:.75rem;font-size:.75rem" onclick="doCopy()">COPIER VERS SÉLECTION</button>
           </div>
         </div>
 
@@ -734,7 +675,7 @@ async function loadClientData(clientId){
     const progDoc=await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',clientId,'data','program'));
     if(progDoc.exists()&&progDoc.data().cycles&&progDoc.data().cycles.length>0){
       clientProgram=progDoc.data().cycles;
-    }else{clientProgram=defaultProgram();await saveClientProgram(clientId);}
+    }else{clientProgram=[];await saveClientProgram(clientId);}
     const unlockDoc=await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',clientId,'data','unlock'));
     if(unlockDoc.exists()){
       clientUnlocked=new Set(unlockDoc.data().unlocked||[1,2,3,4]);
@@ -1151,7 +1092,7 @@ function switchCoachTab(tab){
 function switchSubTab(tab){
   ['logs','unlock','cycles','editor','visu'].forEach(t=>{
     const el=document.getElementById('sub-'+t);if(!el)return;
-    if(t==='cycles'){el.style.display=(t===tab)?'flex':'none';}
+    if(t==='cycles'){el.style.display=(t===tab)?'flex':'none';el.classList.toggle('hidden',t!==tab);}
     else{el.classList.toggle('hidden',t!==tab);}
     const btn=document.getElementById('stab-'+t);if(btn)btn.className='tab-pill '+(t===tab?'on':'off');
   });
@@ -1286,24 +1227,17 @@ async function deleteCycleBtn(id){
 }
 
 // ═══════════════════════════════════
-// EDITOR
+// EDITOR (session-based)
 // ═══════════════════════════════════
+// editorExos holds the working copy of exercises for current session
+let editorExos = [];
+let editorSessComment = '';
+
 function rebuildEditorSelects(){
   const ec=document.getElementById('ed-cycle');if(!ec)return;
   ec.innerHTML=clientProgram.map(c=>`<option value="${c.id}">C${c.id} – ${h(c.focus.substring(0,16))}</option>`).join('');
-  rebuildExSelect();
   const cg=document.getElementById('copy-grid');
-  if(cg)cg.innerHTML=clientProgram.map(c=>`<label style="display:flex;align-items:center;justify-content:center;padding:.5rem;border-radius:.75rem;border:1px solid var(--border);background:var(--surface);cursor:pointer;transition:all .2s" onclick="this.classList.toggle('copy-sel');this.style.borderColor=this.classList.contains('copy-sel')?'rgba(240,165,0,.5)':'var(--border)';this.style.background=this.classList.contains('copy-sel')?'rgba(240,165,0,.1)':'var(--surface)'"><input type="checkbox" value="${c.id}" style="display:none" class="copy-check"><span style="font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;color:var(--muted)">C${c.id}</span></label>`).join('');
-}
-
-function rebuildExSelect(sel=0){
-  const cId=parseInt(document.getElementById('ed-cycle')?.value);
-  const sess=document.getElementById('ed-sess')?.value||'A';
-  const c=clientProgram.find(x=>x.id===cId);if(!c)return;
-  const exs=getSessEx(c,sess);
-  const el=document.getElementById('ed-exidx');if(!el)return;
-  el.innerHTML=exs.map((_,i)=>`<option value="${i}">Ex ${i+1}: ${h(exs[i].name.substring(0,14))}</option>`).join('');
-  el.value=Math.min(sel,exs.length-1);
+  if(cg)cg.innerHTML=clientProgram.map(c=>`<label style="display:flex;align-items:center;justify-content:center;padding:.4rem .75rem;border-radius:.75rem;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;color:var(--muted);transition:all .2s" onclick="this.classList.toggle('copy-sel');this.style.borderColor=this.classList.contains('copy-sel')?'rgba(240,165,0,.5)':'var(--border)';this.style.color=this.classList.contains('copy-sel')?'var(--gold)':'var(--muted)';this.style.background=this.classList.contains('copy-sel')?'rgba(240,165,0,.1)':'var(--surface)'"><input type="checkbox" value="${c.id}" class="copy-check" style="display:none">C${c.id}</label>`).join('');
 }
 
 function syncEditor(){
@@ -1311,33 +1245,13 @@ function syncEditor(){
   const cId=parseInt(document.getElementById('ed-cycle').value);
   const sess=document.getElementById('ed-sess').value;
   const c=clientProgram.find(x=>x.id===cId);if(!c)return;
-  rebuildExSelect(parseInt(document.getElementById('ed-exidx').value)||0);
   const sp=getSessParams(c,sess);
-  document.getElementById('ed-rest').value=sp.rest||'';
+  document.getElementById('ed-rest').value=sp.rest||'45s';
   document.getElementById('ed-tours').value=sp.tours||'3';
+  document.getElementById('ed-sess-comment').value=sp.comment||'';
   setSessMode(sp.mode||'circuit',false);
-  syncEditorEx();
-}
-
-function syncEditorEx(){
-  const cId=parseInt(document.getElementById('ed-cycle').value);
-  const sess=document.getElementById('ed-sess').value;
-  const idx=parseInt(document.getElementById('ed-exidx').value)||0;
-  const c=clientProgram.find(x=>x.id===cId);if(!c)return;
-  const ex=getSessEx(c,sess)[idx];if(!ex)return;
-  document.getElementById('ed-name').value=ex.name||'';
-  document.getElementById('ed-desc').value=ex.desc||'';
-  document.getElementById('ed-video').value=ex.video||'';
-  document.getElementById('ed-tst').value=ex.tst||'';
-  document.getElementById('ed-reps').value=ex.reps||'';
-  document.getElementById('ed-tst-c').value=ex.tst||'';
-  document.getElementById('ed-reps-c').value=ex.reps||'';
-  document.getElementById('ed-sets').value=ex.sets||'';
-  document.getElementById('ed-rest-set').value=ex.restSet||'';
-  document.getElementById('ed-rest-ex').value=ex.restEx||'';
-  document.getElementById('ed-rpe-target').value=ex.rpeTarget||'';
-  document.getElementById('superset-indicator').classList.toggle('hidden',!ex.superset);
-  liveRecap();
+  editorExos=JSON.parse(JSON.stringify(getSessEx(c,sess)));
+  renderEditorExos();
 }
 
 function setSessMode(mode,save=false){
@@ -1345,127 +1259,200 @@ function setSessMode(mode,save=false){
   const isCircuit=mode==='circuit';
   const cbtn=document.getElementById('mode-circuit-btn');
   const kbtn=document.getElementById('mode-classic-btn');
-  cbtn.style.borderColor=isCircuit?'rgba(240,165,0,.5)':'var(--border)';
-  cbtn.style.background=isCircuit?'rgba(240,165,0,.15)':'var(--surface)';
-  cbtn.style.color=isCircuit?'var(--gold)':'var(--muted)';
-  kbtn.style.borderColor=!isCircuit?'rgba(59,130,246,.5)':'var(--border)';
-  kbtn.style.background=!isCircuit?'rgba(59,130,246,.15)':'var(--surface)';
-  kbtn.style.color=!isCircuit?'#60a5fa':'var(--muted)';
-  document.getElementById('circuit-params').style.display=isCircuit?'block':'none';
-  document.getElementById('ed-circuit-fields').style.display=isCircuit?'grid':'none';
-  const cf=document.getElementById('ed-classic-fields');
-  cf.style.display=!isCircuit?'flex':'none';
+  if(cbtn){cbtn.style.borderColor=isCircuit?'rgba(240,165,0,.5)':'var(--border)';cbtn.style.background=isCircuit?'rgba(240,165,0,.15)':'var(--surface)';cbtn.style.color=isCircuit?'var(--gold)':'var(--muted)';}
+  if(kbtn){kbtn.style.borderColor=!isCircuit?'rgba(59,130,246,.5)':'var(--border)';kbtn.style.background=!isCircuit?'rgba(59,130,246,.15)':'var(--surface)';kbtn.style.color=!isCircuit?'#60a5fa':'var(--muted)';}
+  const gp=document.getElementById('ed-circuit-global');
+  if(gp)gp.style.display=isCircuit?'flex':'none';
   if(save){
     const cId=parseInt(document.getElementById('ed-cycle').value);
     const sess=document.getElementById('ed-sess').value;
     const idx=clientProgram.findIndex(c=>c.id===cId);
-    if(idx!==-1){const s=clientProgram[idx].sessions[sess];if(!Array.isArray(s))s.mode=mode;saveClientProgram().catch(()=>{});}
+    if(idx!==-1){const s=clientProgram[idx].sessions[sess];if(s&&!Array.isArray(s))s.mode=mode;}
   }
-  liveRecap();
+  renderEditorExos();
 }
 
-function liveRecap(){
-  const cId=parseInt(document.getElementById('ed-cycle')?.value);
-  const sess=document.getElementById('ed-sess')?.value;
-  const idx=parseInt(document.getElementById('ed-exidx')?.value)||0;
-  const c=clientProgram.find(x=>x.id===cId);if(!c)return;
-  const exs=JSON.parse(JSON.stringify(getSessEx(c,sess)));
-  const sp=getSessParams(c,sess);
-  const rest=document.getElementById('ed-rest')?.value||sp.rest;
-  const tours=document.getElementById('ed-tours')?.value||sp.tours;
+function renderEditorExos(){
+  const el=document.getElementById('ed-exos-list');if(!el)return;
   const isCircuit=currentSessMode==='circuit';
-  if(exs[idx]){
-    exs[idx].name=document.getElementById('ed-name')?.value||exs[idx].name;
-    exs[idx].tst=(isCircuit?document.getElementById('ed-tst'):document.getElementById('ed-tst-c'))?.value||exs[idx].tst;
-    exs[idx].reps=(isCircuit?document.getElementById('ed-reps'):document.getElementById('ed-reps-c'))?.value||exs[idx].reps;
+  const colors={A:'#3b82f6',B:'#10b981',C:'#f97316',D:'#8b5cf6'};
+  const sess=document.getElementById('ed-sess')?.value||'A';
+  const col=colors[sess]||'#f0a500';
+  
+  if(!editorExos.length){
+    el.innerHTML=`<div style="padding:2rem;text-align:center;color:var(--muted);font-style:italic;border:1px dashed var(--border);border-radius:1rem">Aucun exercice. Cliquez "+ Ajouter un exercice".</div>`;
+    return;
   }
-  const tmp=JSON.parse(JSON.stringify(c));
-  tmp.sessions[sess]={rest,tours,mode:currentSessMode,exercises:exs};
-  renderRecap(tmp,sess);
-}
 
-function renderRecap(c,sess){
-  const el=document.getElementById('editor-recap');if(!el)return;
-  const sp=getSessParams(c,sess);const exs=getSessEx(c,sess);
-  const colors={A:var_blue=>'#3b82f6',B:'#10b981',C:'#f97316',D:'#8b5cf6'};
-  const col={A:'#3b82f6',B:'#10b981',C:'#f97316',D:'#8b5cf6'}[sess]||'#f0a500';
-  const isCircuit=sp.mode!=='classic';
-  let html=`<div style="display:flex;gap:.5rem;margin-bottom:.75rem">`;
-  if(isCircuit){
-    html+=`<div style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:.75rem;padding:.6rem;text-align:center"><div style="font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.2rem">Repos</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:.875rem;font-weight:900">${sp.rest||'-'}</div></div>
-    <div style="flex:1;background:var(--bg);border:1px solid rgba(240,165,0,.2);border-radius:.75rem;padding:.6rem;text-align:center"><div style="font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.2rem">Tours</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:.875rem;font-weight:900;color:var(--gold)">${sp.tours||'3'}</div></div>`;
-  }else{
-    html+=`<div style="flex:1;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:.75rem;padding:.6rem;text-align:center"><div style="font-size:.55rem;color:#60a5fa;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.2rem">≡ Classique</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:.875rem;font-weight:900;color:#60a5fa">${exs.length} exo</div></div>`;
+  // Build HTML - handle supersets (group A+B)
+  let html='';let i=0;
+  while(i<editorExos.length){
+    const e=editorExos[i];
+    // Check if this is part of a superset (only in classic mode)
+    if(!isCircuit && e.superset && editorExos[i+1]){
+      // Superset: two exercises in one card
+      html+=supersetEditorCard(e,editorExos[i+1],i,col);
+      i+=2;
+    } else {
+      html+=singleExEditorCard(e,i,col,isCircuit);
+      i++;
+    }
   }
-  html+=`</div>`;
-  html+=exs.map((e,i)=>`<div style="display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;background:var(--bg);border-radius:.75rem;border:1px solid ${e.superset?'rgba(240,165,0,.2)':'var(--border)'};margin-bottom:.4rem">
-    <div style="width:1.5rem;height:1.5rem;border-radius:50%;background:${col}20;border:1px solid ${col}60;display:flex;align-items:center;justify-content:center;flex-shrink:0"><span style="font-size:.6rem;font-weight:900;color:${col}">0${i+1}</span></div>
-    <div style="flex:1;min-width:0;font-size:.7rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${h(e.name||'—')}</div>
-    ${e.superset?`<span style="font-size:.55rem;color:var(--gold)">⇄</span>`:''}
-    ${isCircuit?`<span style="font-size:.6rem;font-weight:700;color:var(--muted);background:var(--surface);padding:.15rem .4rem;border-radius:.375rem;flex-shrink:0">${e.tst||'-'}</span><span style="font-size:.6rem;font-weight:700;color:${col};background:${col}18;padding:.15rem .4rem;border-radius:.375rem;flex-shrink:0">${e.reps||'-'}</span>`
-    :`${e.sets?`<span style="font-size:.6rem;font-weight:700;color:var(--muted);background:var(--surface);padding:.15rem .4rem;border-radius:.375rem;flex-shrink:0">${e.sets}x</span>`:''}${e.rpeTarget?`<span style="font-size:.6rem;font-weight:700;color:var(--gold);background:rgba(240,165,0,.1);padding:.15rem .4rem;border-radius:.375rem;flex-shrink:0">RPE${e.rpeTarget}</span>`:''}`}
-  </div>`).join('')+(exs.length===0?'<p style="color:var(--muted);font-size:.75rem;text-align:center;padding:1rem;font-style:italic">Aucun exercice</p>':'');
   el.innerHTML=html;
 }
 
-async function saveSessParams(){
+function dbSelectorsHTML(idx,prefix){
+  const zones=[...new Set(exerciseDb.map(e=>e.zone).filter(Boolean))].sort();
+  const zoneOpts='<option value="">Zone...</option>'+zones.map(z=>`<option value="${z}">${h(z)}</option>`).join('');
+  return `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-bottom:.5rem">
+    <select class="inp" style="font-size:.75rem;padding:.4rem" onchange="edUpdateZone(${idx},'${prefix}',this.value)"><optgroup label="Zone">${zoneOpts}</optgroup></select>
+    <select id="ed-pat-${prefix}-${idx}" class="inp" style="font-size:.75rem;padding:.4rem" onchange="edUpdatePattern(${idx},'${prefix}',this.value)"><option value="">Pattern...</option></select>
+    <select id="ed-exdb-${prefix}-${idx}" class="inp" style="font-size:.75rem;padding:.4rem" onchange="edPickEx(${idx},'${prefix}',this.value)"><option value="">Exercice...</option></select>
+  </div>`;
+}
+
+function singleExEditorCard(e,i,col,isCircuit){
+  const num=i+1;
+  return `<div style="background:var(--card);border:1px solid var(--border);border-radius:1.25rem;overflow:hidden" id="ex-card-${i}">
+    <div style="background:${col}22;border-bottom:1px solid ${col}33;padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem">
+      <span style="width:2rem;height:2rem;background:${col};color:#fff;border-radius:.5rem;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;flex-shrink:0">${num}</span>
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;font-style:italic;flex:1;color:${e.name?'var(--text)':'var(--muted)'}">${h(e.name||'Nouvel exercice')}</span>
+      <div style="display:flex;gap:.4rem;flex-shrink:0">
+        ${!isCircuit?`<button onclick="edMoveUp(${i})" class="btn btn-ghost btn-sm" style="padding:.25rem .5rem">↑</button><button onclick="edMoveDown(${i})" class="btn btn-ghost btn-sm" style="padding:.25rem .5rem">↓</button><button onclick="edAddSuperset(${i})" class="btn btn-ghost btn-sm" style="padding:.25rem .5rem;color:var(--gold);border-color:rgba(240,165,0,.3)">⇄ SS</button>`:`<button onclick="edMoveUp(${i})" class="btn btn-ghost btn-sm" style="padding:.25rem .5rem">↑</button><button onclick="edMoveDown(${i})" class="btn btn-ghost btn-sm" style="padding:.25rem .5rem">↓</button>`}
+        <button onclick="edRemoveEx(${i})" class="btn btn-danger btn-sm" style="padding:.25rem .5rem">🗑</button>
+      </div>
+    </div>
+    <div style="padding:1rem;display:flex;flex-direction:column;gap:.75rem">
+      ${dbSelectorsHTML(i,'s')}
+      <input type="text" class="inp" value="${h(e.name||'')}" placeholder="Nom exercice" oninput="editorExos[${i}].name=this.value">
+      ${isCircuit ? circuitExFields(e,i) : classicExFields(e,i)}
+      <input type="text" class="inp" value="${h(e.comment||'')}" placeholder="Commentaire sur cet exercice..." oninput="editorExos[${i}].comment=this.value" style="font-size:.8rem">
+    </div>
+  </div>`;
+}
+
+function supersetEditorCard(e1,e2,i,col){
+  const num=i+1;
+  return `<div style="border:1px solid rgba(240,165,0,.35);border-radius:1.25rem;overflow:hidden;background:rgba(240,165,0,.03)" id="ex-card-${i}">
+    <div style="background:rgba(240,165,0,.12);border-bottom:1px solid rgba(240,165,0,.25);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem">
+      <span style="background:var(--gold);color:#1a0900;padding:.25rem .75rem;border-radius:.5rem;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:900;font-style:italic;flex-shrink:0">⇄ SUPERSET ${num}</span>
+      <div style="display:flex;gap:.4rem;flex-shrink:0;margin-left:auto">
+        <button onclick="edMoveUp(${i})" class="btn btn-ghost btn-sm" style="padding:.25rem .5rem">↑</button>
+        <button onclick="edMoveDown(${i+1})" class="btn btn-ghost btn-sm" style="padding:.25rem .5rem">↓</button>
+        <button onclick="edBreakSuperset(${i})" class="btn btn-ghost btn-sm" style="padding:.25rem .5rem;color:#f87171;border-color:rgba(248,113,113,.3)">Casser SS</button>
+        <button onclick="edRemoveEx(${i})" class="btn btn-danger btn-sm" style="padding:.25rem .5rem">🗑 A</button>
+        <button onclick="edRemoveEx(${i+1})" class="btn btn-danger btn-sm" style="padding:.25rem .5rem">🗑 B</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+      <!-- Ex A -->
+      <div style="padding:1rem;border-right:1px solid rgba(240,165,0,.2);display:flex;flex-direction:column;gap:.6rem">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem">
+          <span style="width:1.75rem;height:1.75rem;background:var(--gold);color:#1a0900;border-radius:.5rem;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:900;flex-shrink:0">${num}A</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:900;font-style:italic;color:${e1.name?'var(--text)':'var(--muted)'}">${h(e1.name||'Exercice A')}</span>
+        </div>
+        ${dbSelectorsHTML(i,'ss')}
+        <input type="text" class="inp" value="${h(e1.name||'')}" placeholder="Nom exercice A" oninput="editorExos[${i}].name=this.value" style="font-size:.8rem">
+        ${classicExFields(e1,i,true)}
+        <input type="text" class="inp" value="${h(e1.comment||'')}" placeholder="Commentaire A..." oninput="editorExos[${i}].comment=this.value" style="font-size:.75rem">
+      </div>
+      <!-- Ex B -->
+      <div style="padding:1rem;display:flex;flex-direction:column;gap:.6rem">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem">
+          <span style="width:1.75rem;height:1.75rem;background:rgba(240,165,0,.3);color:var(--gold);border:1px solid rgba(240,165,0,.5);border-radius:.5rem;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:900;flex-shrink:0">${num}B</span>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:.85rem;font-weight:900;font-style:italic;color:${e2.name?'var(--text)':'var(--muted)'}">${h(e2.name||'Exercice B')}</span>
+        </div>
+        ${dbSelectorsHTML(i+1,'ss')}
+        <input type="text" class="inp" value="${h(e2.name||'')}" placeholder="Nom exercice B" oninput="editorExos[${i+1}].name=this.value" style="font-size:.8rem">
+        ${classicExFields(e2,i+1,true)}
+        <input type="text" class="inp" value="${h(e2.comment||'')}" placeholder="Commentaire B..." oninput="editorExos[${i+1}].comment=this.value" style="font-size:.75rem">
+      </div>
+    </div>
+  </div>`;
+}
+
+function circuitExFields(e,i){
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Répétitions</label><input type="text" class="inp" value="${h(e.reps||'')}" placeholder="10-12" oninput="editorExos[${i}].reps=this.value" style="font-size:.8rem"></div>
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Tempo</label><input type="text" class="inp" value="${h(e.tst||'')}" placeholder="20s" oninput="editorExos[${i}].tst=this.value" style="font-size:.8rem"></div>
+  </div>`;
+}
+
+function classicExFields(e,i,compact=false){
+  const grid=compact?'grid-template-columns:1fr 1fr':'grid-template-columns:1fr 1fr 1fr 1fr 1fr';
+  return `<div style="display:grid;${grid};gap:.5rem">
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Reps</label><input type="text" class="inp" value="${h(e.reps||'')}" placeholder="10-12" oninput="editorExos[${i}].reps=this.value" style="font-size:.8rem"></div>
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Tempo</label><input type="text" class="inp" value="${h(e.tst||'')}" placeholder="2-0-2" oninput="editorExos[${i}].tst=this.value" style="font-size:.8rem"></div>
+    ${!compact?`<div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Séries</label><input type="number" class="inp" value="${h(e.sets||'')}" placeholder="4" oninput="editorExos[${i}].sets=this.value" style="font-size:.8rem"></div>
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Récup série</label><input type="text" class="inp" value="${h(e.restSet||'')}" placeholder="90s" oninput="editorExos[${i}].restSet=this.value" style="font-size:.8rem"></div>
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">RPE cible</label><input type="text" class="inp" value="${h(e.rpeTarget||'')}" placeholder="7-8" oninput="editorExos[${i}].rpeTarget=this.value" style="font-size:.8rem"></div>`:''}
+  </div>
+  ${!compact?`<div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Récup après cet exercice</label><input type="text" class="inp" value="${h(e.restEx||'')}" placeholder="120s" oninput="editorExos[${i}].restEx=this.value" style="font-size:.8rem"></div>`:''}`;
+}
+
+// DB search per exercise
+function edUpdateZone(idx,prefix,zone){
+  const patterns=[...new Set(exerciseDb.filter(e=>!zone||e.zone===zone).map(e=>e.pattern).filter(Boolean))].sort();
+  const pEl=document.getElementById('ed-pat-'+prefix+'-'+idx);
+  if(pEl)pEl.innerHTML='<option value="">Pattern...</option>'+patterns.map(p=>`<option value="${p}">${h(p)}</option>`).join('');
+  const eEl=document.getElementById('ed-exdb-'+prefix+'-'+idx);
+  const exs=exerciseDb.filter(e=>!zone||e.zone===zone);
+  if(eEl)eEl.innerHTML='<option value="">Exercice...</option>'+exs.map(e=>`<option value="${e.id}">${h(e.name)}</option>`).join('');
+}
+
+function edUpdatePattern(idx,prefix,pattern){
+  const zEl=document.querySelector(`#ed-exos-list #ex-card-${Math.min(idx,idx)} select`);
+  const zone=zEl?zEl.value:'';
+  const exs=exerciseDb.filter(e=>(!zone||e.zone===zone)&&(!pattern||e.pattern===pattern));
+  const eEl=document.getElementById('ed-exdb-'+prefix+'-'+idx);
+  if(eEl)eEl.innerHTML='<option value="">Exercice...</option>'+exs.map(e=>`<option value="${e.id}">${h(e.name)}</option>`).join('');
+}
+
+function edPickEx(idx,prefix,exId){
+  if(!exId)return;
+  const ex=exerciseDb.find(e=>e.id===exId);if(!ex||!editorExos[idx])return;
+  editorExos[idx].name=ex.name;
+  editorExos[idx].desc=ex.desc||'';
+  editorExos[idx].video=ex.video||'';
+  renderEditorExos();
+  toast(ex.name+' chargé','i');
+}
+
+function edMoveUp(i){if(i<=0)return;[editorExos[i-1],editorExos[i]]=[editorExos[i],editorExos[i-1]];renderEditorExos();}
+function edMoveDown(i){if(i>=editorExos.length-1)return;[editorExos[i],editorExos[i+1]]=[editorExos[i+1],editorExos[i]];renderEditorExos();}
+function edRemoveEx(i){if(editorExos.length<=1){toast('Au moins 1 exercice requis','w');return;}editorExos.splice(i,1);renderEditorExos();}
+
+function edAddSuperset(i){
+  // Mark exercise i as superset start, insert blank after if not already
+  if(editorExos[i+1]?.superset===undefined||!editorExos[i]){return;}
+  editorExos[i].superset=true;
+  if(!editorExos[i+1]||editorExos[i+1].superset){
+    editorExos.splice(i+1,0,{name:'',desc:'',video:'',reps:'',tst:'',sets:'',restSet:'',restEx:'',rpeTarget:'',comment:'',superset:false});
+  }
+  renderEditorExos();toast('Superset activé','i');
+}
+
+function edBreakSuperset(i){
+  if(editorExos[i])editorExos[i].superset=false;
+  renderEditorExos();toast('Superset cassé','i');
+}
+
+function addExEditor(){
+  editorExos.push({name:'',desc:'',video:'',reps:'',tst:'',sets:'',restSet:'',restEx:'',rpeTarget:'',comment:'',superset:false});
+  renderEditorExos();
+  // Scroll to new exercise
+  setTimeout(()=>{const el=document.getElementById('ed-exos-list');if(el)el.lastElementChild?.scrollIntoView({behavior:'smooth',block:'nearest'});},100);
+}
+
+async function saveFullSession(){
   const cId=parseInt(document.getElementById('ed-cycle').value);
   const sess=document.getElementById('ed-sess').value;
   const idx=clientProgram.findIndex(c=>c.id===cId);if(idx===-1)return;
   const rest=document.getElementById('ed-rest').value.trim()||'45s';
   const tours=document.getElementById('ed-tours').value.trim()||'3';
-  const s=clientProgram[idx].sessions[sess];
-  const exs=Array.isArray(s)?s:(s.exercises||[]);
-  clientProgram[idx].sessions[sess]={rest,tours,mode:currentSessMode,exercises:exs};
-  try{await saveClientProgram();toast('Séance sauvegardée','s');}catch(e){toast('Erreur','e');}
-}
-
-async function saveEx(){
-  const cId=parseInt(document.getElementById('ed-cycle').value);
-  const sess=document.getElementById('ed-sess').value;
-  const idx=parseInt(document.getElementById('ed-exidx').value);
-  const cidx=clientProgram.findIndex(c=>c.id===cId);if(cidx===-1)return;
-  const s=clientProgram[cidx].sessions[sess];
-  const exs=Array.isArray(s)?s:(s.exercises||[]);
-  const isCircuit=currentSessMode==='circuit';
-  exs[idx]={
-    name:document.getElementById('ed-name').value,
-    desc:document.getElementById('ed-desc').value,
-    video:document.getElementById('ed-video').value,
-    tst:isCircuit?document.getElementById('ed-tst').value:document.getElementById('ed-tst-c').value,
-    reps:isCircuit?document.getElementById('ed-reps').value:document.getElementById('ed-reps-c').value,
-    sets:document.getElementById('ed-sets').value,
-    restSet:document.getElementById('ed-rest-set').value,
-    restEx:document.getElementById('ed-rest-ex').value,
-    rpeTarget:document.getElementById('ed-rpe-target').value,
-    superset:exs[idx]?.superset||false
-  };
-  if(!Array.isArray(s))clientProgram[cidx].sessions[sess].exercises=exs;
-  try{await saveClientProgram();rebuildExSelect(idx);toast('Exercice mis à jour','s');}catch(e){toast('Erreur','e');}
-}
-
-async function addEx(){
-  const cId=parseInt(document.getElementById('ed-cycle').value);
-  const sess=document.getElementById('ed-sess').value;
-  const cidx=clientProgram.findIndex(c=>c.id===cId);if(cidx===-1)return;
-  const s=clientProgram[cidx].sessions[sess];
-  const exs=Array.isArray(s)?s:(s.exercises||[]);
-  exs.push({name:'Nouvel exercice',desc:'A definir',video:'',tst:'20s',reps:'10-12',sets:'',restSet:'',restEx:'',rpeTarget:'',superset:false});
-  if(!Array.isArray(s))clientProgram[cidx].sessions[sess].exercises=exs;
-  try{await saveClientProgram();rebuildExSelect(exs.length-1);syncEditorEx();toast('Exercice ajouté','s');}catch(e){toast('Erreur','e');}
-}
-
-async function dupEx(){
-  const cId=parseInt(document.getElementById('ed-cycle').value);
-  const sess=document.getElementById('ed-sess').value;
-  const idx=parseInt(document.getElementById('ed-exidx').value);
-  const cidx=clientProgram.findIndex(c=>c.id===cId);if(cidx===-1)return;
-  const s=clientProgram[cidx].sessions[sess];
-  const exs=Array.isArray(s)?s:(s.exercises||[]);
-  const copy=Object.assign({},exs[idx],{name:exs[idx].name+' (copie)'});
-  exs.splice(idx+1,0,copy);
-  if(!Array.isArray(s))clientProgram[cidx].sessions[sess].exercises=exs;
-  try{await saveClientProgram();rebuildExSelect(idx+1);syncEditorEx();toast('Dupliqué','s');}catch(e){toast('Erreur','e');}
+  const comment=document.getElementById('ed-sess-comment').value.trim();
+  clientProgram[idx].sessions[sess]={rest,tours,mode:currentSessMode,comment,exercises:JSON.parse(JSON.stringify(editorExos))};
+  try{await saveClientProgram();toast('Séance sauvegardée !','s');}catch(e){toast('Erreur sauvegarde','e');}
 }
 
 async function dupCycle(){
@@ -1478,62 +1465,51 @@ async function dupCycle(){
   try{await saveClientProgram();rebuildEditorSelects();renderClientGrid();renderCycleStatus();toast('Cycle dupliqué !','s');}catch(e){toast('Erreur','e');}
 }
 
-async function delEx(){
-  const cId=parseInt(document.getElementById('ed-cycle').value);
-  const sess=document.getElementById('ed-sess').value;
-  const idx=parseInt(document.getElementById('ed-exidx').value);
-  const cidx=clientProgram.findIndex(c=>c.id===cId);if(cidx===-1)return;
-  const s=clientProgram[cidx].sessions[sess];
-  const exs=Array.isArray(s)?s:(s.exercises||[]);
-  if(exs.length<=1){toast('Au moins 1 exercice requis','w');return;}
-  exs.splice(idx,1);
-  if(!Array.isArray(s))clientProgram[cidx].sessions[sess].exercises=exs;
-  try{await saveClientProgram();rebuildExSelect(Math.min(idx,exs.length-1));syncEditorEx();toast('Exercice supprimé','i');}catch(e){toast('Erreur','e');}
+// Legacy stubs (kept for copy etc)
+function syncEditorEx(){}
+function liveRecap(){}
+function saveSessParams(){saveFullSession();}
+async function saveEx(){saveFullSession();}
+async function addEx(){addExEditor();}
+async function dupEx(){
+  const i=editorExos.length-1;if(i<0)return;
+  const copy=Object.assign({},editorExos[i],{name:editorExos[i].name+' (copie)'});
+  editorExos.push(copy);renderEditorExos();
 }
+async function delEx(){if(editorExos.length>1){editorExos.pop();renderEditorExos();}else toast('Au moins 1 exercice','w');}
+async function toggleSuperset(){if(editorExos.length>=2){edAddSuperset(editorExos.length-1);}}
 
-async function toggleSuperset(){
-  const cId=parseInt(document.getElementById('ed-cycle').value);
-  const sess=document.getElementById('ed-sess').value;
-  const idx=parseInt(document.getElementById('ed-exidx').value);
-  const cidx=clientProgram.findIndex(c=>c.id===cId);if(cidx===-1)return;
-  const s=clientProgram[cidx].sessions[sess];
-  const exs=Array.isArray(s)?s:(s.exercises||[]);
-  exs[idx].superset=!exs[idx].superset;
-  if(!Array.isArray(s))clientProgram[cidx].sessions[sess].exercises=exs;
-  document.getElementById('superset-indicator').classList.toggle('hidden',!exs[idx].superset);
-  try{await saveClientProgram();toast(exs[idx].superset?'Superset activé':'Superset désactivé','i');}catch(e){toast('Erreur','e');}
-}
-
+// ═══════════════════════════════════
+// COPY FUNCTIONS
+// ═══════════════════════════════════
 function setCopyMode(m){
   copyMode=m;
-  const descs={ex:"Copie l'exercice sélectionné",sess:"Copie toute la séance",cyc:"Copie les 4 séances du cycle"};
-  ['ex','sess','cyc'].forEach(k=>{
+  const descs={sess:"Copie la seance selectionnee vers les cycles coches",cyc:"Copie les 4 seances du cycle vers les cycles coches"};
+  ['sess','cyc'].forEach(k=>{
     const btn=document.getElementById('cm-'+k);if(!btn)return;
     btn.style.borderColor=k===m?'rgba(240,165,0,.5)':'var(--border)';
     btn.style.background=k===m?'rgba(240,165,0,.15)':'var(--surface)';
     btn.style.color=k===m?'var(--gold)':'var(--muted)';
   });
-  document.getElementById('copy-desc').innerText=descs[m]||'';
+  const desc=document.getElementById('copy-desc');if(desc)desc.innerText=descs[m]||'';
 }
 
 async function doCopy(){
   const cId=parseInt(document.getElementById('ed-cycle').value);
   const sess=document.getElementById('ed-sess').value;
-  const idx=parseInt(document.getElementById('ed-exidx').value);
   const srcCidx=clientProgram.findIndex(c=>c.id===cId);
   const sel=Array.from(document.querySelectorAll('#copy-grid label.copy-sel .copy-check')).map(i=>parseInt(i.value));
-  if(!sel.length){toast('Sélectionnez au moins un cycle cible','w');return;}
-  if(copyMode==='ex'){
-    const src={name:document.getElementById('ed-name').value,desc:document.getElementById('ed-desc').value,video:document.getElementById('ed-video').value,tst:document.getElementById('ed-tst').value||'20s',reps:document.getElementById('ed-reps').value||'10-12',sets:'',restSet:'',restEx:'',rpeTarget:'',superset:false};
-    sel.forEach(tId=>{const ci=clientProgram.findIndex(c=>c.id===tId);if(ci===-1)return;const s=clientProgram[ci].sessions[sess];const ex=Array.isArray(s)?s:(s.exercises||[]);ex[idx]=Object.assign({},src);if(!Array.isArray(s))clientProgram[ci].sessions[sess].exercises=ex;});
-  }else if(copyMode==='sess'){
-    if(srcCidx===-1)return;const srcS=JSON.parse(JSON.stringify(clientProgram[srcCidx].sessions[sess]));
+  if(!sel.length){toast('Selectionnez au moins un cycle cible','w');return;}
+  if(copyMode==='sess'){
+    if(srcCidx===-1)return;
+    const srcS=JSON.parse(JSON.stringify(clientProgram[srcCidx].sessions[sess]));
     sel.forEach(tId=>{const ci=clientProgram.findIndex(c=>c.id===tId);if(ci===-1)return;clientProgram[ci].sessions[sess]=JSON.parse(JSON.stringify(srcS));});
   }else{
-    if(srcCidx===-1)return;const srcSess=JSON.parse(JSON.stringify(clientProgram[srcCidx].sessions));
+    if(srcCidx===-1)return;
+    const srcSess=JSON.parse(JSON.stringify(clientProgram[srcCidx].sessions));
     sel.forEach(tId=>{const ci=clientProgram.findIndex(c=>c.id===tId);if(ci===-1)return;clientProgram[ci].sessions=JSON.parse(JSON.stringify(srcSess));});
   }
-  try{await saveClientProgram();toast('Copié vers '+sel.length+' cycle(s) !','s');}catch(e){toast('Erreur','e');}
+  try{await saveClientProgram();toast('Copie vers '+sel.length+' cycle(s) effectuee !','s');}catch(e){toast('Erreur copie','e');}
 }
 
 // ═══════════════════════════════════
@@ -1572,11 +1548,25 @@ function populateEditorDbFilters(){
 // ═══════════════════════════════════
 // VISUALISATION
 // ═══════════════════════════════════
+let visuSelectedCycles = new Set();
+
 function populateVisuSelect(){
   const el=document.getElementById('visu-cycle-sel');if(!el)return;
   el.innerHTML=clientProgram.map(c=>`<option value="${c.id}">C${c.id} – ${h(c.focus)}</option>`).join('');
   const chk=document.getElementById('visu-ctrl-cycles-check');
-  if(chk)chk.innerHTML=clientProgram.map(c=>`<label style="display:flex;align-items:center;gap:.4rem;padding:.4rem .75rem;border-radius:.75rem;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;color:var(--muted)" onclick="this.classList.toggle('visu-sel');this.style.borderColor=this.classList.contains('visu-sel')?'rgba(240,165,0,.5)':'var(--border)';this.style.color=this.classList.contains('visu-sel')?'var(--gold)':'var(--muted)';renderVisu()"><input type="checkbox" value="${c.id}" class="visu-cycle-check" style="display:none">C${c.id}</label>`).join('');
+  if(!chk)return;
+  chk.innerHTML=clientProgram.map(c=>`<button onclick="toggleVisuCycle(${c.id},this)" style="padding:.4rem .875rem;border-radius:.75rem;border:1px solid var(--border);background:var(--surface);cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:900;font-style:italic;text-transform:uppercase;color:var(--muted);transition:all .2s">C${c.id} – ${h(c.focus.substring(0,12))}</button>`).join('');
+}
+
+function toggleVisuCycle(id, btn){
+  if(visuSelectedCycles.has(id)){
+    visuSelectedCycles.delete(id);
+    btn.style.borderColor='var(--border)';btn.style.background='var(--surface)';btn.style.color='var(--muted)';
+  } else {
+    visuSelectedCycles.add(id);
+    btn.style.borderColor='rgba(240,165,0,.5)';btn.style.background='rgba(240,165,0,.1)';btn.style.color='var(--gold)';
+  }
+  renderVisu();
 }
 
 function setVisuMode(m){
@@ -1610,10 +1600,11 @@ function renderVisu(){
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem">
       ${['A','B','C','D'].map(t=>{
         const sp=getSessParams(c,t);const exs=getSessEx(c,t);const col=colors[t];
-        return`<div class="card" style="overflow:hidden">
+        return`<div class="card" style="overflow:hidden;cursor:pointer;transition:box-shadow .2s" onmouseover="this.style.boxShadow='0 0 0 2px ${col}'" onmouseout="this.style.boxShadow='none'" onclick="visuOpenEditor(${c.id},'${t}')">
           <div style="background:${col};padding:1rem;display:flex;align-items:center;gap:.75rem">
             <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;font-style:italic;color:white">SÉANCE ${t}</span>
             <span class="badge" style="background:rgba(255,255,255,.2);color:white">${sp.mode==='classic'?'Classique':'Circuit'}</span>
+            <span style="margin-left:auto;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:700;font-style:italic;color:rgba(255,255,255,.6)">✏️ Cliquer pour modifier</span>
           </div>
           <div style="padding:1rem">
             ${sp.mode==='circuit'?`<div style="display:flex;gap:.5rem;margin-bottom:.75rem"><span class="badge" style="background:var(--surface);color:var(--muted);border:1px solid var(--border)">${sp.rest}</span><span class="badge" style="background:var(--surface);color:var(--gold);border:1px solid rgba(240,165,0,.2)">${sp.tours} tours</span></div>`:''}
@@ -1630,8 +1621,8 @@ function renderVisu(){
       }).join('')}
     </div>`;
   }else if(visuMode==='cross-sess'){
-    const selCycles=Array.from(document.querySelectorAll('.visu-cycle-check')).filter((_,i)=>document.querySelectorAll('#visu-ctrl-cycles-check label')[i]?.classList.contains('visu-sel')).map(c=>parseInt(c.value));
-    if(!selCycles.length){el.innerHTML='<p style="color:var(--muted);font-style:italic">Cochez des cycles ci-dessus.</p>';return;}
+    const selCycles=Array.from(visuSelectedCycles);
+    if(!selCycles.length){el.innerHTML='<p style="color:var(--muted);font-style:italic">Cliquez sur des cycles ci-dessus pour les sélectionner.</p>';return;}
     const col=colors[visuSess];
     el.innerHTML=`<h5 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">SÉANCE ${visuSess} — ${selCycles.length} cycle(s)</h5>
     <div style="display:flex;flex-direction:column;gap:1.25rem">
@@ -1653,8 +1644,8 @@ function renderVisu(){
       }).join('')}
     </div>`;
   }else{// all
-    const selCycles=Array.from(document.querySelectorAll('.visu-cycle-check')).filter((_,i)=>document.querySelectorAll('#visu-ctrl-cycles-check label')[i]?.classList.contains('visu-sel')).map(c=>parseInt(c.value));
-    if(!selCycles.length){el.innerHTML='<p style="color:var(--muted);font-style:italic">Cochez des cycles ci-dessus.</p>';return;}
+    const selCycles=Array.from(visuSelectedCycles);
+    if(!selCycles.length){el.innerHTML='<p style="color:var(--muted);font-style:italic">Cliquez sur des cycles ci-dessus pour les sélectionner.</p>';return;}
     el.innerHTML=selCycles.map(cId=>{
       const c=clientProgram.find(x=>x.id===cId);if(!c)return'';
       return`<div style="margin-bottom:2rem">
@@ -1681,6 +1672,21 @@ function renderVisu(){
         </div>
       </div>`;
     }).join('');
+  }
+}
+
+function visuOpenEditor(cycleId, sessType){
+  if(confirm('Modifier la séance '+sessType+' du cycle '+cycleId+' ?')){
+    switchSubTab('editor');
+    setTimeout(()=>{
+      const ec=document.getElementById('ed-cycle');
+      const es=document.getElementById('ed-sess');
+      if(ec&&es){
+        ec.value=cycleId;es.value=sessType;
+        syncEditor();
+        document.getElementById('sub-editor')?.scrollIntoView({behavior:'smooth',block:'start'});
+      }
+    },200);
   }
 }
 
@@ -1848,12 +1854,17 @@ Object.assign(window,{
   renderLogs,toggleAllLogs,updateBulk,bulkDelete,resetLog,
   toggleUnlock,saveUnlock,
   addCycle,renameCycle,toggleArchiveCycle,deleteCycleBtn,renderCycleStatus,
-  syncEditor,syncEditorEx,liveRecap,setSessMode,saveSessParams,saveEx,addEx,dupEx,dupCycle,delEx,toggleSuperset,
-  setCopyMode,doCopy,updateDbFilters,pickFromDb,
-  setVisuMode,setVisuSess,renderVisu,
+  syncEditor,syncEditorEx,liveRecap,setSessMode,saveSessParams,saveEx,saveFullSession,
+  addEx,addExEditor,dupEx,dupCycle,delEx,toggleSuperset,
+  edMoveUp,edMoveDown,edRemoveEx,edAddSuperset,edBreakSuperset,
+  edUpdateZone,edUpdatePattern,edPickEx,
+  renderEditorExos,
+  setCopyMode,doCopy,
+  setVisuMode,setVisuSess,renderVisu,toggleVisuCycle,visuOpenEditor,populateVisuSelect,
   createGroup,deleteGroup,renderGroupes,
   populateTransferSelects,loadTransferCycles,setTransferMode,setTransferSess,doTransfer,
-  renderDatabase,saveExerciseToDb,deleteExFromDb
+  renderDatabase,saveExerciseToDb,deleteExFromDb,
+  updateDbFilters,updateDbFilterDropdowns
 });
 </script>
 </body>
