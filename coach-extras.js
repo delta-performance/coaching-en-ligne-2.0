@@ -1,4 +1,33 @@
+// ── CLIENT TABS ───────────────────────────────────────
+function switchClientTab(tab) {
+  ['programme','documents'].forEach(t => {
+    const panel = document.getElementById('client-tab-'+t);
+    const btn = document.getElementById('ctab-'+t);
+    if (!panel || !btn) return;
+    if (t === tab) { panel.classList.remove('hidden'); btn.className = 'sub-tab-pill on'; }
+    else { panel.classList.add('hidden'); btn.className = 'sub-tab-pill off'; }
+  });
+  if (tab === 'documents') renderClientDocuments();
+}
+
 // ── THEME TOGGLE ─────────────────────────────────────
+
+function openDocument(e, url, type) {
+  if (e) { e.preventDefault(); e.stopPropagation(); }
+  if (!url) return;
+  if (url.startsWith('data:')) {
+    // base64 dataURL → Blob pour que le navigateur l'ouvre correctement
+    const mime = url.split(';')[0].split(':')[1] || 'application/octet-stream';
+    const b64 = url.split(',')[1];
+    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    const blob = new Blob([bytes], { type: mime });
+    const blobUrl = URL.createObjectURL(blob);
+    window.open(blobUrl, '_blank');
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+  } else {
+    window.open(url, '_blank');
+  }
+}
 
 (function initTheme() {
   const saved = localStorage.getItem('delta-theme');
@@ -217,7 +246,7 @@ function renderDocumentsTab() {
               ${doc.notes?`<p style="font-size:.7rem;color:var(--muted);margin-top:.4rem;font-style:italic">${h(doc.notes)}</p>`:''}
             </div>
             <div style="display:flex;flex-direction:column;gap:.4rem">
-              <a href="${h(doc.url)}" target="_blank" class="btn btn-gold btn-sm">Ouvrir</a>
+              <a href="${h(doc.url)}" target="_blank" class="btn btn-gold btn-sm" onclick="openDocument(event,'${h(doc.url)}','${doc.type||'pdf'}');return false">Ouvrir</a>
               <button onclick="deleteDocument(${i})" class="btn btn-danger btn-sm">Suppr.</button>
             </div>
           </div>
@@ -264,17 +293,20 @@ async function renderClientDocuments() {
   try {
     const doc = await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',cid,'data','documents'));
     const docs = (doc.exists && doc.data()?.docs) ? doc.data().docs : [];
-    if (!docs.length) { el.classList.add('hidden'); return; }
+    if (!docs.length) {
+      el.innerHTML = `<div class="card" style="padding:3rem;text-align:center;margin-top:1rem"><p style="color:var(--muted);font-style:italic">Aucun document partagé pour le moment.</p></div>`;
+      return;
+    }
     el.classList.remove('hidden');
     el.innerHTML = `<div style="margin-top:2rem">
       <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1rem">MES DOCUMENTS</h3>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem">
-        ${docs.map(d=>`<a href="${h(d.url)}" target="_blank" class="card-hover" style="padding:1.25rem;display:block;text-decoration:none">
+        ${docs.map(d=>`<div onclick="openDocument(event,'${h(d.url)}','${d.type||'pdf'}')" class="card-hover" style="padding:1.25rem;cursor:pointer">
           <div style="font-size:2rem;margin-bottom:.75rem">${d.type==='image'?'🖼':'📄'}</div>
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:900;font-style:italic;color:var(--text)">${h(d.title)}</div>
           ${d.notes?`<p style="font-size:.7rem;color:var(--muted);margin-top:.25rem">${h(d.notes)}</p>`:''}
           <div style="font-size:.6rem;color:var(--muted);margin-top:.5rem;text-transform:uppercase;letter-spacing:.1em">Ouvrir →</div>
-        </a>`).join('')}
+        </div>`).join('')}
       </div>
     </div>`;
   } catch(e) { console.error(e); }
