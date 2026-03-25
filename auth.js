@@ -26,10 +26,11 @@ async function doLogin() {
 }
 document.getElementById('login-code').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
-// Auto-login if session saved
-(async function tryAutoLogin() {
+// Auto-login if session saved — attend que Firebase Auth soit prêt
+_auth.onAuthStateChanged(async () => {
   const saved = localStorage.getItem(_SESSION_KEY);
   if (!saved) return;
+  if (document.getElementById('screen-app') && !document.getElementById('screen-app').classList.contains('hidden')) return;
   try {
     const { code } = JSON.parse(saved);
     if (!code) return;
@@ -42,8 +43,8 @@ document.getElementById('login-code').addEventListener('keydown', e => { if(e.ke
     snap.forEach(d => { const c = d.data(); if (c.code && c.code.toUpperCase() === code.toUpperCase()) found = { id: d.id, ...c }; });
     if (found) { currentUser = { ...found, isCoach: false }; enterApp(); }
     else localStorage.removeItem(_SESSION_KEY);
-  } catch(e) { localStorage.removeItem(_SESSION_KEY); }
-})();
+  } catch(e) { console.warn('Auto-login failed', e); localStorage.removeItem(_SESSION_KEY); }
+});
 
 function enterApp() {
   document.getElementById('screen-login').classList.add('hidden');
