@@ -1,11 +1,13 @@
 // ── COACH: PROFILE EDITING ───────────────────────────
 if (typeof _clientPRData === 'undefined') window._clientPRData = { records:{} };
 if (typeof _manualPRExName === 'undefined') window._manualPRExName = '';
+if (typeof _weightHistory === 'undefined') window._weightHistory = [];
 
 function renderClientProfile() {
   const c = currentClient; if (!c) return;
   const el = document.getElementById('sub-profile'); if (!el) return;
   const age = c.birthday ? _calcAge(c.birthday) : null;
+  const isWeightGoal = c.goalType === 'poids';
   el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start">
     <div class="card" style="padding:2rem">
       <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">PROFIL</h4>
@@ -18,8 +20,25 @@ function renderClientProfile() {
           <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem">Code d'accès</label>
           <input type="text" id="prof-code" class="inp" value="${h(c.code||'')}" style="text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:900;font-style:italic;letter-spacing:.1em">
         </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div>
+            <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem">Poids (kg)</label>
+            <input type="number" step="0.1" min="0" id="prof-weight" class="inp" value="${c.weight||''}" placeholder="75">
+          </div>
+          <div>
+            <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem">Taille (cm)</label>
+            <input type="number" step="1" min="0" id="prof-height" class="inp" value="${c.height||''}" placeholder="175">
+          </div>
+        </div>
         <div>
-          <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem">Objectif</label>
+          <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem">Type d'objectif</label>
+          <div style="display:flex;gap:.5rem">
+            <button id="goal-type-perf" onclick="_setGoalType('performance')" style="flex:1;padding:.6rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.7rem;text-transform:uppercase;cursor:pointer;border:1px solid ${!isWeightGoal?'rgba(240,165,0,.5)':'var(--border)'};background:${!isWeightGoal?'rgba(240,165,0,.15)':'var(--surface)'};color:${!isWeightGoal?'var(--gold)':'var(--muted)'}">💪 Performance</button>
+            <button id="goal-type-poids" onclick="_setGoalType('poids')" style="flex:1;padding:.6rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.7rem;text-transform:uppercase;cursor:pointer;border:1px solid ${isWeightGoal?'rgba(59,130,246,.5)':'var(--border)'};background:${isWeightGoal?'rgba(59,130,246,.15)':'var(--surface)'};color:${isWeightGoal?'#60a5fa':'var(--muted)'}">⚖️ Poids corporel</button>
+          </div>
+        </div>
+        <div>
+          <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);letter-spacing:.1em;margin-bottom:.5rem">Objectif (texte)</label>
           <input type="text" id="prof-objectif" class="inp" value="${h(c.objectif||'')}">
         </div>
         <div>
@@ -46,28 +65,48 @@ function renderClientProfile() {
         </label>
       </div>
     </div>
-    <div class="card" style="padding:2rem">
-      <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">INFOS</h4>
-      <div style="display:flex;flex-direction:column;gap:.75rem">
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:var(--surface);border-radius:.875rem;border:1px solid var(--border)">
-          <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Membre depuis</span>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;font-style:italic">${c.createdAt?new Date(c.createdAt).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}):'—'}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:var(--surface);border-radius:.875rem;border:1px solid var(--border)">
-          <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Cycles</span>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;font-style:italic">${clientProgram.length}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:var(--surface);border-radius:.875rem;border:1px solid var(--border)">
-          <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Séances validées</span>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;font-style:italic;color:var(--gold)">${Object.keys(clientLogs).length}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:var(--surface);border-radius:.875rem;border:1px solid var(--border)">
-          <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Records enregistrés</span>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;font-style:italic;color:var(--gold)">${Object.keys(_clientPRData.records||{}).length}</span>
+    <div style="display:flex;flex-direction:column;gap:1.5rem">
+      <div class="card" style="padding:2rem">
+        <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">INFOS</h4>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:var(--surface);border-radius:.875rem;border:1px solid var(--border)">
+            <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Membre depuis</span>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;font-style:italic">${c.createdAt?new Date(c.createdAt).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'}):'—'}</span>
+          </div>
+          ${c.weight&&c.height?`<div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:var(--surface);border-radius:.875rem;border:1px solid var(--border)">
+            <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">IMC</span>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;font-style:italic;color:var(--gold)">${(c.weight/((c.height/100)**2)).toFixed(1)}</span>
+          </div>`:''}
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:var(--surface);border-radius:.875rem;border:1px solid var(--border)">
+            <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Cycles</span>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;font-style:italic">${clientProgram.length}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:var(--surface);border-radius:.875rem;border:1px solid var(--border)">
+            <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Séances validées</span>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;font-style:italic;color:var(--gold)">${Object.keys(clientLogs).length}</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem;background:var(--surface);border-radius:.875rem;border:1px solid var(--border)">
+            <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Records enregistrés</span>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:700;font-style:italic;color:var(--gold)">${Object.keys(_clientPRData.records||{}).length}</span>
+          </div>
         </div>
       </div>
+      ${isWeightGoal ? `<div class="card" style="padding:2rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <h4 style="font-size:1.25rem;font-weight:900;font-style:italic;text-transform:uppercase">⚖️ SUIVI DU POIDS</h4>
+          <button onclick="openAddWeightEntry()" class="btn btn-primary btn-sm">+ Ajouter</button>
+        </div>
+        <div id="weight-chart-area">${_renderWeightChart()}</div>
+        <div id="weight-history-list" style="margin-top:1rem">${_renderWeightList()}</div>
+      </div>` : ''}
     </div>
   </div>`;
+}
+
+function _setGoalType(type) {
+  if (!currentClient) return;
+  currentClient = { ...currentClient, goalType: type };
+  renderClientProfile();
 }
 
 function _calcAge(birthday) {
@@ -86,10 +125,13 @@ async function saveClientProfile() {
   const birthday = document.getElementById('prof-birthday')?.value || '';
   const notes = document.getElementById('prof-notes')?.value.trim() || '';
   const group = document.getElementById('prof-group')?.value || '';
+  const weight = parseFloat(document.getElementById('prof-weight')?.value) || null;
+  const height = parseFloat(document.getElementById('prof-height')?.value) || null;
+  const goalType = currentClient.goalType || 'performance';
   if (!name || !code) { toast('Nom et code requis','w'); return; }
   const conflict = allClients.find(c => c.code === code && c.id !== currentClient.id);
   if (conflict) { toast('Code déjà utilisé par '+conflict.name,'w'); return; }
-  const updated = { ...currentClient, name, code, objectif, birthday, notes, group };
+  const updated = { ...currentClient, name, code, objectif, birthday, notes, group, weight, height, goalType };
   await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',currentClient.id), updated);
   const idx = allClients.findIndex(c => c.id === currentClient.id);
   if (idx !== -1) allClients[idx] = updated;
@@ -98,6 +140,93 @@ async function saveClientProfile() {
   document.getElementById('fiche-client-code').innerText = 'CODE: '+code;
   toast('Profil mis à jour !','s');
   renderClientProfile();
+}
+
+// ── WEIGHT TRACKING ───────────────────────────────────
+
+async function loadWeightHistory() {
+  if (!currentClient) { _weightHistory = []; return; }
+  try {
+    const doc = await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',currentClient.id,'data','weightHistory'));
+    _weightHistory = (doc.exists && doc.data()?.entries) ? doc.data().entries : [];
+  } catch(e) { _weightHistory = []; }
+}
+
+function _renderWeightChart() {
+  const entries = (_weightHistory||[]).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
+  if (entries.length < 2) return `<p style="color:var(--muted);font-style:italic;font-size:.8rem">${entries.length === 1 ? 'Ajoutez une 2ème mesure pour voir le graphique.' : 'Aucune mesure. Cliquez sur + Ajouter.'}</p>`;
+  return svgLineChart(
+    entries.map(e=>({ label: new Date(e.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'}), value: e.weight, tooltip: `${e.weight} kg · ${new Date(e.date).toLocaleDateString('fr-FR')}` })),
+    '#3b82f6', 'Poids (kg)'
+  );
+}
+
+function _renderWeightList() {
+  const entries = (_weightHistory||[]).slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if (!entries.length) return '';
+  return `<table class="tbl" style="width:100%">
+    <thead><tr><th>Date</th><th>Poids</th><th style="text-align:right">Action</th></tr></thead>
+    <tbody>${entries.slice(0,8).map((e,i)=>`<tr class="db-row">
+      <td style="font-size:.7rem;color:var(--muted)">${new Date(e.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit'})}</td>
+      <td><span style="font-family:'Barlow Condensed',sans-serif;font-weight:900;color:#60a5fa">${e.weight} kg</span></td>
+      <td style="text-align:right"><button onclick="deleteWeightEntry(${i})" class="btn btn-danger btn-sm">Suppr.</button></td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+function openAddWeightEntry() {
+  const modal = document.getElementById('modal-add-weight');
+  if (!modal) {
+    const div = document.createElement('div');
+    div.id = 'modal-add-weight';
+    div.className = 'modal-overlay hidden';
+    div.innerHTML = `<div class="modal" style="max-width:380px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+        <h3 style="font-size:1.25rem;font-weight:900;font-style:italic;text-transform:uppercase">⚖️ NOUVELLE MESURE</h3>
+        <button onclick="closeModal('modal-add-weight')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.25rem">✕</button>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div>
+          <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Poids (kg)</label>
+          <input type="number" step="0.1" min="0" id="add-weight-val" class="inp" style="font-size:2rem;text-align:center;padding:1rem" placeholder="75.5">
+        </div>
+        <div>
+          <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Date</label>
+          <input type="date" id="add-weight-date" class="inp" value="${new Date().toISOString().split('T')[0]}">
+        </div>
+        <button class="btn btn-primary" style="width:100%;padding:1rem" onclick="saveWeightEntry()">ENREGISTRER</button>
+      </div>
+    </div>`;
+    document.body.appendChild(div);
+  }
+  document.getElementById('add-weight-val').value = '';
+  document.getElementById('add-weight-date').value = new Date().toISOString().split('T')[0];
+  openModal('modal-add-weight');
+}
+
+async function saveWeightEntry() {
+  if (!currentClient) return;
+  const weight = parseFloat(document.getElementById('add-weight-val')?.value);
+  const date = document.getElementById('add-weight-date')?.value;
+  if (!weight || weight <= 0) { toast('Poids invalide','w'); return; }
+  if (!_weightHistory) _weightHistory = [];
+  _weightHistory.push({ date: date ? new Date(date).toISOString() : new Date().toISOString(), weight });
+  await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',currentClient.id,'data','weightHistory'), { entries: _weightHistory });
+  closeModal('modal-add-weight');
+  document.getElementById('weight-chart-area').innerHTML = _renderWeightChart();
+  document.getElementById('weight-history-list').innerHTML = _renderWeightList();
+  toast('Mesure enregistrée','s');
+}
+
+async function deleteWeightEntry(sortedIdx) {
+  if (!currentClient) return;
+  const sorted = (_weightHistory||[]).slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
+  const entry = sorted[sortedIdx]; if (!entry) return;
+  _weightHistory = (_weightHistory||[]).filter(e => e !== entry);
+  await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',currentClient.id,'data','weightHistory'), { entries: _weightHistory });
+  document.getElementById('weight-chart-area').innerHTML = _renderWeightChart();
+  document.getElementById('weight-history-list').innerHTML = _renderWeightList();
+  toast('Mesure supprimée','i');
 }
 
 // ── PERSONAL RECORDS ─────────────────────────────────
