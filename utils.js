@@ -35,13 +35,11 @@ function groupExercises(exs) {
 
 function getActiveSessions(c) {
   let arr;
-  if (c && Array.isArray(c.sessions_active) && c.sessions_active.length > 0) arr = [...c.sessions_active];
-  else arr = Object.keys(c && c.sessions ? c.sessions : {}).filter(k => {
-    const s = c.sessions[k];
-    if (!s) return false;
-    const exs = Array.isArray(s) ? s : (s.exercises || []);
-    return exs.length > 0;
-  });
+  if (c && Array.isArray(c.sessions_active) && c.sessions_active.length > 0) {
+    arr = [...c.sessions_active];
+  } else {
+    arr = Object.keys(c && c.sessions ? c.sessions : {});
+  }
   return arr.sort((a,b) => a.localeCompare(b));
 }
 
