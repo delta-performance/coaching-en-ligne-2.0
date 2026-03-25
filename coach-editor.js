@@ -39,6 +39,7 @@ function syncEditor() {
   setSessMode(sp.mode||'circuit', false);
   editorExos = JSON.parse(JSON.stringify(getSessEx(c, sess)));
   edDropdownState = {};
+  if (typeof clearEditorDirty === 'function') clearEditorDirty();
   renderEditorExos();
 }
 
@@ -85,6 +86,19 @@ function renderEditorExos() {
     });
   }
   el.innerHTML = html;
+  // Update autocomplete datalist with current exerciseDb
+  let dl = document.getElementById('db-exnames-list');
+  if (!dl) { dl = document.createElement('datalist'); dl.id = 'db-exnames-list'; document.body.appendChild(dl); }
+  dl.innerHTML = exerciseDb.map(e => `<option value="${h(e.name||'')}"></option>`).join('');
+}
+
+function _fillExFromDb(idx, name) {
+  const dbEx = exerciseDb.find(e => e.name && e.name.toLowerCase() === name.toLowerCase());
+  if (!dbEx) return;
+  const ex = editorExos[idx]; if (!ex) return;
+  if (!ex.photo && dbEx.photo) ex.photo = dbEx.photo;
+  if (!ex.video && dbEx.video) ex.video = dbEx.video;
+  if (!ex.desc && dbEx.desc) ex.desc = dbEx.desc;
 }
 
 function dbSelectorsHTML(idx, prefix) {
@@ -121,7 +135,7 @@ function singleExEditorCard(e, i, col, isCircuit) {
     </div>
     <div style="padding:1rem;display:flex;flex-direction:column;gap:.75rem">
       ${dbSelectorsHTML(i,'s')}
-      <input type="text" class="inp" value="${h(e.name||'')}" placeholder="Nom exercice" oninput="editorExos[${i}].name=this.value;this.closest('[id^=ex-card-]').querySelector('.ex-title-span').textContent=this.value||'Nouvel exercice'" style="font-size:.85rem">
+      <input type="text" list="db-exnames-list" class="inp" value="${h(e.name||'')}" placeholder="Nom exercice" oninput="editorExos[${i}].name=this.value;this.closest('[id^=ex-card-]').querySelector('.ex-title-span').textContent=this.value||'Nouvel exercice';_fillExFromDb(${i},this.value)" style="font-size:.85rem">
       <div style="display:flex;gap:.5rem;align-items:center">
         <span style="font-size:.55rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Type :</span>
         <button onclick="editorExos[${i}].exType='musculaire';renderEditorExos()" style="padding:.25rem .6rem;border-radius:.5rem;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;font-style:italic;text-transform:uppercase;cursor:pointer;border:1px solid ${(e.exType||'musculaire')==='musculaire'?'rgba(240,165,0,.5)':'var(--border)'};background:${(e.exType||'musculaire')==='musculaire'?'rgba(240,165,0,.15)':'var(--surface)'};color:${(e.exType||'musculaire')==='musculaire'?'var(--gold)':'var(--muted)'}">💪 Musculaire</button>
@@ -222,7 +236,7 @@ function edPickEx(idx, prefix, exId) {
 
 function edMoveUp(i) { if(i<=0)return; [editorExos[i-1],editorExos[i]]=[editorExos[i],editorExos[i-1]]; edDropdownState={}; renderEditorExos(); }
 function edMoveDown(i) { if(i>=editorExos.length-1)return; [editorExos[i],editorExos[i+1]]=[editorExos[i+1],editorExos[i]]; edDropdownState={}; renderEditorExos(); }
-function edRemoveEx(i) { if(editorExos.length<=1){toast('Au moins 1 exercice requis','w');return;} editorExos.splice(i,1); edDropdownState={}; renderEditorExos(); }
+function edRemoveEx(i) { if(editorExos.length<=1){toast('Au moins 1 exercice requis','w');return;} editorExos.splice(i,1); edDropdownState={}; if(typeof markEditorDirty==='function')markEditorDirty(); renderEditorExos(); }
 
 function edAddSuperset(i) {
   editorExos[i].superset = true;
@@ -262,6 +276,7 @@ function edDoCopyParams(toIdx) {
 
 function addExEditor() {
   editorExos.push({ name:'', desc:'', video:'', photo:'', reps:'', tst:'', sets:'', restSet:'', restEx:'', rpeTarget:'', comment:'', superset:false, exType:'musculaire' });
+  if (typeof markEditorDirty === 'function') markEditorDirty();
   renderEditorExos();
   setTimeout(() => { const el = document.getElementById('ed-exos-list'); if(el) el.lastElementChild?.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 100);
 }
@@ -274,7 +289,7 @@ async function saveFullSession() {
   const tours = document.getElementById('ed-tours').value.trim()||'3';
   const comment = document.getElementById('ed-sess-comment').value.trim();
   clientProgram[idx].sessions[sess] = { rest, tours, mode:currentSessMode, comment, exercises:JSON.parse(JSON.stringify(editorExos)) };
-  try { await saveClientProgram(); toast('Séance sauvegardée !','s'); } catch(e) { toast('Erreur sauvegarde','e'); }
+  try { await saveClientProgram(); if (typeof clearEditorDirty === 'function') clearEditorDirty(); toast('Séance sauvegardée !','s'); } catch(e) { toast('Erreur sauvegarde','e'); }
 }
 
 async function dupCycle() {
