@@ -73,7 +73,6 @@ function visuExRowHTML(e, col, isClassic) {
 
 function renderVisu() {
   const el = document.getElementById('visu-content'); if (!el) return;
-  const colors = { A:'#3b82f6', B:'#10b981', C:'#f97316', D:'#8b5cf6' };
 
   if (visuMode === 'same-cycle') {
     const cId = parseInt(document.getElementById('visu-cycle-sel')?.value);
@@ -82,8 +81,8 @@ function renderVisu() {
     const active = getActiveSessions(c);
     el.innerHTML = `<h5 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">CYCLE ${c.id} — ${h(c.focus)}</h5>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem">
-      ${active.map(t => {
-        const sp = getSessParams(c,t); const exs = getSessEx(c,t); const col = colors[t];
+      ${active.map((t,ti) => {
+        const sp = getSessParams(c,t); const exs = getSessEx(c,t); const col = getSessColor(t,ti);
         return `<div class="card" style="overflow:hidden">
           <div style="background:${col};padding:1rem;display:flex;align-items:center;gap:.75rem">
             <span style="font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;font-style:italic;color:white">SÉANCE ${t}</span>
@@ -102,7 +101,7 @@ function renderVisu() {
   } else if (visuMode === 'cross-sess') {
     const selCycles = Array.from(visuSelectedCycles);
     if (!selCycles.length) { el.innerHTML = '<p style="color:var(--muted);font-style:italic">Cliquez sur des cycles ci-dessus pour les sélectionner.</p>'; return; }
-    const col = colors[visuSess];
+    const col = getSessColor(visuSess);
     el.innerHTML = `<h5 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">SÉANCE ${visuSess} — ${selCycles.length} cycle(s)</h5>
     <div style="display:flex;flex-direction:column;gap:1.25rem">
       ${selCycles.map(cId => {
@@ -141,21 +140,22 @@ function renderVisu() {
           <table class="tbl" style="width:100%;background:var(--card);border-radius:1rem;overflow:hidden">
             <thead><tr>
               <th>Exercice</th>
-              ${active.map(t=>`<th style="color:${colors[t]}">Séance ${t} <button onclick="visuOpenEditor(${c.id},'${t}')" style="background:none;border:none;color:${colors[t]};cursor:pointer;font-size:.65rem">✏️</button></th>`).join('')}
+              ${active.map((t,ti)=>{const col=getSessColor(t,ti);return `<th style="color:${col}">Séance ${t} <button onclick="visuOpenEditor(${c.id},'${t}')" style="background:none;border:none;color:${col};cursor:pointer;font-size:.65rem">✏️</button></th>`;}).join('')}
             </tr></thead>
             <tbody>
               ${(()=>{
                 const maxEx = Math.max(1, ...active.map(t => getSessEx(c,t).length));
                 return Array.from({length:maxEx},(_,i)=>`<tr class="db-row">
                   <td style="font-size:.75rem;color:var(--muted)">Ex ${i+1}</td>
-                  ${active.map(t => {
+                  ${active.map((t,ti) => {
                     const e = getSessEx(c,t)[i];
                     const sp = getSessParams(c,t);
+                    const col = getSessColor(t,ti);
                     return e ? `<td>
                       ${e.superset?`<span style="font-size:.6rem;color:var(--gold)">⇄ </span>`:''}
                       <div style="font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700">${h(e.name)}</div>
-                      ${sp.mode==='classic'&&(e.sets||e.reps)?`<div style="font-size:.6rem;color:${colors[t]};margin-top:.15rem">${e.sets?e.sets+'× ':''} ${e.reps||''} ${e.rpeTarget?'RPE'+e.rpeTarget:''}</div>`:''}
-                      ${sp.mode!=='classic'&&e.reps?`<div style="font-size:.65rem;color:${colors[t]}">${h(e.reps)}</div>`:''}
+                      ${sp.mode==='classic'&&(e.sets||e.reps)?`<div style="font-size:.6rem;color:${col};margin-top:.15rem">${e.sets?e.sets+'× ':''} ${e.reps||''} ${e.rpeTarget?'RPE'+e.rpeTarget:''}</div>`:''}
+                      ${sp.mode!=='classic'&&e.reps?`<div style="font-size:.65rem;color:${col}">${h(e.reps)}</div>`:''}
                     </td>` : `<td style="color:var(--border)">—</td>`;
                   }).join('')}
                 </tr>`).join('');
