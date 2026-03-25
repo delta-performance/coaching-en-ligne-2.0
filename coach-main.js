@@ -51,6 +51,7 @@ async function openClientFiche(clientId) {
   switchSubTab('logs');
   await loadClientData(clientId);
   await loadClientPR();
+  await loadClientDocuments();
   rebuildEditorSelects(); populateVisuSelect();
 }
 
@@ -182,6 +183,7 @@ function switchSubTab(tab) {
   if (tab==='profile') renderClientProfile();
   if (tab==='records') renderClientPR();
   if (tab==='progression') renderProgressCharts();
+  if (tab==='documents') renderDocumentsTab();
 }
 
 // ── LOGS ──────────────────────────────────────────────
