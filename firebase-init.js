@@ -1,6 +1,3 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, deleteDoc, onSnapshot, collection, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyA__vW3RPMCMD9y1Uh7KvyBDDUXO9qXreY",
   authDomain: "delta-perf.firebaseapp.com",
@@ -9,10 +6,19 @@ const firebaseConfig = {
   messagingSenderId: "335271116250",
   appId: "1:335271116250:web:f8a26e13f1e248a42814e3"
 };
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 window.db = db;
-window.fdb = { doc, setDoc, getDoc, deleteDoc, onSnapshot, collection, getDocs, writeBatch };
-onAuthStateChanged(auth, u => { if(u) window.anonUid = u.uid; });
-signInAnonymously(auth).catch(e => console.error(e));
+window.fdb = {
+  doc: (db, ...path) => db.doc(path.join('/')),
+  setDoc: (ref, data) => ref.set(data),
+  getDoc: (ref) => ref.get(),
+  deleteDoc: (ref) => ref.delete(),
+  onSnapshot: (ref, cb) => ref.onSnapshot(cb),
+  collection: (db, ...path) => db.collection(path.join('/')),
+  getDocs: (ref) => ref.get(),
+  writeBatch: (db) => db.batch()
+};
+auth.signInAnonymously().catch(e => console.error(e));
+auth.onAuthStateChanged(u => { if (u) window.anonUid = u.uid; });
