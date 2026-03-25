@@ -10,7 +10,7 @@ async function loadTransferCycles() {
   const srcId = document.getElementById('tr-src')?.value; if (!srcId) return;
   try {
     const doc = await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',srcId,'data','program'));
-    const cycles = (doc.exists()&&doc.data().cycles) ? doc.data().cycles : [];
+    const cycles = (doc.exists&&doc.data().cycles) ? doc.data().cycles : [];
     const el = document.getElementById('tr-cycle'); if (!el) return;
     el.innerHTML = cycles.map(c=>`<option value="${c.id}">C${c.id} – ${h(c.focus)}</option>`).join('');
     window._transferSrcCycles = cycles;
@@ -45,10 +45,10 @@ async function doTransfer() {
   if (srcId===dstId) { toast('Source et cible identiques','w'); return; }
   try {
     const srcDoc = await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',srcId,'data','program'));
-    const srcCycles = (srcDoc.exists()&&srcDoc.data().cycles) ? srcDoc.data().cycles : [];
+    const srcCycles = (srcDoc.exists&&srcDoc.data().cycles) ? srcDoc.data().cycles : [];
     const srcCycle = srcCycles.find(c => c.id===cycleId); if (!srcCycle) { toast('Cycle source introuvable','e'); return; }
     const dstDoc = await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',dstId,'data','program'));
-    let dstCycles = (dstDoc.exists()&&dstDoc.data().cycles) ? dstDoc.data().cycles : [];
+    let dstCycles = (dstDoc.exists&&dstDoc.data().cycles) ? dstDoc.data().cycles : [];
     const dstIdx = dstCycles.findIndex(c => c.id===cycleId);
     if (transferMode==='cycle') {
       if (dstIdx!==-1) { dstCycles[dstIdx].sessions = JSON.parse(JSON.stringify(srcCycle.sessions)); dstCycles[dstIdx].sessions_active = srcCycle.sessions_active || ['A','B','C','D']; }
