@@ -42,7 +42,8 @@ async function saveClientProgram(clientId) {
       exercises: ex.map(e => ({
         name: e.name||'', desc: e.desc||'', video: e.video||'', photo: e.photo||'',
         tst: e.tst||'', reps: e.reps||'', sets: e.sets||'', restSet: e.restSet||'',
-        restEx: e.restEx||'', rpeTarget: e.rpeTarget||'', comment: e.comment||'', superset: e.superset||false
+        restEx: e.restEx||'', rpeTarget: e.rpeTarget||'', comment: e.comment||'', superset: e.superset||false,
+        exType: e.exType||'musculaire', workTime: e.workTime||'', restTime: e.restTime||''
       }))
     };
   }
@@ -213,13 +214,15 @@ function exCard(e, i, type, col, isCircuit) {
   const exType = e.exType || 'musculaire';
   const isEnergetic = exType === 'energetique';
   const hasPerfData = workoutData[i];
-  const perfBtnStyle = hasPerfData
-    ? 'background:rgba(240,165,0,.25);border-color:rgba(240,165,0,.5);color:var(--gold)'
-    : 'background:var(--surface);border-color:var(--border);color:var(--muted)';
+  const perfBtnStyle = isEnergetic
+    ? (hasPerfData ? 'background:rgba(59,130,246,.2);border-color:rgba(59,130,246,.4);color:#60a5fa' : 'background:var(--surface);border-color:var(--border);color:var(--muted)')
+    : (hasPerfData ? 'background:rgba(240,165,0,.25);border-color:rgba(240,165,0,.5);color:var(--gold)' : 'background:var(--surface);border-color:var(--border);color:var(--muted)');
   const perfBtnLabel = isEnergetic ? (hasPerfData ? '⚡ RPE MODIF.' : '⚡ RPE') : (hasPerfData ? '📊 MODIF.' : '📊 PERF');
   const safeName = h(e.name).replace(/'/g,"\\'");
   const plannedReps = (e.reps || '').replace(/'/g,"\\'");
   const perfBtn = `<button id="perf-btn-${i}" onclick="openPerfModal(${i},'${safeName}',${setsCount},'${plannedReps}','${exType}')" style="display:flex;align-items:center;justify-content:center;gap:.4rem;${perfBtnStyle};border:1px solid;border-radius:.875rem;padding:.6rem;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;cursor:pointer;transition:all .2s;width:100%">${perfBtnLabel}</button>`;
+
+  const energeticBadge = isEnergetic ? `<span style="position:absolute;top:.75rem;right:.75rem;background:rgba(59,130,246,.25);border:1px solid rgba(59,130,246,.4);border-radius:.5rem;padding:.15rem .4rem;font-size:.55rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:#60a5fa;letter-spacing:.05em">⚡ ÉNERGIE</span>` : '';
 
   // Header gradient couleur dynamique
   const gradStyle = `background:linear-gradient(135deg,${col}cc,${col}88)`;
@@ -227,11 +230,11 @@ function exCard(e, i, type, col, isCircuit) {
   const headerInner = photo
     ? `<img src="${h(photo)}" style="height:80px;width:auto;max-width:120px;object-fit:contain;flex-shrink:0;border-radius:.5rem;margin-left:1.5rem" onerror="this.style.display='none'">
        <div style="flex:1;padding-left:.75rem">
-         ${e.superset?`<span style="position:absolute;top:.75rem;right:.75rem;font-size:.6rem;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-weight:900">⇄</span>`:''}
+         ${e.superset?`<span style="position:absolute;top:.75rem;right:.75rem;font-size:.6rem;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-weight:900">⇄</span>`:energeticBadge}
          <h5 style="font-size:1rem;font-weight:900;font-style:italic;text-transform:uppercase;color:white;line-height:1.2">${h(e.name)}</h5>
        </div>`
     : `<span style="position:absolute;top:.75rem;left:.75rem;width:1.75rem;height:1.75rem;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;color:white">${String(i+1).padStart(2,'0')}</span>
-       ${e.superset?`<span style="position:absolute;top:.75rem;right:.75rem;font-size:.6rem;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-weight:900">⇄</span>`:''}
+       ${e.superset?`<span style="position:absolute;top:.75rem;right:.75rem;font-size:.6rem;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-weight:900">⇄</span>`:energeticBadge}
        <h5 style="font-size:1.1rem;font-weight:900;font-style:italic;text-transform:uppercase;color:white;line-height:1.2">${h(e.name)}</h5>`;
 
   if (!isCircuit) {
