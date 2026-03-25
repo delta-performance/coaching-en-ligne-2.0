@@ -1,4 +1,10 @@
 // ── WORKOUT PERFORMANCE LOGGING ──────────────────────
+// Guard: ensure workoutData exists even if state.js loaded before this
+if (typeof workoutData === 'undefined') window.workoutData = {};
+if (typeof _clientPRData === 'undefined') window._clientPRData = { records:{} };
+if (typeof _perfModalExIdx === 'undefined') window._perfModalExIdx = -1;
+if (typeof _perfModalSets === 'undefined') window._perfModalSets = 3;
+if (typeof _perfMode === 'undefined') window._perfMode = 'same';
 
 function openPerfModal(exIdx, exName, setsCount) {
   _perfModalExIdx = exIdx;
