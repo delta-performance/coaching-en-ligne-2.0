@@ -1,11 +1,11 @@
 async function loadClientData(clientId) {
   try {
     const progDoc = await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',clientId,'data','program'));
-    if (progDoc.exists() && progDoc.data().cycles && progDoc.data().cycles.length > 0) {
+    if (progDoc.exists && progDoc.data().cycles && progDoc.data().cycles.length > 0) {
       clientProgram = progDoc.data().cycles;
     } else { clientProgram = []; await saveClientProgram(clientId); }
     const unlockDoc = await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',clientId,'data','unlock'));
-    if (unlockDoc.exists()) {
+    if (unlockDoc.exists) {
       clientUnlocked = new Set(unlockDoc.data().unlocked || []);
       clientArchived = new Set(unlockDoc.data().archived || []);
     } else { clientUnlocked = new Set(); clientArchived = new Set(); await saveClientUnlock(clientId); }
@@ -42,11 +42,13 @@ async function saveClientProgram(clientId) {
       }))
     };
   }
-  const safe = clientProgram.map(c => ({
-    id: c.id, focus: c.focus||'',
-    sessions_active: c.sessions_active !== undefined ? c.sessions_active : ['A','B','C','D'],
-    sessions: { A: sanitize(c,'A'), B: sanitize(c,'B'), C: sanitize(c,'C'), D: sanitize(c,'D') }
-  }));
+  const safe = clientProgram.map(c => {
+    const active = Array.isArray(c.sessions_active) ? c.sessions_active : [];
+    const allKeys = [...new Set([...active, ...Object.keys(c.sessions||{})])];
+    const sessObj = {};
+    allKeys.forEach(t => { sessObj[t] = sanitize(c, t); });
+    return { id: c.id, focus: c.focus||'', sessions_active: active, sessions: sessObj };
+  });
   await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',cid,'data','program'), { cycles: safe });
 }
 
@@ -133,8 +135,7 @@ function openDetail() {
   const log = clientLogs[cycle+'-'+type];
   const sp = getSessParams(c, type);
   const exs = getSessEx(c, type);
-  const colors = { A:'#3b82f6', B:'#10b981', C:'#f97316', D:'#8b5cf6' };
-  const col = colors[type] || '#f0a500';
+  const col = getSessColor(type);
   const isCircuit = sp.mode !== 'classic';
 
   document.getElementById('detail-bar').style.background = `linear-gradient(90deg,${col},${col}44)`;
