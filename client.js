@@ -1,3 +1,6 @@
+// Guard: workoutData may not be loaded yet
+if (typeof workoutData === 'undefined') window.workoutData = {};
+
 async function loadClientData(clientId) {
   try {
     const progDoc = await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',clientId,'data','program'));
@@ -13,6 +16,7 @@ async function loadClientData(clientId) {
     if (!currentUser || !currentUser.isCoach) {
       const dbsnap = await window.fdb.getDocs(window.fdb.collection(window.db,'apps',APP_ID,'exerciseDb'));
       exerciseDb = []; dbsnap.forEach(d => exerciseDb.push({ id: d.id, ...d.data() }));
+      if (typeof renderClientDocuments === 'function') renderClientDocuments();
     }
     if (unsubLogs) unsubLogs();
     unsubLogs = window.fdb.onSnapshot(
