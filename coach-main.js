@@ -50,6 +50,7 @@ async function openClientFiche(clientId) {
   switchCoachTab('fiche');
   switchSubTab('logs');
   await loadClientData(clientId);
+  await loadClientPR();
   rebuildEditorSelects(); populateVisuSelect();
 }
 
@@ -97,6 +98,18 @@ async function createClient() {
 }
 
 // ── GROUPES ───────────────────────────────────────────
+
+async function toggleArchiveClient(clientId) {
+  const c = allClients.find(x => x.id === clientId); if (!c) return;
+  const updated = { ...c, archived: !c.archived };
+  await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',clientId), updated);
+  const idx = allClients.findIndex(x => x.id === clientId);
+  if (idx !== -1) allClients[idx] = updated;
+  if (currentClient?.id === clientId) currentClient = updated;
+  toast(updated.archived ? 'Client archivé' : 'Client désarchivé', 'i');
+  renderClientProfile();
+  renderClientsGrid();
+}
 function populateGroupSelects() {
   const opts = allGroups.map(g => `<option value="${g.id}">${h(g.name)}</option>`).join('');
   ['filter-group','nc-group'].forEach(id => {
@@ -155,7 +168,7 @@ function switchCoachTab(tab) {
 }
 
 function switchSubTab(tab) {
-  ['logs','unlock','cycles','editor','visu'].forEach(t => {
+  ['logs','unlock','cycles','editor','visu','profile','records','progression'].forEach(t => {
     const el = document.getElementById('sub-'+t); if (!el) return;
     if (t==='cycles') { el.style.display=(t===tab)?'flex':'none'; el.classList.toggle('hidden',t!==tab); }
     else { el.classList.toggle('hidden',t!==tab); }
@@ -166,6 +179,9 @@ function switchSubTab(tab) {
   if (tab==='cycles') renderCycleStatus();
   if (tab==='editor') { rebuildEditorSelects(); syncEditor(); }
   if (tab==='visu') { populateVisuSelect(); renderVisu(); }
+  if (tab==='profile') renderClientProfile();
+  if (tab==='records') renderClientPR();
+  if (tab==='progression') renderProgressCharts();
 }
 
 // ── LOGS ──────────────────────────────────────────────
