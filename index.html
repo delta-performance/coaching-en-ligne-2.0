@@ -11,12 +11,33 @@
 <script src="firebase-init.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Barlow:wght@300;400;500;600&display=swap');
+/* ── DARK MODE (défaut) ── */
 :root {
   --bg:#080c12; --surface:#0f1620; --card:#141d2b; --border:#1e2d40;
   --brand:#c8102e; --brand2:#8a0c1f; --gold:#f0a500;
   --text:#e8edf3; --muted:#4a6080;
   --blue:#3b82f6; --green:#10b981; --orange:#f97316; --purple:#8b5cf6;
+  --nav-bg:rgba(8,12,18,.92);
+  --shadow:rgba(0,0,0,.5);
 }
+/* ── LIGHT MODE ── */
+:root.light-mode {
+  --bg:#f0f4f8; --surface:#ffffff; --card:#ffffff; --border:#d1dae6;
+  --brand:#c8102e; --brand2:#a50d25; --gold:#d08000;
+  --text:#0f1728; --muted:#5a6f8a;
+  --nav-bg:rgba(240,244,248,.95);
+  --shadow:rgba(0,0,0,.12);
+}
+:root.light-mode nav { background: var(--nav-bg); border-bottom-color: var(--border); }
+:root.light-mode .card,:root.light-mode .card-hover { box-shadow: 0 2px 12px var(--shadow); }
+:root.light-mode .login-box { box-shadow: 0 20px 60px var(--shadow); }
+:root.light-mode .toast-item.s{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46;}
+:root.light-mode .toast-item.e{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;}
+:root.light-mode .toast-item.i{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;}
+:root.light-mode .toast-item.w{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;}
+:root.light-mode .tab-pill.off { background: var(--surface); }
+:root.light-mode select.inp option { background: var(--surface); color: var(--text); }
+@media (prefers-color-scheme: light) { :root:not(.dark-forced) { --bg:#f0f4f8; --surface:#ffffff; --card:#ffffff; --border:#d1dae6; --brand:#c8102e; --brand2:#a50d25; --gold:#d08000; --text:#0f1728; --muted:#5a6f8a; --nav-bg:rgba(240,244,248,.95); --shadow:rgba(0,0,0,.12); } }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 h1,h2,h3,h4,h5{font-family:'Barlow Condensed',sans-serif;}
@@ -139,6 +160,7 @@ select.inp option{background:var(--surface);}
       <div style="display:flex;align-items:center;gap:.75rem">
         <span id="nav-badge" class="badge badge-client">—</span>
         <span id="nav-name" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.9rem">—</span>
+        <button id="btn-theme" onclick="toggleTheme()" class="btn btn-ghost btn-sm" title="Mode jour/nuit" style="font-size:.9rem;padding:.4rem .6rem">🌙</button>
         <button id="btn-refresh" class="btn btn-ghost btn-sm hidden" onclick="refreshData()">Actualiser</button>
         <button class="btn btn-ghost btn-sm" onclick="doLogout()">Déconnexion</button>
       </div>
@@ -154,6 +176,7 @@ select.inp option{background:var(--surface);}
           <p style="color:var(--muted);margin-top:.5rem">Bienvenu dans ton programme.</p>
         </header>
         <div id="cycles-grid" class="grid-auto"></div>
+        <div id="client-docs-section" class="hidden"></div>
         <div id="archive-section" class="hidden" style="margin-top:2rem">
           <button onclick="toggleArchive()" style="display:flex;align-items:center;gap:.75rem;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.5rem">
             <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2L19 8"/></svg>
@@ -275,6 +298,7 @@ select.inp option{background:var(--surface);}
           <button class="sub-tab-pill off" id="stab-profile"     onclick="switchSubTab('profile')">Profil</button>
           <button class="sub-tab-pill off" id="stab-records"     onclick="switchSubTab('records')">Records</button>
           <button class="sub-tab-pill off" id="stab-progression" onclick="switchSubTab('progression')">Progression</button>
+          <button class="sub-tab-pill off" id="stab-documents"   onclick="switchSubTab('documents')">Documents</button>
         </div>
 
         <!-- LOGS -->
@@ -338,6 +362,7 @@ select.inp option{background:var(--surface);}
             <button class="btn btn-ghost btn-sm" onclick="dupCycle()">⧉ Dupliquer cycle</button>
             <button class="btn btn-ghost btn-sm" onclick="dupSession()" style="border-color:rgba(59,130,246,.3);color:#60a5fa">⧉ Dupliquer séance</button>
             <button class="btn btn-ghost btn-sm" onclick="saveFullSession()" style="background:var(--gold);color:#1a0900;border-color:var(--gold)">💾 SAUVEGARDER</button>
+            <button class="btn btn-ghost btn-sm" onclick="openPDFModal()" style="border-color:rgba(139,92,246,.3);color:#a78bfa">🖨 PDF</button>
           </div>
           <!-- Session-level params -->
           <div id="ed-sess-params" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem;padding:1rem;background:var(--surface);border-radius:1rem;border:1px solid var(--border);align-items:flex-end">
@@ -404,6 +429,9 @@ select.inp option{background:var(--surface);}
 
         <!-- PROGRESSION -->
         <div id="sub-progression" class="hidden" style="padding:.5rem 0"></div>
+
+        <!-- DOCUMENTS (coach upload → client view) -->
+        <div id="sub-documents" class="hidden" style="padding:.5rem 0"></div>
 
       </div><!-- /coach-fiche -->
 
@@ -628,6 +656,50 @@ select.inp option{background:var(--surface);}
   </div>
 </div>
 
+<!-- Modal PDF -->
+<div id="modal-pdf" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:480px;width:100%">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.5rem">GÉNÉRER PDF</h3>
+    <p style="font-size:.75rem;color:var(--muted);margin-bottom:1.5rem">Ouvre une fenêtre d'impression / sauvegarde PDF.</p>
+    <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem">
+      <button onclick="generatePDF('session')" class="btn btn-gold" style="width:100%;padding:1rem;font-size:.9rem">📄 Séance actuelle</button>
+      <button onclick="generatePDF('cycle')" class="btn btn-ghost" style="width:100%;padding:1rem;font-size:.9rem;color:var(--text)">📋 Cycle complet</button>
+      <button onclick="generatePDF('all')" class="btn btn-ghost" style="width:100%;padding:1rem;font-size:.9rem;color:var(--text)">📚 Tout le programme</button>
+    </div>
+    <button onclick="closeModal('modal-pdf')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Fermer</button>
+  </div>
+</div>
+<!-- Modal ajout document -->
+<div id="modal-add-doc" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:500px;width:100%">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">AJOUTER UN DOCUMENT</h3>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem">
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Titre *</label>
+        <input type="text" id="doc-title" class="inp" placeholder="Programme nutrition, Bilan mensuel...">
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Type</label>
+        <select id="doc-type" class="inp"><option value="pdf">PDF</option><option value="image">Image</option><option value="link">Lien externe</option></select>
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">URL / lien</label>
+        <input type="url" id="doc-url" class="inp" placeholder="https://...">
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Ou uploader une image / PDF (max 2Mo)</label>
+        <input type="file" id="doc-file" accept="image/*,.pdf" class="inp" style="padding:.5rem">
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Notes (optionnel)</label>
+        <textarea id="doc-notes" class="inp" rows="2" placeholder="Description..."></textarea>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="saveDocument()">AJOUTER CE DOCUMENT</button>
+    <button onclick="closeModal('modal-add-doc')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+
 <!-- Modal Performance saisie poids/reps -->
 <div id="modal-perf" class="modal-bg hidden">
   <div class="card" style="padding:2.5rem;max-width:420px;width:100%;max-height:90vh;overflow-y:auto">
@@ -678,6 +750,7 @@ select.inp option{background:var(--surface);}
 <script src="coach-visu.js"></script>
 <script src="coach-database.js"></script>
 <script src="coach-profiles.js"></script>
+<script src="coach-extras.js"></script>
 <script src="transfer.js"></script>
 </body>
 </html>
