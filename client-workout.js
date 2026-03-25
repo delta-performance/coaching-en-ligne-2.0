@@ -5,35 +5,60 @@ if (typeof _clientPRData === 'undefined') window._clientPRData = { records:{} };
 if (typeof _perfModalExIdx === 'undefined') window._perfModalExIdx = -1;
 if (typeof _perfModalSets === 'undefined') window._perfModalSets = 3;
 if (typeof _perfMode === 'undefined') window._perfMode = 'same';
+if (typeof _perfPlannedReps === 'undefined') window._perfPlannedReps = '';
+if (typeof _perfExType === 'undefined') window._perfExType = 'musculaire';
 
-function openPerfModal(exIdx, exName, setsCount) {
+function _getLastWeight(exName) {
+  const pr = _clientPRData && _clientPRData.records && _clientPRData.records[exName];
+  if (!pr || !pr.history || !pr.history.length) return '';
+  const sorted = pr.history.slice().sort((a,b) => new Date(b.date)-new Date(a.date));
+  return sorted[0].weight || '';
+}
+
+function openPerfModal(exIdx, exName, setsCount, plannedReps, exType) {
   _perfModalExIdx = exIdx;
   _perfModalSets = parseInt(setsCount) || 3;
-  _perfMode = workoutData[exIdx] ? workoutData[exIdx].type : 'same';
+  _perfPlannedReps = plannedReps || '';
+  _perfExType = exType || 'musculaire';
+  _perfMode = workoutData[exIdx] ? workoutData[exIdx].type : (_perfExType === 'energetique' ? 'energetique' : 'same');
   document.getElementById('perf-ex-name').innerText = exName;
-  document.getElementById('perf-modal-content').innerHTML = buildPerfForm(workoutData[exIdx]);
+  document.getElementById('perf-modal-content').innerHTML = buildPerfForm(workoutData[exIdx], exName);
   openModal('modal-perf');
 }
 
-function buildPerfForm(existing) {
+function buildPerfForm(existing, exName) {
+  if (_perfExType === 'energetique') return _buildEnergeticForm(existing);
   const type = existing ? existing.type : _perfMode;
   const sets = existing ? existing.sets : [];
+  const lastW = exName ? _getLastWeight(exName) : '';
   return `<div style="display:flex;gap:.5rem;margin-bottom:1.25rem">
     <button id="perf-mode-same" onclick="setPerfMode('same')" style="flex:1;padding:.6rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid ${type==='same'?'rgba(240,165,0,.5)':'var(--border)'};background:${type==='same'?'rgba(240,165,0,.15)':'var(--surface)'};color:${type==='same'?'var(--gold)':'var(--muted)'}">Même charge</button>
     <button id="perf-mode-individual" onclick="setPerfMode('individual')" style="flex:1;padding:.6rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid ${type==='individual'?'rgba(59,130,246,.5)':'var(--border)'};background:${type==='individual'?'rgba(59,130,246,.15)':'var(--surface)'};color:${type==='individual'?'#60a5fa':'var(--muted)'}">Par série</button>
   </div>
-  <div id="perf-fields">${type==='same' ? _buildSameFields(sets[0]) : _buildIndivFields(sets, _perfModalSets)}</div>`;
+  <div id="perf-fields">${type==='same' ? _buildSameFields(sets[0], lastW) : _buildIndivFields(sets, _perfModalSets, lastW)}</div>`;
 }
 
-function _buildSameFields(s) {
+function _buildEnergeticForm(existing) {
+  const rpe = existing ? (existing.rpe || '') : '';
+  _perfMode = 'energetique';
+  return `<div style="text-align:center;padding:1rem 0">
+    <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">RPE ressenti (1–10)</label>
+    <input type="number" min="1" max="10" step="0.5" id="perf-rpe-val" class="inp" value="${rpe}" placeholder="7" style="font-size:2.5rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-align:center;padding:1rem;width:100%;max-width:200px;margin:0 auto;display:block">
+    <p style="margin-top:.75rem;font-size:.65rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif">1 = très facile · 10 = effort maximal</p>
+  </div>`;
+}
+
+function _buildSameFields(s, lastW) {
+  const weightVal = (s && s.weight) ? s.weight : (lastW || '');
+  const repsVal = (s && s.reps) ? s.reps : _perfPlannedReps;
   return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
     <div>
       <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Poids (kg)</label>
-      <input type="number" step="0.5" min="0" id="perf-weight-0" class="inp" value="${s&&s.weight?s.weight:''}" placeholder="80" style="font-size:1.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-align:center;padding:1rem">
+      <input type="number" step="0.5" min="0" id="perf-weight-0" class="inp" value="${weightVal}" placeholder="80" style="font-size:1.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-align:center;padding:1rem">
     </div>
     <div>
       <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Reps</label>
-      <input type="number" min="0" id="perf-reps-0" class="inp" value="${s&&s.reps?s.reps:''}" placeholder="10" style="font-size:1.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-align:center;padding:1rem">
+      <input type="number" min="0" id="perf-reps-0" class="inp" value="${repsVal}" placeholder="10" style="font-size:1.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-align:center;padding:1rem">
     </div>
   </div>
   <div id="perf-rm-preview" style="margin-top:1rem;text-align:center;padding:.75rem;background:rgba(240,165,0,.05);border:1px solid rgba(240,165,0,.15);border-radius:.875rem;display:none">
@@ -42,7 +67,7 @@ function _buildSameFields(s) {
   </div>`;
 }
 
-function _buildIndivFields(sets, count) {
+function _buildIndivFields(sets, count, lastW) {
   let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
     <label style="font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Poids kg × Reps</label>
     <div style="display:flex;align-items:center;gap:.5rem">
@@ -53,7 +78,9 @@ function _buildIndivFields(sets, count) {
   const n = Math.max(count, sets.length || count);
   for (let i = 0; i < n; i++) {
     const s = sets[i] || {};
-    html += _indivRow(i, s.weight||'', s.reps||'');
+    const w = s.weight || (i === 0 ? lastW : '') || '';
+    const r = s.reps || _perfPlannedReps || '';
+    html += _indivRow(i, w, r);
   }
   html += `</div>`;
   return html;
@@ -72,15 +99,17 @@ function _indivRow(i, weight, reps) {
 function _addPerfSet() {
   const rows = document.getElementById('perf-indiv-rows'); if (!rows) return;
   const count = rows.children.length;
-  rows.insertAdjacentHTML('beforeend', _indivRow(count, '', ''));
+  rows.insertAdjacentHTML('beforeend', _indivRow(count, '', _perfPlannedReps || ''));
 }
 
 function setPerfMode(mode) {
   _perfMode = mode;
   const existing = workoutData[_perfModalExIdx];
+  const exName = document.getElementById('perf-ex-name')?.innerText || '';
+  const lastW = _getLastWeight(exName);
   document.getElementById('perf-fields').innerHTML = mode === 'same'
-    ? _buildSameFields(existing?.sets?.[0])
-    : _buildIndivFields(existing?.sets || [], _perfModalSets);
+    ? _buildSameFields(existing?.sets?.[0], lastW)
+    : _buildIndivFields(existing?.sets || [], _perfModalSets, lastW);
   ['same','individual'].forEach(m => {
     const btn = document.getElementById('perf-mode-'+m); if (!btn) return;
     const on = m === mode;
@@ -108,6 +137,16 @@ function _updateRMPreview() {
 }
 
 function savePerfModal() {
+  if (_perfExType === 'energetique') {
+    const rpe = parseFloat(document.getElementById('perf-rpe-val')?.value) || 0;
+    if (rpe === 0) { toast('Entrez un RPE','w'); return; }
+    workoutData[_perfModalExIdx] = { type: 'energetique', rpe };
+    closeModal('modal-perf');
+    const btn = document.getElementById('perf-btn-'+_perfModalExIdx);
+    if (btn) { btn.style.background='rgba(240,165,0,.25)'; btn.style.borderColor='rgba(240,165,0,.5)'; btn.style.color='var(--gold)'; btn.innerText='⚡ RPE MODIF.'; }
+    toast('RPE enregistré','s');
+    return;
+  }
   let sets = [];
   if (_perfMode === 'same') {
     const w = parseFloat(document.getElementById('perf-weight-0')?.value) || 0;
@@ -128,7 +167,6 @@ function savePerfModal() {
   workoutData[_perfModalExIdx] = { type: _perfMode, sets };
   closeModal('modal-perf');
   updateTonnageDisplay();
-  // Refresh exCard button to show it's filled
   const btn = document.getElementById('perf-btn-'+_perfModalExIdx);
   if (btn) { btn.style.background='rgba(240,165,0,.25)'; btn.style.borderColor='rgba(240,165,0,.5)'; btn.style.color='var(--gold)'; btn.innerText='📊 MODIF.'; }
   toast('Performance enregistrée','s');
@@ -149,6 +187,7 @@ function calcTonnage() {
   const c = clientProgram.find(x => x.id === cycle); if (!c) return 0;
   const exs = getSessEx(c, type);
   Object.entries(workoutData).forEach(([idx, data]) => {
+    if (data.type === 'energetique') return;
     const ex = exs[parseInt(idx)];
     if (data.type === 'same') {
       const s = data.sets[0] || {};
@@ -173,6 +212,7 @@ async function saveWorkoutAndPR(cid, key) {
     const records = prData.records || {};
     Object.entries(workoutData).forEach(([idx, data]) => {
       const ex = exs[parseInt(idx)]; if (!ex || !ex.name) return;
+      if (data.type === 'energetique') return;
       const allSets = data.type === 'same'
         ? Array(parseInt(ex.sets)||3).fill(null).map(()=>({...data.sets[0]}))
         : data.sets;
@@ -186,6 +226,8 @@ async function saveWorkoutAndPR(cid, key) {
       });
     });
     await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',cid,'data','personalRecords'), { records });
+    window._clientPRData = { records };
   } catch(e) { console.error('PR save error', e); }
   return tonnage;
 }
+
