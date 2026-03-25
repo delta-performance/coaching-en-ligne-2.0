@@ -52,6 +52,7 @@ async function openClientFiche(clientId) {
   await loadClientData(clientId);
   await loadClientPR();
   await loadClientDocuments();
+  await loadWeightHistory();
   rebuildEditorSelects(); populateVisuSelect();
 }
 
