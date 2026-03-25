@@ -175,18 +175,29 @@ select.inp option{background:var(--surface);}
     <!-- CLIENT VIEW -->
     <div id="view-client" class="hidden">
       <div id="client-grid-view">
-        <header style="padding:1.5rem 0 2rem">
+        <header style="padding:1.5rem 0 1.5rem">
           <h2 id="client-greeting" style="font-size:3.5rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-.02em;line-height:1">SALUT !</h2>
           <p style="color:var(--muted);margin-top:.5rem">Bienvenu dans ton programme.</p>
         </header>
-        <div id="cycles-grid" class="grid-auto"></div>
-        <div id="client-docs-section" class="hidden"></div>
-        <div id="archive-section" class="hidden" style="margin-top:2rem">
-          <button onclick="toggleArchive()" style="display:flex;align-items:center;gap:.75rem;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.5rem">
-            <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2L19 8"/></svg>
-            <span id="archive-label">Afficher archives</span>
-          </button>
-          <div id="archive-grid" class="hidden grid-auto"></div>
+        <!-- Onglets client -->
+        <div style="display:flex;gap:.5rem;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:-.5px">
+          <button id="ctab-programme" onclick="switchClientTab('programme')" class="sub-tab-pill on" style="font-size:.75rem">Programme</button>
+          <button id="ctab-documents" onclick="switchClientTab('documents')" class="sub-tab-pill off" style="font-size:.75rem">Mes Documents</button>
+        </div>
+        <!-- Tab: Programme -->
+        <div id="client-tab-programme">
+          <div id="cycles-grid" class="grid-auto"></div>
+          <div id="archive-section" class="hidden" style="margin-top:2rem">
+            <button onclick="toggleArchive()" style="display:flex;align-items:center;gap:.75rem;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.5rem">
+              <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2L19 8"/></svg>
+              <span id="archive-label">Afficher archives</span>
+            </button>
+            <div id="archive-grid" class="hidden grid-auto"></div>
+          </div>
+        </div>
+        <!-- Tab: Documents -->
+        <div id="client-tab-documents" class="hidden">
+          <div id="client-docs-section"></div>
         </div>
       </div>
       <!-- DETAIL -->
