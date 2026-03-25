@@ -122,7 +122,12 @@ function singleExEditorCard(e, i, col, isCircuit) {
     <div style="padding:1rem;display:flex;flex-direction:column;gap:.75rem">
       ${dbSelectorsHTML(i,'s')}
       <input type="text" class="inp" value="${h(e.name||'')}" placeholder="Nom exercice" oninput="editorExos[${i}].name=this.value;this.closest('[id^=ex-card-]').querySelector('.ex-title-span').textContent=this.value||'Nouvel exercice'" style="font-size:.85rem">
-      ${isCircuit ? circuitExFields(e,i) : classicExFields(e,i)}
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span style="font-size:.55rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted)">Type :</span>
+        <button onclick="editorExos[${i}].exType='musculaire';renderEditorExos()" style="padding:.25rem .6rem;border-radius:.5rem;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;font-style:italic;text-transform:uppercase;cursor:pointer;border:1px solid ${(e.exType||'musculaire')==='musculaire'?'rgba(240,165,0,.5)':'var(--border)'};background:${(e.exType||'musculaire')==='musculaire'?'rgba(240,165,0,.15)':'var(--surface)'};color:${(e.exType||'musculaire')==='musculaire'?'var(--gold)':'var(--muted)'}">💪 Musculaire</button>
+        <button onclick="editorExos[${i}].exType='energetique';renderEditorExos()" style="padding:.25rem .6rem;border-radius:.5rem;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;font-style:italic;text-transform:uppercase;cursor:pointer;border:1px solid ${e.exType==='energetique'?'rgba(59,130,246,.5)':'var(--border)'};background:${e.exType==='energetique'?'rgba(59,130,246,.15)':'var(--surface)'};color:${e.exType==='energetique'?'#60a5fa':'var(--muted)'}">⚡ Énergétique</button>
+      </div>
+      ${isCircuit ? circuitExFields(e,i) : (e.exType === 'energetique' ? energeticExFields(e,i) : classicExFields(e,i))}
       <input type="text" class="inp" value="${h(e.comment||'')}" placeholder="Commentaire sur cet exercice..." oninput="editorExos[${i}].comment=this.value" style="font-size:.8rem">
     </div>
   </div>`;
@@ -178,6 +183,16 @@ function classicExFields(e, i, compact=false) {
   ${!compact?`<div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Récup après cet exercice</label><input type="text" class="inp" value="${h(e.restEx||'')}" placeholder="120s" oninput="editorExos[${i}].restEx=this.value" style="font-size:.8rem"></div>`:''}`;
 }
 
+function energeticExFields(e, i) {
+  return `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem">
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Temps effort</label><input type="text" class="inp" value="${h(e.workTime||'')}" placeholder="20s" oninput="editorExos[${i}].workTime=this.value" style="font-size:.8rem"></div>
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Temps récup</label><input type="text" class="inp" value="${h(e.restTime||'')}" placeholder="10s" oninput="editorExos[${i}].restTime=this.value" style="font-size:.8rem"></div>
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Reps</label><input type="text" class="inp" value="${h(e.reps||'')}" placeholder="10" oninput="editorExos[${i}].reps=this.value" style="font-size:.8rem"></div>
+    <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">Séries</label><input type="number" class="inp" value="${h(e.sets||'')}" placeholder="4" oninput="editorExos[${i}].sets=this.value" style="font-size:.8rem"></div>
+  </div>
+  <div><label style="display:block;font-size:.55rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.3rem">RPE cible</label><input type="text" class="inp" value="${h(e.rpeTarget||'')}" placeholder="7-8" oninput="editorExos[${i}].rpeTarget=this.value" style="font-size:.8rem"></div>`;
+}
+
 // DB search
 function edUpdateZone(idx, prefix, zone) {
   if (!edDropdownState[idx]) edDropdownState[idx] = {};
@@ -212,14 +227,14 @@ function edRemoveEx(i) { if(editorExos.length<=1){toast('Au moins 1 exercice req
 function edAddSuperset(i) {
   editorExos[i].superset = true;
   // Insère un exercice vide après i (ne prend pas l'exercice suivant)
-  editorExos.splice(i+1, 0, { name:'', desc:'', video:'', photo:'', reps:'', tst:'', sets:'', restSet:'', restEx:'', rpeTarget:'', comment:'', superset:false });
+  editorExos.splice(i+1, 0, { name:'', desc:'', video:'', photo:'', reps:'', tst:'', sets:'', restSet:'', restEx:'', rpeTarget:'', comment:'', superset:false, exType:'musculaire' });
   edDropdownState = {}; renderEditorExos(); toast('Superset créé','i');
 }
 
 function edAddToSuperset(startIdx, groupLength) {
   const lastIdx = startIdx + groupLength - 1;
   editorExos[lastIdx].superset = true;
-  editorExos.splice(lastIdx+1, 0, { name:'', desc:'', video:'', photo:'', reps:'', tst:'', sets:'', restSet:'', restEx:'', rpeTarget:'', comment:'', superset:false });
+  editorExos.splice(lastIdx+1, 0, { name:'', desc:'', video:'', photo:'', reps:'', tst:'', sets:'', restSet:'', restEx:'', rpeTarget:'', comment:'', superset:false, exType:'musculaire' });
   edDropdownState = {}; renderEditorExos(); toast('Exercice ajouté au superset','i');
 }
 
@@ -246,7 +261,7 @@ function edDoCopyParams(toIdx) {
 }
 
 function addExEditor() {
-  editorExos.push({ name:'', desc:'', video:'', photo:'', reps:'', tst:'', sets:'', restSet:'', restEx:'', rpeTarget:'', comment:'', superset:false });
+  editorExos.push({ name:'', desc:'', video:'', photo:'', reps:'', tst:'', sets:'', restSet:'', restEx:'', rpeTarget:'', comment:'', superset:false, exType:'musculaire' });
   renderEditorExos();
   setTimeout(() => { const el = document.getElementById('ed-exos-list'); if(el) el.lastElementChild?.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 100);
 }
