@@ -169,8 +169,22 @@ function switchCoachTab(tab) {
   if (tab==='database') { renderDatabase(); updateDbFilterDropdowns(); }
 }
 
+let _editorDirty = false;
+function markEditorDirty() { _editorDirty = true; }
+function clearEditorDirty() { _editorDirty = false; }
+function _confirmLeaveEditor(callback) {
+  if (!_editorDirty) { callback(); return; }
+  const proceed = window.confirm('Vous avez des modifications non enregistrées dans l\'éditeur. Quitter sans sauvegarder ?');
+  if (proceed) { _editorDirty = false; callback(); }
+}
+
 function switchSubTab(tab) {
-  ['logs','unlock','cycles','editor','visu','profile','records','progression'].forEach(t => {
+  if (tab !== 'editor' && _editorDirty) { _confirmLeaveEditor(() => _doSwitchSubTab(tab)); return; }
+  _doSwitchSubTab(tab);
+}
+
+function _doSwitchSubTab(tab) {
+  ['logs','unlock','cycles','editor','visu','profile','records','progression','documents'].forEach(t => {
     const el = document.getElementById('sub-'+t); if (!el) return;
     if (t==='cycles') { el.style.display=(t===tab)?'flex':'none'; el.classList.toggle('hidden',t!==tab); }
     else { el.classList.toggle('hidden',t!==tab); }
