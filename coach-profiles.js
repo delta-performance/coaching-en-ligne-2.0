@@ -1,4 +1,6 @@
 // ── COACH: PROFILE EDITING ───────────────────────────
+if (typeof _clientPRData === 'undefined') window._clientPRData = { records:{} };
+if (typeof _manualPRExName === 'undefined') window._manualPRExName = '';
 
 function renderClientProfile() {
   const c = currentClient; if (!c) return;
