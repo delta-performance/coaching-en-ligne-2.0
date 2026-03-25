@@ -34,6 +34,14 @@ function groupExercises(exs) {
 }
 
 function getActiveSessions(c) {
-  if (c && Array.isArray(c.sessions_active) && c.sessions_active.length >= 0) return c.sessions_active;
-  return ['A', 'B', 'C', 'D'];
+  if (c && Array.isArray(c.sessions_active)) return c.sessions_active;
+  return Object.keys(c && c.sessions ? c.sessions : {});
+}
+
+const SESS_COLORS = ['#3b82f6','#10b981','#f97316','#8b5cf6','#ec4899','#14b8a6','#f59e0b','#6366f1'];
+function getSessColor(sessKey, idx) {
+  if (!isNaN(idx)) return SESS_COLORS[idx % SESS_COLORS.length];
+  const keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const i = keys.indexOf(String(sessKey).toUpperCase());
+  return SESS_COLORS[(i >= 0 ? i : 0) % SESS_COLORS.length];
 }
