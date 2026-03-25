@@ -29,3 +29,11 @@ window._copySrcCycleId=0;
 window._copySrcSessType='A';
 window._copySrcProgram=[];
 window._editingDbExId=null;
+// Workout logging
+window.workoutData={};
+window._clientPRData={records:{}};
+window._perfModalExIdx=-1;
+window._perfModalSets=3;
+window._perfMode='same';
+window._manualPRExName='';
+
