@@ -192,6 +192,8 @@ function openDetail() {
     document.getElementById('rpe-input').value = 5; document.getElementById('rpe-display').innerText = '5';
     document.getElementById('comment-input').value = '';
   }
+  // Init workout data
+  workoutData = {};
   document.getElementById('client-grid-view').classList.add('hidden');
   document.getElementById('client-detail-view').classList.remove('hidden');
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -200,6 +202,17 @@ function openDetail() {
 function exCard(e, i, type, col, isCircuit) {
   const dbEx = exerciseDb.find(x => x.name === e.name);
   const photo = e.photo || (dbEx ? dbEx.photo : '');
+  const video = e.video || (dbEx ? dbEx.video : '');
+  const setsCount = parseInt(e.sets) || 3;
+  const hasPerfData = workoutData[i];
+  const perfBtnStyle = hasPerfData
+    ? 'background:rgba(240,165,0,.25);border-color:rgba(240,165,0,.5);color:var(--gold)'
+    : 'background:var(--surface);border-color:var(--border);color:var(--muted)';
+  const perfBtnLabel = hasPerfData ? '📊 MODIF.' : '📊 PERF';
+  const perfBtn = `<button id="perf-btn-${i}" onclick="openPerfModal(${i},'${h(e.name).replace(/'/g,"\\'")}',${setsCount})" style="display:flex;align-items:center;justify-content:center;gap:.4rem;${perfBtnStyle};border:1px solid;border-radius:.875rem;padding:.6rem;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;cursor:pointer;transition:all .2s;width:100%">${perfBtnLabel}</button>`;
+
+  // Header gradient couleur dynamique
+  const gradStyle = `background:linear-gradient(135deg,${col}cc,${col}88)`;
 
   const headerInner = photo
     ? `<img src="${h(photo)}" style="height:80px;width:auto;max-width:120px;object-fit:contain;flex-shrink:0;border-radius:.5rem;margin-left:1.5rem" onerror="this.style.display='none'">
@@ -207,14 +220,14 @@ function exCard(e, i, type, col, isCircuit) {
          ${e.superset?`<span style="position:absolute;top:.75rem;right:.75rem;font-size:.6rem;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-weight:900">⇄</span>`:''}
          <h5 style="font-size:1rem;font-weight:900;font-style:italic;text-transform:uppercase;color:white;line-height:1.2">${h(e.name)}</h5>
        </div>`
-    : `<span style="position:absolute;top:.75rem;left:.75rem;width:1.75rem;height:1.75rem;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;color:white">0${i+1}</span>
+    : `<span style="position:absolute;top:.75rem;left:.75rem;width:1.75rem;height:1.75rem;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;color:white">${String(i+1).padStart(2,'0')}</span>
        ${e.superset?`<span style="position:absolute;top:.75rem;right:.75rem;font-size:.6rem;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-weight:900">⇄</span>`:''}
        <h5 style="font-size:1.1rem;font-weight:900;font-style:italic;text-transform:uppercase;color:white;line-height:1.2">${h(e.name)}</h5>`;
 
   if (!isCircuit) {
     return `<div class="ex-card">
-      <div class="acc-${type}" style="padding:1.25rem;display:flex;align-items:center;position:relative;min-height:90px">
-        ${!photo?'':`<span style="position:absolute;top:.75rem;left:.75rem;width:1.75rem;height:1.75rem;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;color:white">0${i+1}</span>`}
+      <div style="${gradStyle};padding:1.25rem;display:flex;align-items:center;position:relative;min-height:90px">
+        ${!photo?'':`<span style="position:absolute;top:.75rem;left:.75rem;width:1.75rem;height:1.75rem;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;color:white">${String(i+1).padStart(2,'0')}</span>`}
         ${headerInner}
       </div>
       <div style="padding:.875rem 1rem">
@@ -224,19 +237,22 @@ function exCard(e, i, type, col, isCircuit) {
         </div>`:''}
         ${(e.restSet||e.rpeTarget)?`<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem">
           ${e.restSet?`<span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--muted);background:var(--surface);padding:.2rem .6rem;border-radius:.4rem;border:1px solid var(--border)">Récup: ${h(e.restSet)}</span>`:''}
-          ${e.rpeTarget?`<span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--gold);background:rgba(240,165,0,.1);padding:.2rem .6rem;border-radius:.4rem;border:1px solid rgba(240,165,0,.2)">RPE ${h(e.rpeTarget)}</span>`:''}
+          ${e.rpeTarget?`<span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--gold);background:rgba(240,165,0,.1);padding:.2rem .6rem;border-radius:.4rem;border:1px solid rgba(240,165,0,.2)">RPE cible: ${h(e.rpeTarget)}</span>`:''}
         </div>`:''}
         ${e.tst?`<div style="font-size:.7rem;color:var(--muted);margin-bottom:.4rem">Tempo: ${h(e.tst)}</div>`:''}
-        <p style="font-size:.75rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">${h(e.desc)}</p>
-        ${e.video?`<a href="${h(e.video)}" target="_blank" style="display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:.875rem;padding:.6rem;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);text-decoration:none">VOIR DÉMO</a>`:''}
+        ${e.desc?`<p style="font-size:.75rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">${h(e.desc)}</p>`:''}
+        <div style="display:flex;gap:.5rem;flex-direction:column">
+          ${video?`<a href="${h(video)}" target="_blank" style="display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:.875rem;padding:.6rem;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);text-decoration:none">▶ VOIR DÉMO</a>`:''}
+          ${perfBtn}
+        </div>
       </div>
     </div>`;
   }
 
   // Circuit mode
   return `<div class="ex-card">
-    <div class="acc-${type}" style="padding:1.25rem;display:flex;align-items:center;position:relative;min-height:90px">
-      ${!photo?'':`<span style="position:absolute;top:.75rem;left:.75rem;width:1.75rem;height:1.75rem;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;color:white">0${i+1}</span>`}
+    <div style="${gradStyle};padding:1.25rem;display:flex;align-items:center;position:relative;min-height:90px">
+      ${!photo?'':`<span style="position:absolute;top:.75rem;left:.75rem;width:1.75rem;height:1.75rem;background:rgba(255,255,255,.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;color:white">${String(i+1).padStart(2,'0')}</span>`}
       ${headerInner}
     </div>
     <div style="display:flex;gap:.5rem;padding:.875rem 1rem 0">
@@ -244,8 +260,11 @@ function exCard(e, i, type, col, isCircuit) {
       ${e.reps?`<div style="flex:1;background:var(--surface);border:1px solid var(--border);border-radius:.75rem;padding:.4rem;text-align:center"><div style="font-size:.5rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.2rem">Volume</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:.9rem;font-weight:900;color:var(--gold)">${h(e.reps)}</div></div>`:''}
     </div>
     <div style="padding:.875rem 1rem">
-      <p style="font-size:.75rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">${h(e.desc)}</p>
-      ${e.video?`<a href="${h(e.video)}" target="_blank" style="display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:.875rem;padding:.6rem;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);text-decoration:none">VOIR DÉMO</a>`:''}
+      ${e.desc?`<p style="font-size:.75rem;color:var(--muted);line-height:1.6;margin-bottom:.75rem">${h(e.desc)}</p>`:''}
+      <div style="display:flex;gap:.5rem;flex-direction:column">
+        ${video?`<a href="${h(video)}" target="_blank" style="display:flex;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:.875rem;padding:.6rem;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);text-decoration:none">▶ VOIR DÉMO</a>`:''}
+        ${perfBtn}
+      </div>
     </div>
   </div>`;
 }
@@ -270,7 +289,10 @@ async function submitValidation() {
   const btn = document.getElementById('btn-validate');
   btn.disabled = true; btn.innerText = 'ENVOI...';
   try {
-    await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',cid,'logs',key), { id:key, cycle:currentSess.cycle, type:currentSess.type, rpe:_rpe, comment:_comment, timestamp:new Date().toISOString() });
+    const tonnage = await saveWorkoutAndPR(cid, key);
+    const logData = { id:key, cycle:currentSess.cycle, type:currentSess.type, rpe:_rpe, comment:_comment, timestamp:new Date().toISOString() };
+    if (tonnage > 0) logData.tonnage = Math.round(tonnage);
+    await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',cid,'logs',key), logData);
     btn.disabled = false; btn.innerText = "VALIDER L'EFFORT";
     openDetail();
   } catch(e) { console.error(e); btn.disabled = false; btn.innerText = 'ERREUR'; toast('Erreur réseau','e'); }
