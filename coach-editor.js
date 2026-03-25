@@ -63,9 +63,8 @@ function setSessMode(mode, save=false) {
 function renderEditorExos() {
   const el = document.getElementById('ed-exos-list'); if (!el) return;
   const isCircuit = currentSessMode === 'circuit';
-  const colors = { A:'#3b82f6', B:'#10b981', C:'#f97316', D:'#8b5cf6' };
   const sess = document.getElementById('ed-sess')?.value || 'A';
-  const col = colors[sess] || '#f0a500';
+  const col = getSessColor(sess);
 
   if (!editorExos.length) {
     el.innerHTML = `<div style="padding:2rem;text-align:center;color:var(--muted);font-style:italic;border:1px dashed var(--border);border-radius:1rem">Aucun exercice. Cliquez "+ Ajouter un exercice".</div>`;
@@ -282,8 +281,7 @@ async function dupSession() {
   clone.id = newId;
   clone.focus = clientProgram[cidx].focus+' (copie séance '+sess+')';
   clone.sessions_active = [sess];
-  // Clear other sessions
-  ['A','B','C','D'].forEach(t => { if (t!==sess) clone.sessions[t] = { rest:'45s', tours:'3', mode:'circuit', comment:'', exercises:[] }; });
+  clone.sessions = { [sess]: JSON.parse(JSON.stringify(clientProgram[cidx].sessions[sess] || {})) };
   clientProgram.push(clone);
   try { await saveClientProgram(); rebuildEditorSelects(); renderClientGrid(); renderCycleStatus(); toast('Séance dupliquée dans un nouveau cycle !','s'); } catch(e) { toast('Erreur','e'); }
 }
@@ -329,17 +327,26 @@ async function doCopy() {
 }
 
 // ── AJOUTER UNE SÉANCE ────────────────────────────────
+function _nextSessLetter(active) {
+  const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (let i = 0; i < alpha.length; i++) { if (!active.includes(alpha[i])) return alpha[i]; }
+  return 'S'+(active.length+1);
+}
+
 function openAddSessModal() {
   const cId = parseInt(document.getElementById('ed-cycle').value);
   const c = clientProgram.find(x => x.id === cId); if (!c) return;
   const active = getActiveSessions(c);
-  const available = ['A','B','C','D'].filter(s => !active.includes(s));
-  if (!available.length) { toast('Toutes les séances sont déjà actives (A,B,C,D)','w'); return; }
-  // Build letter picker
-  const picker = document.getElementById('sess-letter-picker'); if (picker) picker.innerHTML = available.map(s =>
-    `<button onclick="document.querySelectorAll('.sess-letter-btn').forEach(b=>b.style.borderColor='var(--border)');this.style.borderColor='var(--gold)';_addSessTargetLetter='${s}'" class="sess-letter-btn btn btn-ghost" style="padding:.75rem 1.5rem;font-size:1.2rem">${s}</button>`
-  ).join('');
-  _addSessTargetLetter = available[0];
+  const suggestions = [];
+  const alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for (let i = 0, found = 0; i < alpha.length && found < 4; i++) {
+    if (!active.includes(alpha[i])) { suggestions.push(alpha[i]); found++; }
+  }
+  const picker = document.getElementById('sess-letter-picker');
+  if (picker) picker.innerHTML = suggestions.map(s =>
+    `<button onclick="document.querySelectorAll('.sess-letter-btn').forEach(b=>{b.style.borderColor='var(--border)';b.style.background='var(--surface)';b.style.color='var(--muted)'});this.style.borderColor='var(--gold)';this.style.background='rgba(240,165,0,.15)';this.style.color='var(--gold)';_addSessTargetLetter='${s}'" class="sess-letter-btn btn btn-ghost" style="padding:.75rem 1.5rem;font-size:1.2rem">${s}</button>`
+  ).join('') + `<div style="display:flex;align-items:center;gap:.5rem;margin-top:.75rem"><span style="font-size:.65rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase">Autre :</span><input id="custom-sess-letter" type="text" maxlength="3" class="inp" style="width:70px;font-size:1rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-align:center;text-transform:uppercase" placeholder="E..." oninput="_addSessTargetLetter=this.value.toUpperCase()"></div>`;
+  _addSessTargetLetter = suggestions[0] || _nextSessLetter(active);
   // Init copy source selects
   const srcClient = document.getElementById('copy-src-client');
   if (srcClient) {
@@ -369,7 +376,7 @@ async function loadCopySrcCycles() {
   _copySrcClientId = srcId;
   try {
     const doc = await window.fdb.getDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',srcId,'data','program'));
-    _copySrcProgram = (doc.exists() && doc.data().cycles) ? doc.data().cycles : [];
+    _copySrcProgram = (doc.exists && doc.data().cycles) ? doc.data().cycles : [];
     const sel = document.getElementById('copy-src-cycle'); if (!sel) return;
     sel.innerHTML = _copySrcProgram.map(c=>`<option value="${c.id}">C${c.id} – ${h(c.focus)}</option>`).join('');
     _copySrcCycleId = _copySrcProgram[0]?.id || 0;
