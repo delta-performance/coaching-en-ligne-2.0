@@ -72,7 +72,9 @@ function renderClientGrid() {
   const archSec = document.getElementById('archive-section');
   if (!grid) return;
   grid.innerHTML = ''; archGrid.innerHTML = ''; let hasArch = false;
-  clientProgram.forEach(c => {
+  // Trier les cycles par ID numérique
+  const sorted = clientProgram.slice().sort((a,b) => a.id - b.id);
+  sorted.forEach(c => {
     const isArch = clientArchived.has(c.id);
     const isUnlock = clientUnlocked.has(c.id);
     const active = getActiveSessions(c);
@@ -208,12 +210,16 @@ function exCard(e, i, type, col, isCircuit) {
   const photo = e.photo || (dbEx ? dbEx.photo : '');
   const video = e.video || (dbEx ? dbEx.video : '');
   const setsCount = parseInt(e.sets) || 3;
+  const exType = e.exType || 'musculaire';
+  const isEnergetic = exType === 'energetique';
   const hasPerfData = workoutData[i];
   const perfBtnStyle = hasPerfData
     ? 'background:rgba(240,165,0,.25);border-color:rgba(240,165,0,.5);color:var(--gold)'
     : 'background:var(--surface);border-color:var(--border);color:var(--muted)';
-  const perfBtnLabel = hasPerfData ? '📊 MODIF.' : '📊 PERF';
-  const perfBtn = `<button id="perf-btn-${i}" onclick="openPerfModal(${i},'${h(e.name).replace(/'/g,"\\'")}',${setsCount})" style="display:flex;align-items:center;justify-content:center;gap:.4rem;${perfBtnStyle};border:1px solid;border-radius:.875rem;padding:.6rem;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;cursor:pointer;transition:all .2s;width:100%">${perfBtnLabel}</button>`;
+  const perfBtnLabel = isEnergetic ? (hasPerfData ? '⚡ RPE MODIF.' : '⚡ RPE') : (hasPerfData ? '📊 MODIF.' : '📊 PERF');
+  const safeName = h(e.name).replace(/'/g,"\\'");
+  const plannedReps = (e.reps || '').replace(/'/g,"\\'");
+  const perfBtn = `<button id="perf-btn-${i}" onclick="openPerfModal(${i},'${safeName}',${setsCount},'${plannedReps}','${exType}')" style="display:flex;align-items:center;justify-content:center;gap:.4rem;${perfBtnStyle};border:1px solid;border-radius:.875rem;padding:.6rem;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;cursor:pointer;transition:all .2s;width:100%">${perfBtnLabel}</button>`;
 
   // Header gradient couleur dynamique
   const gradStyle = `background:linear-gradient(135deg,${col}cc,${col}88)`;
@@ -235,10 +241,17 @@ function exCard(e, i, type, col, isCircuit) {
         ${headerInner}
       </div>
       <div style="padding:.875rem 1rem">
-        ${(e.sets||e.reps)?`<div style="display:flex;gap:1.5rem;margin-bottom:.6rem;align-items:flex-end">
+        ${isEnergetic
+          ? `<div style="display:flex;gap:1rem;margin-bottom:.6rem;align-items:flex-end;flex-wrap:wrap">
+              ${e.workTime?`<div><div style="font-size:.5rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.15rem">Effort</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;color:#60a5fa;line-height:1">${h(e.workTime)}</div></div>`:''}
+              ${e.restTime?`<div><div style="font-size:.5rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.15rem">Récup</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;line-height:1">${h(e.restTime)}</div></div>`:''}
+              ${e.sets?`<div><div style="font-size:.5rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.15rem">Séries</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;line-height:1">${h(e.sets)}</div></div>`:''}
+              ${e.reps?`<div><div style="font-size:.5rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.15rem">Reps</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;color:var(--gold);line-height:1">${h(e.reps)}</div></div>`:''}
+            </div>`
+          : `${(e.sets||e.reps)?`<div style="display:flex;gap:1.5rem;margin-bottom:.6rem;align-items:flex-end">
           ${e.sets?`<div><div style="font-size:.5rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.15rem">Séries</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1.75rem;font-weight:900;line-height:1">${h(e.sets)}</div></div>`:''}
           ${e.reps?`<div><div style="font-size:.5rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.15rem">Répétitions</div><div style="font-family:'Barlow Condensed',sans-serif;font-size:1.75rem;font-weight:900;color:var(--gold);line-height:1">${h(e.reps)}</div></div>`:''}
-        </div>`:''}
+        </div>`:''}`}
         ${(e.restSet||e.rpeTarget)?`<div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem">
           ${e.restSet?`<span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--muted);background:var(--surface);padding:.2rem .6rem;border-radius:.4rem;border:1px solid var(--border)">Récup: ${h(e.restSet)}</span>`:''}
           ${e.rpeTarget?`<span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:var(--gold);background:rgba(240,165,0,.1);padding:.2rem .6rem;border-radius:.4rem;border:1px solid rgba(240,165,0,.2)">RPE cible: ${h(e.rpeTarget)}</span>`:''}
