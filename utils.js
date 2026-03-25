@@ -34,9 +34,15 @@ function groupExercises(exs) {
 }
 
 function getActiveSessions(c) {
-  if (c && Array.isArray(c.sessions_active)) return c.sessions_active;
-  return Object.keys(c && c.sessions ? c.sessions : {});
+  let arr;
+  if (c && Array.isArray(c.sessions_active)) arr = [...c.sessions_active];
+  else arr = Object.keys(c && c.sessions ? c.sessions : {});
+  return arr.sort((a,b) => a.localeCompare(b));
 }
+
+// Safe accessor for workoutData (guards against missing script)
+function getWorkoutData() { return (typeof workoutData !== 'undefined') ? workoutData : {}; }
+function getSessParamsSafe(c,t) { return typeof getSessParams === 'function' ? getSessParams(c,t) : {}; }
 
 const SESS_COLORS = ['#3b82f6','#10b981','#f97316','#8b5cf6','#ec4899','#14b8a6','#f59e0b','#6366f1'];
 function getSessColor(sessKey, idx) {
