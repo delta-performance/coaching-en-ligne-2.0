@@ -96,6 +96,10 @@ function renderVisu() {
           </div>
         </div>`;
       }).join('')}
+      <div onclick="visuAddSession(${c.id})" style="cursor:pointer;border:2px dashed var(--border);border-radius:1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;padding:2rem;min-height:160px;transition:all .2s;background:transparent" onmouseover="this.style.borderColor='rgba(240,165,0,.5)';this.style.background='rgba(240,165,0,.03)'" onmouseout="this.style.borderColor='var(--border)';this.style.background='transparent'">
+        <span style="font-size:2rem;color:var(--muted)">+</span>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)">Ajouter une séance</span>
+      </div>
     </div>`;
 
   } else if (visuMode === 'cross-sess') {
@@ -166,6 +170,28 @@ function renderVisu() {
       </div>`;
     }).join('');
   }
+}
+
+async function visuAddSession(cycleId) {
+  const idx = clientProgram.findIndex(c => c.id === cycleId); if (idx === -1) return;
+  const c = clientProgram[idx];
+  if (!c.sessions_active) c.sessions_active = [];
+  // Find next available letter
+  const used = new Set(Object.keys(c.sessions || {}));
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let letter = '';
+  for (const l of letters) { if (!used.has(l)) { letter = l; break; } }
+  if (!letter) { toast('Toutes les lettres sont utilisées !','w'); return; }
+  c.sessions_active.push(letter);
+  c.sessions_active.sort();
+  if (!c.sessions) c.sessions = {};
+  c.sessions[letter] = { rest:'45s', tours:'3', mode:'circuit', comment:'', exercises:[] };
+  try {
+    await saveClientProgram();
+    rebuildEditorSelects();
+    toast('Séance '+letter+' ajoutée — ouvrez l\'éditeur pour la configurer','s');
+    renderVisu();
+  } catch(e) { toast('Erreur sauvegarde','e'); }
 }
 
 function visuOpenEditor(cycleId, sessType) {
