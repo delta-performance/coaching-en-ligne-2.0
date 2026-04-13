@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DELTA Performance 2.0</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-init.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Barlow:wght@300;400;500;600&display=swap');
+/* ── DARK MODE (défaut) ── */
+:root {
+  --bg:#080c12; --surface:#0f1620; --card:#141d2b; --border:#1e2d40;
+  --brand:#c8102e; --brand2:#8a0c1f; --gold:#f0a500;
+  --text:#e8edf3; --muted:#4a6080;
+  --blue:#3b82f6; --green:#10b981; --orange:#f97316; --purple:#8b5cf6;
+  --nav-bg:rgba(8,12,18,.92);
+  --shadow:rgba(0,0,0,.5);
+}
+/* ── CHAT STYLES ─────────────────────────────────── */
+.chat-fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand), var(--brand2));
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 20px rgba(200, 16, 46, 0.4);
+  transition: all 0.2s;
+  z-index: 100;
+}
+.chat-fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 30px rgba(200, 16, 46, 0.5);
+}
+.chat-fab.has-unread {
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(200, 16, 46, 0.4); }
+  50% { box-shadow: 0 4px 30px rgba(200, 16, 46, 0.8); }
+}
+.chat-badge {
+  position: absolute;
+  top: -0.25rem;
+  right: -0.25rem;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  background: var(--gold);
+  color: #1a0900;
+  border-radius: 50%;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.3rem;
+}
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+  max-height: 600px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+.chat-header {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--card), var(--surface));
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 900;
+  font-style: italic;
+  text-transform: uppercase;
+}
+.chat-close-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0.25rem;
+  transition: color 0.2s;
+}
+.chat-close-btn:hover {
+  color: var(--text);
+}
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.chat-message-row {
+  display: flex;
+  width: 100%;
+}
+.chat-bubble-client {
+  background: linear-gradient(135deg, var(--brand), var(--brand2));
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem 1rem 0.25rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+.chat-bubble-coach {
+  background: var(--card);
+  color: var(--text);
+  padding: 0.75rem 1rem;
+  border-radius: 1rem 1rem 1rem 0.25rem;
+  border: 1px solid var(--border);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+.chat-sender-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.25rem;
+  letter-spacing: 0.05em;
+}
+.chat-text {
+  margin-bottom: 0.25rem;
+}
+.chat-time {
+  font-size: 0.65rem;
+  opacity: 0.7;
+  text-align: right;
+}
+.chat-date-separator {
+  text-align: center;
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0.5rem 0;
+  position: relative;
+}
+.chat-date-separator::before,
+.chat-date-separator::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 30%;
+  height: 1px;
+  background: var(--border);
+}
+.chat-date-separator::before { left: 0; }
+.chat-date-separator::after { right: 0; }
+.chat-input-area {
+  padding: 1rem;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.chat-input-row {
+  display: flex;
+  gap: 0.75rem;
+}
+.chat-input {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1.5rem;
+  padding: 0.75rem 1rem;
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  resize: none;
+  min-height: 2.75rem;
+  max-height: 120px;
+}
+.chat-input:focus {
+  border-color: var(--gold);
+}
+.chat-send-btn {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--gold), #d49000);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #1a0900;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.chat-send-btn:hover {
+  transform: scale(1.05);
+}
+.chat-send-btn:active {
+  transform: scale(0.95);
+}
+.chat-template-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Barlow Condensed', sans-serif;
+}
+.chat-template-btn:hover {
+  background: var(--card);
+  border-color: var(--gold);
+}
+.chat-template-picker {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+}
+.chat-btn-template {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.chat-btn-template:hover {
+  background: var(--card);
+  border-color: var(--gold);
+}
+/* Panel chat coach */
+.coach-chat-panel {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 380px;
+  max-height: 500px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+  overflow: hidden;
+}
+.coach-chat-panel .chat-messages {
+  max-height: 300px;
+  height: 250px;
+}
+@media (max-width: 768px) {
+  .coach-chat-panel {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-height: 70vh;
+    border-radius: 1rem 1rem 0 0;
+  }
+}
+/* Onglet chat dans la fiche client */
+.chat-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.chat-client-preview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.chat-client-preview:hover {
+  border-color: var(--gold);
+}
+.chat-last-message {
+  font-size: 0.85rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.5rem;
+}
+.chat-timestamp {
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-family: 'Barlow Condensed', sans-serif;
+}
+
+/* ── LIGHT MODE ── */
+:root.light-mode {
+  --bg:#f0f4f8; --surface:#ffffff; --card:#ffffff; --border:#d1dae6;
+  --brand:#c8102e; --brand2:#a50d25; --gold:#d08000;
+  --text:#0f1728; --muted:#5a6f8a;
+  --nav-bg:rgba(240,244,248,.95);
+  --shadow:rgba(0,0,0,.12);
+}
+:root.light-mode nav { background: var(--nav-bg); border-bottom-color: var(--border); }
+:root.light-mode .card,:root.light-mode .card-hover { box-shadow: 0 2px 12px var(--shadow); }
+:root.light-mode .login-box { box-shadow: 0 20px 60px var(--shadow); }
+:root.light-mode .toast-item.s{background:linear-gradient(135deg,#d1fae5,#a7f3d0);color:#065f46;}
+:root.light-mode .toast-item.e{background:linear-gradient(135deg,#fee2e2,#fecaca);color:#991b1b;}
+:root.light-mode .toast-item.i{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af;}
+:root.light-mode .toast-item.w{background:linear-gradient(135deg,#fef3c7,#fde68a);color:#92400e;}
+:root.light-mode .tab-pill.off { background: var(--surface); }
+:root.light-mode select.inp option { background: var(--surface); color: var(--text); }
+:root.light-mode .cycle-card-client{background:linear-gradient(135deg,#f8fafc 0%,#f1f5f9 100%);border-color:#cbd5e1;}
+:root.light-mode .cycle-title-client{color:#0f1728;}
+:root.light-mode .cycle-focus-client{color:#d08000;}
+:root.light-mode .cycle-sess-btn{background:#fff;border-color:#cbd5e1;color:#64748b;}
+:root.light-mode .cycle-sess-btn.type-a{background:linear-gradient(135deg,#1e3a8a,#3b82f6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-b{background:linear-gradient(135deg,#064e3b,#10b981);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-c{background:linear-gradient(135deg,#7c2d12,#f97316);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-d{background:linear-gradient(135deg,#4c1d95,#8b5cf6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-e{background:linear-gradient(135deg,#be185d,#ec4899);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-f{background:linear-gradient(135deg,#0f766e,#14b8a6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-g{background:linear-gradient(135deg,#92400e,#f59e0b);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-h{background:linear-gradient(135deg,#3730a3,#6366f1);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-i{background:linear-gradient(135deg,#1e3a8a,#3b82f6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-j{background:linear-gradient(135deg,#064e3b,#10b981);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-k{background:linear-gradient(135deg,#7c2d12,#f97316);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-l{background:linear-gradient(135deg,#4c1d95,#8b5cf6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-m{background:linear-gradient(135deg,#be185d,#ec4899);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-n{background:linear-gradient(135deg,#0f766e,#14b8a6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-o{background:linear-gradient(135deg,#92400e,#f59e0b);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-p{background:linear-gradient(135deg,#3730a3,#6366f1);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-q{background:linear-gradient(135deg,#1e3a8a,#3b82f6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-r{background:linear-gradient(135deg,#064e3b,#10b981);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-s{background:linear-gradient(135deg,#7c2d12,#f97316);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-t{background:linear-gradient(135deg,#4c1d95,#8b5cf6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-u{background:linear-gradient(135deg,#be185d,#ec4899);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-v{background:linear-gradient(135deg,#0f766e,#14b8a6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-w{background:linear-gradient(135deg,#92400e,#f59e0b);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-x{background:linear-gradient(135deg,#3730a3,#6366f1);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-y{background:linear-gradient(135deg,#1e3a8a,#3b82f6);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.type-z{background:linear-gradient(135deg,#064e3b,#10b981);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-sess-btn.done{background:linear-gradient(135deg,#059669,#10b981);border-color:transparent;color:#fff;}
+:root.light-mode .cycle-card-client[style*="#0a0f18"]{background:linear-gradient(135deg,#e2e8f0 0%,#cbd5e1 100%)!important;}
+:root.light-mode .cycle-card-client[style*="#0a0f18"] .cycle-title-client{color:#475569;}
+:root.light-mode .cycle-card-client[style*="#0a0f18"] > div:first-child{background:repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(15,23,42,.06) 12px,rgba(15,23,42,.06) 24px)!important;}
+@media (prefers-color-scheme: light) { :root:not(.dark-forced) { --bg:#f0f4f8; --surface:#ffffff; --card:#ffffff; --border:#d1dae6; --brand:#c8102e; --brand2:#a50d25; --gold:#d08000; --text:#0f1728; --muted:#5a6f8a; --nav-bg:rgba(240,244,248,.95); --shadow:rgba(0,0,0,.12); } }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+h1,h2,h3,h4,h5{font-family:'Barlow Condensed',sans-serif;}
+.hidden{display:none!important;}
+/* LOGIN */
+#screen-login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden;}
+#screen-login::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(200,16,46,.12) 0%,transparent 70%);top:-100px;left:-100px;pointer-events:none;}
+.login-box{background:var(--card);border:1px solid var(--border);border-radius:2rem;padding:3rem;width:100%;max-width:420px;position:relative;z-index:1;box-shadow:0 40px 80px rgba(0,0,0,.6);}
+.login-logo{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:900;font-style:italic;color:var(--text);letter-spacing:-.02em;text-transform:uppercase;line-height:1;}
+.login-logo span{color:var(--gold);}
+.code-input{width:100%;background:var(--surface);border:2px solid var(--border);border-radius:1rem;padding:1.25rem 1.5rem;font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;font-style:italic;color:var(--text);text-align:center;letter-spacing:.15em;text-transform:uppercase;outline:none;transition:border-color .2s;}
+.code-input:focus{border-color:var(--gold);}
+/* NAV */
+nav{position:sticky;top:0;z-index:50;background:rgba(8,12,18,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:1rem 1.5rem;}
+.nav-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+.nav-brand{font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;}
+.nav-brand span{color:var(--gold);}
+/* MAIN */
+.main{max-width:1400px;margin:0 auto;padding:2rem 1.5rem 6rem;}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:1.5rem;}
+.card-hover{background:var(--card);border:1px solid var(--border);border-radius:1.5rem;transition:all .2s;cursor:pointer;}
+.card-hover:hover{border-color:rgba(240,165,0,.3);transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.4);}
+/* BUTTONS */
+.btn{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.06em;border:none;cursor:pointer;transition:all .2s;border-radius:.875rem;}
+.btn-primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:white;padding:.875rem 1.5rem;font-size:.9rem;border:1px solid rgba(240,165,0,.2);}
+.btn-primary:hover{opacity:.9;}
+.btn-gold{background:var(--gold);color:#1a0900;padding:.75rem 1.5rem;font-size:.85rem;}
+.btn-gold:hover{background:#ffc107;}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);padding:.6rem 1rem;font-size:.75rem;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.btn-danger{background:rgba(127,29,29,.3);border:1px solid rgba(127,29,29,.4);color:#f87171;padding:.5rem .875rem;font-size:.65rem;}
+.btn-danger:hover{background:rgba(127,29,29,.5);}
+.btn-sm{padding:.4rem .875rem;font-size:.65rem;}
+/* TABS COACH PRINCIPAL */
+.tab-pill{padding:.5rem 1.25rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;border:1px solid transparent;cursor:pointer;transition:all .2s;}
+.tab-pill.on{background:linear-gradient(135deg,var(--brand),var(--brand2));color:var(--gold);border-color:rgba(240,165,0,.3);}
+.tab-pill.off{background:transparent;color:var(--muted);border-color:var(--border);}
+.tab-pill.off:hover{border-color:rgba(240,165,0,.2);color:var(--text);}
+/* SOUS-TABS (LOGS, ACCÈS CYCLES, etc.) */
+.sub-tab-pill{padding:.6rem 1.25rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;background:transparent;color:var(--muted);}
+.sub-tab-pill.on{color:var(--gold);border-bottom-color:var(--gold);}
+.sub-tab-pill.off:hover{color:var(--text);border-bottom-color:rgba(240,165,0,.3);}
+/* INPUTS */
+.inp{background:var(--surface);border:1px solid var(--border);color:var(--text);border-radius:.875rem;padding:.75rem 1rem;font-family:'Barlow',sans-serif;font-size:.875rem;outline:none;transition:border-color .2s;width:100%;}
+.inp:focus{border-color:var(--gold);}
+.inp::placeholder{color:var(--muted);}
+textarea.inp{resize:vertical;}
+select.inp option{background:var(--surface);}
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem;overflow-y:auto;}
+/* TOAST */
+#toasts{position:fixed;bottom:2rem;right:2rem;z-index:999;display:flex;flex-direction:column;gap:.75rem;pointer-events:none;}
+.toast-item{display:flex;align-items:center;gap:.75rem;padding:.875rem 1.25rem;border-radius:1rem;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;font-style:italic;text-transform:uppercase;letter-spacing:.05em;box-shadow:0 8px 32px rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.06);animation:tIn .3s cubic-bezier(.34,1.56,.64,1) forwards;}
+.toast-item.s{background:linear-gradient(135deg,#052e16,#064e3b);color:#34d399;}
+.toast-item.e{background:linear-gradient(135deg,#450a0a,#7f1d1d);color:#f87171;}
+.toast-item.i{background:linear-gradient(135deg,#0f2546,#1e3a8a);color:#93c5fd;}
+.toast-item.w{background:linear-gradient(135deg,#431407,#78350f);color:#fbbf24;}
+@keyframes tIn{from{opacity:0;transform:translateY(1rem) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes tOut{from{opacity:1}to{opacity:0;transform:translateY(1rem) scale(.95)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.shake{animation:shake .3s ease;}
+/* SESSION BUTTONS */
+.sess-btn{height:3.25rem;border-radius:1rem;border:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:1rem;cursor:pointer;transition:all .2s;background:var(--surface);color:var(--muted);}
+.sess-btn:hover{border-color:rgba(240,165,0,.4);color:var(--text);}
+.sess-A{background:linear-gradient(135deg,#1e3a8a,#3b82f6);border-color:transparent;color:white;}
+.sess-B{background:linear-gradient(135deg,#064e3b,#10b981);border-color:transparent;color:white;}
+.sess-C{background:linear-gradient(135deg,#7c2d12,#f97316);border-color:transparent;color:white;}
+.sess-D{background:linear-gradient(135deg,#4c1d95,#8b5cf6);border-color:transparent;color:white;}
+.acc-A{background:linear-gradient(135deg,#1e3a8a,#3b82f6);}
+.acc-B{background:linear-gradient(135deg,#064e3b,#10b981);}
+.acc-C{background:linear-gradient(135deg,#7c2d12,#f97316);}
+.acc-D{background:linear-gradient(135deg,#4c1d95,#8b5cf6);}
+/* TABLE */
+.tbl th{padding:.75rem 1rem;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--border);text-align:left;}
+.tbl td{padding:.875rem 1rem;border-bottom:1px solid rgba(30,45,64,.5);font-size:.8rem;vertical-align:middle;}
+.tbl tr:hover td{background:rgba(255,255,255,.02);}
+/* BADGE */
+.badge{display:inline-flex;align-items:center;padding:.2rem .6rem;border-radius:2rem;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.08em;}
+.badge-coach{background:var(--gold);color:#1a0900;}
+.badge-client{background:var(--brand);color:white;}
+.badge-group{background:rgba(139,92,246,.25);color:#a78bfa;border:1px solid rgba(139,92,246,.3);}
+.badge-archived{background:rgba(74,96,128,.15);color:var(--muted);border:1px solid rgba(74,96,128,.2);}
+/* SUPERSET */
+.superset-wrap{border:1px dashed rgba(240,165,0,.4);border-radius:1.25rem;padding:1rem;background:rgba(240,165,0,.03);}
+.superset-label{font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:.75rem;}
+.client-tab-btn{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;background:transparent;border:none;border-bottom:2px solid transparent;color:var(--muted);padding:.6rem 1.25rem;cursor:pointer;transition:all .2s;}
+.client-tab-btn:hover{color:var(--text);}
+.client-tab-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+/* Accordion client */
+.accordion-header-macro{background:linear-gradient(135deg,#1e3a8a 0%,#0f2546 100%);border:1px solid rgba(59,130,246,.3);border-radius:1rem;padding:1rem 1.25rem;margin-bottom:.5rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .2s;}
+.accordion-header-meso{background:linear-gradient(135deg,#7c3aed 0%,#4c1d95 100%);border:1px solid rgba(139,92,246,.3);border-radius:1rem;padding:1rem 1.25rem;margin-bottom:.5rem;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .2s;}
+.accordion-title{font-size:1rem;font-weight:700;font-style:italic;text-transform:uppercase;color:#fff;letter-spacing:.05em;}
+.accordion-subtitle{font-size:.65rem;font-weight:500;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.1em;}
+.accordion-icon-macro,.accordion-icon-meso{font-size:1.2rem;color:#fff;transition:transform .2s;}
+
+/* Cartes cycles client */
+.cycle-card-client{background:linear-gradient(135deg,#0f1620 0%,#141d2b 100%);border:1px solid #1e2d40;border-radius:1.25rem;padding:1.5rem;transition:all .2s;position:relative;}
+.cycle-card-client:hover{border-color:rgba(240,165,0,.3);}
+.cycle-title-client{font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;color:#fff;letter-spacing:-.02em;margin-bottom:.25rem;}
+.cycle-focus-client{font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:1.25rem;}
+.cycle-badge-complete{position:absolute;top:1rem;right:1rem;background:var(--gold);color:#1a0900;font-family:'Barlow Condensed',sans-serif;font-size:.55rem;font-weight:900;font-style:italic;text-transform:uppercase;padding:.25rem .5rem;border-radius:.5rem;}
+.cycle-badge-locked{position:absolute;top:1rem;right:1rem;background:rgba(8,12,18,.7);border:1px solid var(--border);padding:.25rem .5rem;border-radius:.5rem;}
+.cycle-badge-locked span{font-size:.55rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;color:var(--muted);}
+.cycle-sess-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;}
+.cycle-sess-btn{height:2.75rem;border-radius:.75rem;border:1px solid var(--border);background:var(--surface);font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.85rem;color:var(--muted);cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;}
+.cycle-sess-btn:hover{border-color:rgba(240,165,0,.4);color:var(--text);}
+.cycle-sess-btn.done{background:linear-gradient(135deg,#059669,#10b981);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-a{background:linear-gradient(135deg,#1e3a8a,#3b82f6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-b{background:linear-gradient(135deg,#064e3b,#10b981);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-c{background:linear-gradient(135deg,#7c2d12,#f97316);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-d{background:linear-gradient(135deg,#4c1d95,#8b5cf6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-e{background:linear-gradient(135deg,#be185d,#ec4899);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-f{background:linear-gradient(135deg,#0f766e,#14b8a6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-g{background:linear-gradient(135deg,#92400e,#f59e0b);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-h{background:linear-gradient(135deg,#3730a3,#6366f1);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-i{background:linear-gradient(135deg,#1e3a8a,#3b82f6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-j{background:linear-gradient(135deg,#064e3b,#10b981);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-k{background:linear-gradient(135deg,#7c2d12,#f97316);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-l{background:linear-gradient(135deg,#4c1d95,#8b5cf6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-m{background:linear-gradient(135deg,#be185d,#ec4899);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-n{background:linear-gradient(135deg,#0f766e,#14b8a6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-o{background:linear-gradient(135deg,#92400e,#f59e0b);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-p{background:linear-gradient(135deg,#3730a3,#6366f1);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-q{background:linear-gradient(135deg,#1e3a8a,#3b82f6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-r{background:linear-gradient(135deg,#064e3b,#10b981);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-s{background:linear-gradient(135deg,#7c2d12,#f97316);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-t{background:linear-gradient(135deg,#4c1d95,#8b5cf6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-u{background:linear-gradient(135deg,#be185d,#ec4899);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-v{background:linear-gradient(135deg,#0f766e,#14b8a6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-w{background:linear-gradient(135deg,#92400e,#f59e0b);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-x{background:linear-gradient(135deg,#3730a3,#6366f1);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-y{background:linear-gradient(135deg,#1e3a8a,#3b82f6);border-color:transparent;color:#fff;}
+.cycle-sess-btn.type-z{background:linear-gradient(135deg,#064e3b,#10b981);border-color:transparent;color:#fff;}
+.ex-card{background:var(--card);border:1px solid var(--border);border-radius:1.25rem;overflow:hidden;}
+/* DB TABLE */
+.db-row:hover{background:rgba(255,255,255,.02);}
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;width:100%;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;width:100%;}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;width:100%;}
+@media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div id="toasts"></div>
+
+<!-- LOGIN -->
+<div id="screen-login">
+  <div class="login-box">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <div class="login-logo">DELTA <span>Performance</span></div>
+      <div style="font-size:.7rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3em;margin-top:.5rem">Coaching Elite 2.0</div>
+    </div>
+    
+    <!-- Mode CLIENT (par défaut) : connexion par code -->
+    <div id="login-client-mode">
+      <label style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:.75rem">Code d'accès</label>
+      <input type="text" id="login-code" class="code-input" placeholder="EMMA2024" autocomplete="off" style="text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:900;font-style:italic;letter-spacing:.1em">
+      <p id="login-error" class="hidden" style="text-align:center;color:#f87171;font-size:.75rem;margin-top:.75rem;font-family:'Barlow Condensed',sans-serif;font-style:italic;">Code incorrect.</p>
+      <p id="login-hint" style="font-size:.65rem;color:var(--muted);margin-top:.75rem;line-height:1.45;font-style:italic">Entre ton code personnel pour accéder à ton programme.</p>
+      <button class="btn btn-primary" style="width:100%;margin-top:1.5rem;font-size:1rem;padding:1.1rem" onclick="doLogin()">ACCÉDER</button>
+      
+      <div style="text-align:center;margin-top:1.5rem">
+        <button onclick="toggleCoachLogin()" style="background:none;border:none;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;text-decoration:underline">Je suis coach / admin</button>
+      </div>
+    </div>
+    
+    <!-- Mode COACH (caché par défaut) : connexion par email/password -->
+    <div id="login-coach-mode" class="hidden">
+      <label style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:.75rem">Email</label>
+      <input type="email" id="login-email" class="code-input" placeholder="coach@email.com" autocomplete="email" inputmode="email" style="text-transform:none;letter-spacing:.02em;font-size:1.1rem;margin-bottom:1rem">
+      
+      <label style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:.75rem">Mot de passe</label>
+      <input type="password" id="login-password" class="code-input" placeholder="••••••" autocomplete="current-password" style="font-size:1.1rem">
+      
+      <p id="login-error-coach" class="hidden" style="text-align:center;color:#f87171;font-size:.75rem;margin-top:.75rem;font-family:'Barlow Condensed',sans-serif;font-style:italic;"></p>
+      
+      <a href="#" onclick="openModal('modal-forgot-password'); return false;" style="font-size:.65rem;color:var(--gold);text-decoration:underline;display:block;margin-top:1rem;font-family:'Barlow Condensed',sans-serif;font-style:italic;">Mot de passe oublié ?</a>
+      
+      <label style="display:flex;align-items:center;gap:.6rem;margin-top:1rem;cursor:pointer;user-select:none">
+        <input type="checkbox" id="login-remember" style="accent-color:var(--gold);width:1rem;height:1rem">
+        <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--muted)">Rester connecté</span>
+      </label>
+      
+      <button class="btn btn-primary" style="width:100%;margin-top:1.5rem;font-size:1rem;padding:1.1rem" onclick="doCoachLogin()">CONNEXION COACH</button>
+      
+      <div style="text-align:center;margin-top:1rem">
+        <button onclick="toggleCoachLogin()" style="background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;text-decoration:underline">← Retour (connexion par code)</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="screen-app" class="hidden">
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-brand">DELTA <span>Performance</span></div>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <span id="nav-badge" class="badge badge-client">—</span>
+        <span id="nav-name" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.9rem">—</span>
+        <button id="btn-theme" onclick="toggleTheme()" class="btn btn-ghost btn-sm" title="Mode jour/nuit" style="font-size:.9rem;padding:.4rem .6rem">🌙</button>
+        <button id="btn-refresh" class="btn btn-ghost btn-sm hidden" onclick="refreshData()">Actualiser</button>
+        <button id="btn-change-pwd" class="btn btn-ghost btn-sm hidden" onclick="openModal('modal-change-password')">Mot de passe</button>
+        <button class="btn btn-ghost btn-sm" onclick="doLogout()">Déconnexion</button>
+      </div>
+    </div>
+  </nav>
+  <div class="main">
+
+    <!-- CLIENT VIEW -->
+    <div id="view-client" class="hidden">
+      <div id="client-grid-view">
+        <header style="padding:1.5rem 0 1.5rem">
+          <h2 id="client-greeting" style="font-size:3.5rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-.02em;line-height:1">SALUT !</h2>
+          <p style="color:var(--muted);margin-top:.5rem">Bienvenu dans ton programme.</p>
+        </header>
+        <!-- Onglets client -->
+        <div style="display:flex;gap:.5rem;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:-.5px">
+          <button id="ctab-programme" onclick="switchClientTab('programme')" class="sub-tab-pill on" style="font-size:.75rem">Programme</button>
+          <button id="ctab-tracking" onclick="switchClientTab('tracking')" class="sub-tab-pill off" style="font-size:.75rem">Suivi</button>
+          <button id="ctab-documents" onclick="switchClientTab('documents')" class="sub-tab-pill off" style="font-size:.75rem">Mes Documents</button>
+        </div>
+        <!-- Tab: Programme -->
+        <div id="client-tab-programme" style="width:100%;max-width:100%;">
+          <div id="cycles-grid" style="width:100%;"></div>
+          <div id="archive-section" class="hidden" style="margin-top:2rem">
+            <button onclick="toggleArchive()" style="display:flex;align-items:center;gap:.75rem;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1.5rem">
+              <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8l1 12a2 2 0 002 2h8a2 2 0 002-2L19 8"/></svg>
+              <span id="archive-label">Afficher archives</span>
+            </button>
+            <div id="archive-grid" class="hidden grid-auto"></div>
+          </div>
+        </div>
+        <!-- Tab: Documents -->
+        <div id="client-tab-documents" class="hidden">
+          <div id="client-docs-section"></div>
+        </div>
+        <!-- Tab: Tracking -->
+        <div id="client-tab-tracking" class="hidden">
+          <div id="client-tracking-section"></div>
+        </div>
+      </div>
+      <!-- DETAIL -->
+      <div id="client-detail-view" class="hidden">
+        <button onclick="closeDetail()" class="btn btn-ghost btn-sm" style="margin-bottom:1.5rem;display:flex;align-items:center;gap:.5rem">
+          <svg style="width:1rem;height:1rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7"/></svg>
+          Retour
+        </button>
+        <div class="card" style="overflow:hidden">
+          <div id="detail-bar" style="height:5px"></div>
+          <div style="padding:2.5rem">
+            <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:1.5rem;border-bottom:1px solid var(--border);padding-bottom:2rem;margin-bottom:2rem">
+              <div>
+                <span id="detail-tag" class="badge" style="background:var(--surface);color:var(--gold);border:1px solid rgba(240,165,0,.2);margin-bottom:.75rem">C1•A</span>
+                <h2 id="detail-title" style="font-size:3rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-.02em">SEANCE</h2>
+                <p id="detail-focus" style="color:var(--muted);font-style:italic;margin-top:.25rem"></p>
+                <div id="detail-mode-badge" style="margin-top:.5rem"></div>
+              </div>
+              <div id="detail-stats" style="display:flex;gap:.75rem;flex-wrap:wrap"></div>
+            </div>
+            <div id="exercise-list" style="display:flex;flex-direction:column;gap:1.5rem;margin-bottom:1.5rem"></div>
+            <!-- Tonnage display -->
+            <div id="tonnage-display" class="hidden" style="margin-bottom:1.5rem;padding:1rem 1.5rem;background:rgba(240,165,0,.07);border:1px solid rgba(240,165,0,.2);border-radius:1.25rem;display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <div style="font-size:.55rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Tonnage séance</div>
+                <div id="tonnage-value" style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;font-style:italic;color:var(--gold)">0 kg</div>
+              </div>
+              <svg style="width:2.5rem;height:2.5rem;color:rgba(240,165,0,.3)" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div style="background:linear-gradient(135deg,var(--brand),var(--brand2));border-radius:1.5rem;padding:2.5rem;border:1px solid rgba(255,255,255,.05)">
+              <div id="rapport-form">
+                <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:2rem;display:flex;align-items:center;gap:.75rem">
+                  <span style="width:2.5rem;height:2.5rem;background:var(--gold);color:#1a0900;border-radius:.75rem;display:flex;align-items:center;justify-content:center;font-size:1.1rem">!</span>
+                  RAPPORT
+                </h3>
+                <div class="grid-2">
+                  <div>
+                    <label style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.5);margin-bottom:1rem">RPE 1-10</label>
+                    <input type="range" id="rpe-input" min="1" max="10" value="5" style="width:100%;accent-color:var(--gold)">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-top:.75rem">
+                      <span id="rpe-display" style="font-family:'Barlow Condensed',sans-serif;font-size:4rem;font-weight:900;font-style:italic;color:white;line-height:1">5</span>
+                      <span style="font-size:.6rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em">/10</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:.6rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.2em;color:rgba(255,255,255,.5);margin-bottom:1rem">Notes</label>
+                    <textarea id="comment-input" rows="4" class="inp" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.1);color:white" placeholder="Feedback..."></textarea>
+                  </div>
+                </div>
+                <button id="btn-validate" onclick="openConfirmModal()" style="width:100%;margin-top:1.5rem;background:white;color:var(--brand);border:none;border-radius:1rem;padding:1.25rem;font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;font-weight:900;font-style:italic;text-transform:uppercase;cursor:pointer;transition:all .2s">VALIDER L'EFFORT</button>
+              </div>
+              <div id="rapport-done" class="hidden" style="text-align:center;padding:2.5rem 0">
+                <div style="width:5rem;height:5rem;background:var(--gold);color:#1a0900;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem">
+                  <svg style="width:2.5rem;height:2.5rem" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <h4 style="font-size:2rem;font-weight:900;font-style:italic;text-transform:uppercase;color:white;margin-bottom:.5rem">DANS LES ARCHIVES !</h4>
+                <p style="color:rgba(255,255,255,.6)">Rapport transmis au coach.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COACH CHAT PANEL (Floating) -->
+    <div id="coach-chat-panel" class="coach-chat-panel hidden">
+      <div class="chat-header">
+        <div>
+          <div id="coach-chat-title" class="chat-title">💬 Chat</div>
+          <div id="chat-participants" style="display:flex;gap:1rem;margin-top:.25rem;flex-wrap:wrap;font-size:.75rem;color:var(--muted);">
+            <span id="participant-client">Client</span>
+            <span id="participant-coach">Moi (coach)</span>
+          </div>
+        </div>
+        <button class="chat-close-btn" onclick="closeCoachChat()">✕</button>
+      </div>
+      <div id="coach-chat-messages" class="chat-messages"></div>
+      <div class="chat-input-area">
+        <div id="chat-template-picker" class="chat-template-picker hidden"></div>
+        <div class="chat-input-row">
+          <textarea id="coach-chat-input" class="chat-input" placeholder="Écrire un message..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendCoachMessage(this.value)}"></textarea>
+          <button class="chat-send-btn" onclick="sendCoachMessage(document.getElementById('coach-chat-input').value)">➤</button>
+        </div>
+        <button class="chat-btn-template" onclick="showTemplatePicker()">📋 Templates rapides</button>
+      </div>
+    </div>
+
+    <!-- COACH VIEW -->
+    <div id="view-coach" class="hidden">
+      <!-- CHAT FAB COACH (apparaît quand un client est sélectionné) -->
+      <button id="btn-chat-coach" class="chat-fab hidden" onclick="toggleCoachFabChat()" style="position:fixed;bottom:6rem;right:1.5rem;z-index:9999">
+        💬
+        <span id="chat-badge-coach" class="chat-badge" style="display:none">0</span>
+      </button>
+
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.5rem;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:1.5rem">
+        <div>
+          <h2 style="font-size:2.5rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:-.02em">DELTA <span style="color:var(--gold)">ADMIN</span></h2>
+          <p style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase;letter-spacing:.1em">Panneau coach</p>
+        </div>
+      </div>
+      <!-- Coach tabs (style tab-pill = design fort) -->
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
+        <button class="tab-pill on"  id="ctab-clients"  onclick="switchCoachTab('clients')">Clients</button>
+        <button class="tab-pill off" id="ctab-fiche"    onclick="switchCoachTab('fiche')" style="display:none">Fiche client</button>
+        <button class="tab-pill off admin-only" id="ctab-coachs"   onclick="switchCoachTab('coachs')" style="display:none">Coachs</button>
+        <button class="tab-pill off" id="ctab-groupes"  onclick="switchCoachTab('groupes')">Groupes</button>
+        <button class="tab-pill off" id="ctab-baseprograms" onclick="switchCoachTab('baseprograms')">Programmes de base</button>
+        <button class="tab-pill off" id="ctab-transfer" onclick="switchCoachTab('transfer')">Transfert</button>
+        <button class="tab-pill off" id="ctab-database" onclick="switchCoachTab('database')">Base d'exercices</button>
+        <button class="tab-pill off" id="ctab-messages" onclick="console.log('Messages clicked!'); console.log('switchCoachTab exists:', typeof switchCoachTab); switchCoachTab('messages')">💬 Messages <span id="global-chat-badge" class="chat-badge" style="display:none;margin-left:.5rem;font-size:.65rem;min-width:1rem;height:1rem">0</span></button>
+      </div>
+
+      <!-- TAB CLIENTS -->
+      <div id="coach-clients">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.5rem">
+          <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+            <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase">MES CLIENTS</h3>
+            <select id="filter-group" class="inp" style="width:auto;padding:.4rem .875rem;font-size:.75rem" onchange="renderClientsGrid()">
+              <option value="">Tous les groupes</option>
+            </select>
+            <label style="display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:var(--muted);cursor:pointer">
+              <input type="checkbox" id="show-archived" onchange="renderClientsGrid()" style="accent-color:var(--gold)"> Voir archivés
+            </label>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-client')">+ NOUVEAU CLIENT</button>
+        </div>
+        <div id="clients-grid" class="grid-auto"></div>
+      </div>
+
+      <!-- TAB FICHE CLIENT -->
+      <div id="coach-fiche" class="hidden">
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" onclick="switchCoachTab('clients')">← Retour</button>
+          <h3 id="fiche-client-name" style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;color:var(--gold)">CLIENT</h3>
+          <span id="fiche-client-code" class="badge" style="background:var(--surface);color:var(--muted);border:1px solid var(--border)">CODE</span>
+        </div>
+        <!-- Sous-tabs (style sous-ligné, différent des tabs principaux) -->
+        <div style="display:flex;gap:0;flex-wrap:wrap;margin-bottom:1.5rem;border-bottom:1px solid var(--border)">
+          <button class="sub-tab-pill off" id="stab-profile"     onclick="switchSubTab('profile')">Profil</button>
+          <button class="sub-tab-pill off" id="stab-visu"        onclick="switchSubTab('visu')">Visualisation</button>
+          <button class="sub-tab-pill on"  id="stab-cycles"      onclick="switchSubTab('cycles')">Gestion cycles</button>
+          <button class="sub-tab-pill off" id="stab-editor"      onclick="switchSubTab('editor')">Éditeur</button>
+          <button class="sub-tab-pill off" id="stab-progression" onclick="switchSubTab('progression')">Progression</button>
+          <button class="sub-tab-pill off" id="stab-records"     onclick="switchSubTab('records')">Records</button>
+          <button class="sub-tab-pill off" id="stab-logs"        onclick="switchSubTab('logs')">Logs</button>
+          <button class="sub-tab-pill off" id="stab-documents"   onclick="switchSubTab('documents')">Documents</button>
+        </div>
+
+        <!-- LOGS -->
+        <div id="sub-logs" class="card" style="padding:2rem">
+          <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.5rem">
+            <div>
+              <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase">LOGS</h4>
+              <p style="font-size:.65rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-style:italic;margin-top:.25rem">Reset = retire le ✓ client</p>
+            </div>
+            <div style="display:flex;align-items:center;gap:.75rem">
+              <label style="display:flex;align-items:center;gap:.5rem;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;color:var(--muted);cursor:pointer">
+                <input type="checkbox" id="check-all" onchange="toggleAllLogs(this)" style="accent-color:var(--gold)"> Tout
+              </label>
+              <button id="btn-bulk" onclick="bulkDelete()" class="hidden btn btn-danger btn-sm">RESET SÉL.</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="tbl" style="width:100%">
+              <thead><tr><th style="width:2rem"></th><th>Date</th><th>Session</th><th style="text-align:center">RPE</th><th>Notes</th><th style="text-align:right">Action</th></tr></thead>
+              <tbody id="logs-body"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CYCLES (Gestion) -->
+        <div id="sub-cycles" class="hidden" style="flex-direction:column;gap:1rem">
+          <!-- Hiérarchie des cycles -->
+          <div class="card" style="padding:2rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+              <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase">STRUCTURE DES CYCLES</h4>
+              <button class="btn btn-gold" id="btn-add-top-cycle" onclick="addTopLevelCycle()">+ MACROCYCLE</button>
+            </div>
+            <div id="hierarchy-container" style="display:flex;flex-direction:column;gap:0.5rem">
+              <!-- Rempli dynamiquement par renderHierarchy() -->
+            </div>
+          </div>
+        </div>
+
+        <!-- EDITOR -->
+        <div id="sub-editor" class="hidden card" style="padding:2rem">
+          <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">ÉDITEUR DE SÉANCE</h4>
+          
+          <!-- Sélecteurs hiérarchiques -->
+          <div id="hierarchy-selectors" style="margin-bottom:1.5rem;padding:1rem;background:var(--surface);border-radius:1rem;border:1px solid var(--border)">
+            <!-- Rempli dynamiquement par renderHierarchySelectors() -->
+          </div>
+          
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem">
+            <!-- Bandeau de sélection Séance -->
+            <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+              <label style="font-size:.65rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase">Séance</label>
+              <div id="ed-sess-btns" style="display:flex;gap:.4rem;flex-wrap:wrap"></div>
+            </div>
+            <button onclick="openAddSessModal()" class="btn btn-ghost btn-sm" style="color:var(--green);border-color:rgba(16,185,129,.3);font-size:1.2rem;padding:.4rem .7rem;margin-left:auto" title="Ajouter une séance">+</button>
+          </div>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem">
+            <button id="mode-circuit-btn" onclick="setSessMode('circuit')" style="padding:.4rem .7rem;border-radius:.5rem;font-size:1rem;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)" title="Mode Circuit">⟳</button>
+            <button id="mode-classic-btn" onclick="setSessMode('classic')" style="padding:.4rem .7rem;border-radius:.5rem;font-size:1rem;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)" title="Mode Classique">≡</button>
+            <button class="btn btn-ghost btn-sm" onclick="dupCycle()">⧉ Dupliquer cycle</button>
+            <button class="btn btn-ghost btn-sm" onclick="dupSession()" style="border-color:rgba(59,130,246,.3);color:#60a5fa">⧉ Dupliquer séance</button>
+            <button class="btn btn-ghost btn-sm" onclick="saveFullSession()" style="background:var(--gold);color:#1a0900;border-color:var(--gold)">💾 SAUVEGARDER</button>
+            <button class="btn btn-ghost btn-sm" onclick="openPDFModal()" style="border-color:rgba(139,92,246,.3);color:#a78bfa">🖨 PDF</button>
+          </div>
+          <!-- Session-level params -->
+          <div id="ed-sess-params" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem;padding:1rem;background:var(--surface);border-radius:1rem;border:1px solid var(--border);align-items:flex-end">
+            <div id="ed-circuit-global" style="display:flex;gap:.75rem;flex-wrap:wrap">
+              <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Repos entre tours</label><input type="text" id="ed-rest" class="inp" style="width:110px" placeholder="45s"></div>
+              <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Nb de tours</label><input type="number" id="ed-tours" class="inp" style="width:80px" placeholder="3"></div>
+            </div>
+            <div style="flex:1;min-width:200px">
+              <label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Commentaire séance</label>
+              <input type="text" id="ed-sess-comment" class="inp" placeholder="Notes générales sur la séance...">
+            </div>
+          </div>
+          <!-- Exercises list -->
+          <div id="ed-exos-list" style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem"></div>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
+            <button class="btn btn-ghost btn-sm" onclick="addExEditor()">+ Ajouter un exercice</button>
+          </div>
+          <!-- Copy section -->
+          <div style="background:rgba(255,255,255,.02);padding:1.25rem;border-radius:1.25rem;border:1px solid var(--border)">
+            <p style="font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Copier vers d'autres cycles</p>
+            <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
+              <button id="cm-sess" onclick="setCopyMode('sess')" style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.65rem;text-transform:uppercase;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)">Séance</button>
+              <button id="cm-cyc"  onclick="setCopyMode('cyc')"  style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.65rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Cycle complet</button>
+            </div>
+            <p id="copy-desc" style="font-size:.65rem;color:var(--muted);font-style:italic;margin-bottom:.75rem">Copie la séance sélectionnée</p>
+            <div id="copy-grid" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
+            <button class="btn btn-ghost" style="width:100%;padding:.75rem;font-size:.75rem" onclick="doCopy()">COPIER VERS SÉLECTION</button>
+          </div>
+        </div>
+
+        <!-- VISUALISATION -->
+        <div id="sub-visu" class="hidden card" style="padding:2rem">
+          <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.5rem">VISUALISATION</h4>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:1.5rem">Vue synthétique du programme. Cliquer sur une séance pour la modifier.</p>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem">
+            <button id="vm-same-cycle" class="tab-pill on" onclick="setVisuMode('same-cycle')">Même cycle</button>
+            <button id="vm-cross-sess" class="tab-pill off" onclick="setVisuMode('cross-sess')">Même séance / différents cycles</button>
+            <button id="vm-all"        class="tab-pill off" onclick="setVisuMode('all')">Tout sélectionné</button>
+          </div>
+          <div id="visu-controls" style="margin-bottom:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+            <div id="visu-ctrl-macro" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+              <label style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase">Macrocycle :</label>
+              <div id="visu-macro-btns" style="display:flex;gap:.5rem;flex-wrap:wrap"></div>
+            </div>
+            <div id="visu-ctrl-meso" style="display:none;align-items:center;gap:.75rem;flex-wrap:wrap">
+              <label style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase">Mésocycle :</label>
+              <div id="visu-meso-btns" style="display:flex;gap:.5rem;flex-wrap:wrap"></div>
+            </div>
+            <div id="visu-ctrl-cycle" style="display:none;align-items:center;gap:.75rem;flex-wrap:wrap">
+              <label style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase">Microcycle :</label>
+              <div id="visu-cycle-btns" style="display:flex;gap:.5rem;flex-wrap:wrap"></div>
+            </div>
+            <div id="visu-ctrl-sess" style="display:none;align-items:center;gap:.75rem">
+              <label style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase">Séance :</label>
+              <div style="display:flex;gap:.5rem">
+                <button onclick="setVisuSess('A')" id="vs-A" class="tab-pill on" style="padding:.3rem .875rem;font-size:.65rem">A</button>
+                <button onclick="setVisuSess('B')" id="vs-B" class="tab-pill off" style="padding:.3rem .875rem;font-size:.65rem">B</button>
+                <button onclick="setVisuSess('C')" id="vs-C" class="tab-pill off" style="padding:.3rem .875rem;font-size:.65rem">C</button>
+                <button onclick="setVisuSess('D')" id="vs-D" class="tab-pill off" style="padding:.3rem .875rem;font-size:.65rem">D</button>
+              </div>
+            </div>
+            <div id="visu-ctrl-cycles-check" style="display:none;flex-wrap:wrap;gap:.5rem"></div>
+          </div>
+          <div id="visu-content"></div>
+        </div><!-- /sub-visu -->
+
+        <!-- PROFIL CLIENT -->
+        <div id="sub-profile" class="hidden" style="padding:.5rem 0"></div>
+
+        <!-- RECORDS -->
+        <div id="sub-records" class="hidden" style="padding:.5rem 0"></div>
+
+        <!-- PROGRESSION -->
+        <div id="sub-progression" class="hidden" style="padding:.5rem 0"></div>
+
+        <!-- DOCUMENTS (coach upload → client view) -->
+        <div id="sub-documents" class="hidden" style="padding:.5rem 0"></div>
+
+        <!-- CHAT (coach view) - SEULEMENT le contenu du panel flottant -->
+        <div id="sub-chat" class="hidden" style="padding:.5rem 0">
+          <div style="display:flex;justify-content:center;align-items:center;margin-bottom:1rem">
+            <button class="btn btn-primary" onclick="openCoachChat()">💬 Ouvrir le chat avec ce client</button>
+          </div>
+        </div>
+
+      </div><!-- /coach-fiche -->
+
+      <!-- TAB COACHS (Admin uniquement) -->
+      <div id="coach-coachs" class="hidden">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1rem">
+          <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase">COACHS</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-coach')">+ NOUVEAU COACH</button>
+        </div>
+        
+        <!-- Sous-onglets Coachs -->
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:1rem">
+          <button class="sub-tab-pill on" id="coach-sub-gestion" onclick="switchCoachSubTab('gestion')">👥 Gestion Coachs</button>
+          <button class="sub-tab-pill off" id="coach-sub-transfert" onclick="switchCoachSubTab('transfert')">🔄 Transfert Clients</button>
+        </div>
+        
+        <!-- Sous-onglet Gestion -->
+        <div id="coachs-gestion">
+          <div id="coachs-list" style="display:flex;flex-direction:column;gap:1rem"></div>
+        </div>
+        
+        <!-- Sous-onglet Transfert -->
+        <div id="coachs-transfert" class="hidden">
+          <div class="card" style="padding:2rem">
+            <h4 style="font-size:1.25rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1rem">🔄 Transférer des clients entre coachs</h4>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem;margin-bottom:1.5rem">
+              <div>
+                <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Coach SOURCE</label>
+                <select id="tr-coach-src" class="inp" onchange="loadTransferCoachClients()">
+                  <option value="">-- Choisir un coach --</option>
+                </select>
+              </div>
+              <div>
+                <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Coach DESTINATION</label>
+                <select id="tr-coach-dst" class="inp">
+                  <option value="">-- Sans coach --</option>
+                </select>
+              </div>
+            </div>
+            <div id="tr-coach-clients-container" style="margin-bottom:1.5rem">
+              <p style="color:var(--muted);font-style:italic;font-size:.8rem">Sélectionnez un coach source pour voir ses clients.</p>
+            </div>
+            <button class="btn btn-primary" id="tr-coach-btn" onclick="transferCoachClients()" disabled>Transférer les clients sélectionnés</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB GROUPES -->
+      <div id="coach-groupes" class="hidden">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.5rem">
+          <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase">GROUPES</h3>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-group')">+ NOUVEAU GROUPE</button>
+        </div>
+        <div id="groupes-list" style="display:flex;flex-direction:column;gap:1rem"></div>
+      </div>
+
+      <!-- TAB TRANSFER -->
+      <div id="coach-transfer" class="hidden card" style="padding:2rem">
+        <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.5rem">TRANSFERT</h3>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:2rem">Copier cycles/séances entre clients.</p>
+        <div class="grid-2" style="margin-bottom:1.5rem">
+          <div>
+            <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Client SOURCE</label>
+            <select id="tr-src" class="inp" onchange="loadTransferCycles()"></select>
+          </div>
+          <div>
+            <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Client CIBLE</label>
+            <select id="tr-dst" class="inp"></select>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-bottom:1.5rem">
+          <div>
+            <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Mode</label>
+            <div style="display:flex;gap:.5rem">
+              <button id="tr-mode-cycle" onclick="setTransferMode('cycle')" style="flex:1;padding:.6rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.7rem;text-transform:uppercase;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)">Cycle entier</button>
+              <button id="tr-mode-sess" onclick="setTransferMode('sess')" style="flex:1;padding:.6rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.7rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Séance</button>
+            </div>
+          </div>
+          <div>
+            <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Cycle source</label>
+            <select id="tr-cycle" class="inp"></select>
+          </div>
+        </div>
+        <div id="tr-sess-row" class="hidden" style="margin-bottom:1.5rem">
+          <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Séance</label>
+          <div style="display:flex;gap:.5rem">
+            <button onclick="setTransferSess('A')" id="trs-A" style="flex:1;padding:.75rem;border-radius:.875rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.9rem;cursor:pointer;border:1px solid rgba(59,130,246,.5);background:rgba(59,130,246,.15);color:#60a5fa">S-A</button>
+            <button onclick="setTransferSess('B')" id="trs-B" style="flex:1;padding:.75rem;border-radius:.875rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.9rem;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">S-B</button>
+            <button onclick="setTransferSess('C')" id="trs-C" style="flex:1;padding:.75rem;border-radius:.875rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.9rem;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">S-C</button>
+            <button onclick="setTransferSess('D')" id="trs-D" style="flex:1;padding:.75rem;border-radius:.875rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.9rem;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">S-D</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;font-size:1rem;padding:1.25rem" onclick="doTransfer()">EFFECTUER LE TRANSFERT</button>
+      </div>
+
+      <!-- TAB DATABASE -->
+      <div id="coach-database" class="hidden">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.5rem">
+          <div>
+            <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase">BASE D'EXERCICES</h3>
+            <p style="font-size:.8rem;color:var(--muted);margin-top:.25rem">Référentiel global d'exercices.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-exercise')">+ AJOUTER EXERCICE</button>
+        </div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem;align-items:center">
+          <select id="dbf-zone" class="inp" style="width:auto;padding:.5rem .875rem;font-size:.8rem" onchange="renderDatabase()"><option value="">Toutes zones</option></select>
+          <select id="dbf-pattern" class="inp" style="width:auto;padding:.5rem .875rem;font-size:.8rem" onchange="renderDatabase()"><option value="">Tous patterns</option></select>
+          <input type="text" id="dbf-search" class="inp" style="width:220px;padding:.5rem .875rem;font-size:.8rem" placeholder="Rechercher..." oninput="renderDatabase()">
+        </div>
+        <div class="card" style="overflow:hidden">
+          <div style="overflow-x:auto">
+            <table class="tbl" style="width:100%">
+              <thead><tr><th>Nom</th><th>Zone</th><th>Pattern</th><th>Latéralité</th><th>Photo</th><th>Vidéo</th><th></th><th style="text-align:right">Actions</th></tr></thead>
+              <tbody id="db-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB MESSAGES (Chat global) -->
+      <div id="coach-messages" class="hidden">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.5rem">
+          <div>
+            <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase">💬 MESSAGES</h3>
+            <p style="font-size:.8rem;color:var(--muted);margin-top:.25rem">Toutes les conversations avec tes clients.</p>
+          </div>
+        </div>
+        <div id="messages-list-container" style="display:flex;flex-direction:column;gap:.75rem">
+          <div id="messages-list" style="display:flex;flex-direction:column;gap:.5rem">
+            <!-- Rempli dynamiquement par renderAllMessages() -->
+            <p style="color:var(--muted);font-style:italic;text-align:center;padding:2rem">Chargement des messages...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB BASE PROGRAMS (Programmes génériques) -->
+      <div id="coach-baseprograms" class="hidden">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;margin-bottom:1.5rem">
+          <div>
+            <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase">PROGRAMMES DE BASE</h3>
+            <p style="font-size:.8rem;color:var(--muted);margin-top:.25rem">Programmes génériques utilisables par plusieurs clients avec suivi individuel.</p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-baseprogram')">+ NOUVEAU PROGRAMME</button>
+        </div>
+        
+        <!-- Liste des programmes de base -->
+        <div id="baseprograms-list" style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem"></div>
+        
+        <!-- Éditeur de programme de base (affiché quand un programme est sélectionné) -->
+        <div id="baseprogram-editor" class="hidden">
+          <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" onclick="closeBaseProgramEditor()">← Retour aux programmes</button>
+            <h4 id="baseprogram-editor-title" style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;color:var(--gold)">PROGRAMME</h4>
+            <span id="baseprogram-editor-badge" class="badge badge-group">GÉNÉRIQUE</span>
+          </div>
+          
+          <!-- Sous-tabs pour l'éditeur -->
+          <div style="display:flex;gap:0;flex-wrap:wrap;margin-bottom:1.5rem;border-bottom:1px solid var(--border)">
+            <button class="sub-tab-pill on" id="bstab-cycles" onclick="switchBaseProgramSubTab('cycles')">Gestion cycles</button>
+            <button class="sub-tab-pill off" id="bstab-editor" onclick="switchBaseProgramSubTab('editor')">Éditeur</button>
+            <button class="sub-tab-pill off" id="bstab-visu" onclick="switchBaseProgramSubTab('visu')">Visualisation</button>
+            <button class="sub-tab-pill off" id="bstab-params" onclick="switchBaseProgramSubTab('params')">Paramètres</button>
+          </div>
+          
+          <!-- Sub: Gestion cycles - EXACTEMENT comme sub-cycles -->
+          <div id="bsub-cycles" class="hidden" style="flex-direction:column;gap:1rem">
+            <!-- Hiérarchie des cycles -->
+            <div class="card" style="padding:2rem">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+                <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase">STRUCTURE DES CYCLES</h4>
+                <button class="btn btn-gold" id="bp-btn-add-top-cycle" onclick="addTopLevelCycle()">+ MACROCYCLE</button>
+              </div>
+              <div id="bp-hierarchy-container" style="display:flex;flex-direction:column;gap:0.5rem"></div>
+            </div>
+          </div>
+          
+          <!-- Sub: Éditeur - EXACTEMENT comme sub-editor -->
+          <div id="bsub-editor" class="hidden card" style="padding:2rem">
+            <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">ÉDITEUR DE SÉANCE</h4>
+            
+            <!-- Sélecteurs hiérarchiques -->
+            <div id="bp-hierarchy-selectors" style="margin-bottom:1.5rem;padding:1rem;background:var(--surface);border-radius:1rem;border:1px solid var(--border)"></div>
+            
+            <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem">
+              <!-- Bandeau de sélection Séance -->
+              <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+                <label style="font-size:.65rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase">Séance</label>
+                <div id="bp-ed-sess-btns" style="display:flex;gap:.4rem;flex-wrap:wrap"></div>
+              </div>
+              <button onclick="bpOpenAddSessModal()" class="btn btn-ghost btn-sm" style="color:var(--green);border-color:rgba(16,185,129,.3);font-size:1.2rem;padding:.4rem .7rem;margin-left:auto" title="Ajouter une séance">+</button>
+            </div>
+            <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem">
+              <button id="bp-mode-circuit-btn" onclick="bpSetSessMode('circuit')" style="padding:.4rem .7rem;border-radius:.5rem;font-size:1rem;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)" title="Mode Circuit">⟳</button>
+              <button id="bp-mode-classic-btn" onclick="bpSetSessMode('classic')" style="padding:.4rem .7rem;border-radius:.5rem;font-size:1rem;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)" title="Mode Classique">≡</button>
+              <button class="btn btn-ghost btn-sm" onclick="bpDupCycle()">⧉ Dupliquer cycle</button>
+              <button class="btn btn-ghost btn-sm" onclick="bpDupSession()" style="border-color:rgba(59,130,246,.3);color:#60a5fa">⧉ Dupliquer séance</button>
+              <button class="btn btn-ghost btn-sm" onclick="bpSaveFullSession()" style="background:var(--gold);color:#1a0900;border-color:var(--gold)">💾 SAUVEGARDER</button>
+              <button class="btn btn-ghost btn-sm" onclick="openPDFModal()" style="border-color:rgba(139,92,246,.3);color:#a78bfa">🖨 PDF</button>
+            </div>
+            <!-- Session-level params -->
+            <div id="bp-ed-sess-params" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem;padding:1rem;background:var(--surface);border-radius:1rem;border:1px solid var(--border);align-items:flex-end">
+              <div id="bp-ed-circuit-global" style="display:flex;gap:.75rem;flex-wrap:wrap">
+                <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Repos entre tours</label><input type="text" id="bp-ed-rest" class="inp" style="width:110px" placeholder="45s"></div>
+                <div><label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Nb de tours</label><input type="number" id="bp-ed-tours" class="inp" style="width:80px" placeholder="3"></div>
+              </div>
+              <div style="flex:1;min-width:200px">
+                <label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Commentaire séance</label>
+                <input type="text" id="bp-ed-sess-comment" class="inp" placeholder="Notes générales sur la séance...">
+              </div>
+            </div>
+            <!-- Exercises list -->
+            <div id="bp-ed-exos-list" style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem"></div>
+            <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem">
+              <button class="btn btn-ghost btn-sm" onclick="bpAddExEditor()">+ Ajouter un exercice</button>
+            </div>
+            <!-- Copy section -->
+            <div style="background:rgba(255,255,255,.02);padding:1.25rem;border-radius:1.25rem;border:1px solid var(--border)">
+              <p style="font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem">Copier vers d'autres cycles</p>
+              <div style="display:flex;gap:.5rem;margin-bottom:.75rem">
+                <button id="bp-cm-sess" onclick="bpSetCopyMode('sess')" style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.65rem;text-transform:uppercase;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)">Séance</button>
+                <button id="bp-cm-cyc"  onclick="bpSetCopyMode('cyc')"  style="flex:1;padding:.5rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.65rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Cycle complet</button>
+              </div>
+              <p id="bp-copy-desc" style="font-size:.65rem;color:var(--muted);font-style:italic;margin-bottom:.75rem">Copie la séance sélectionnée</p>
+              <div id="bp-copy-grid" style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem"></div>
+              <button class="btn btn-ghost" style="width:100%;padding:.75rem;font-size:.75rem" onclick="bpDoCopy()">COPIER VERS SÉLECTION</button>
+            </div>
+          </div>
+          
+          <!-- Sub: Visualisation - EXACTEMENT comme sub-visu -->
+          <div id="bsub-visu" class="hidden card" style="padding:2rem">
+            <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.5rem">VISUALISATION</h4>
+            <p style="font-size:.8rem;color:var(--muted);margin-bottom:1.5rem">Vue synthétique du programme. Cliquer sur une séance pour la modifier.</p>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem">
+              <button id="bp-vm-same-cycle" class="tab-pill on" onclick="bpSetVisuMode('same-cycle')">Même cycle</button>
+              <button id="bp-vm-cross-sess" class="tab-pill off" onclick="bpSetVisuMode('cross-sess')">Même séance / différents cycles</button>
+              <button id="bp-vm-all"        class="tab-pill off" onclick="bpSetVisuMode('all')">Tout sélectionné</button>
+            </div>
+            <div id="bp-visu-controls" style="margin-bottom:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+              <div id="bp-visu-ctrl-macro" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+                <label style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase">Macrocycle :</label>
+                <div id="bp-visu-macro-btns" style="display:flex;gap:.5rem;flex-wrap:wrap"></div>
+              </div>
+              <div id="bp-visu-ctrl-meso" style="display:none;align-items:center;gap:.75rem;flex-wrap:wrap">
+                <label style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase">Mésocycle :</label>
+                <div id="bp-visu-meso-btns" style="display:flex;gap:.5rem;flex-wrap:wrap"></div>
+              </div>
+              <div id="bp-visu-ctrl-cycle" style="display:none;align-items:center;gap:.75rem;flex-wrap:wrap">
+                <label style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase">Microcycle :</label>
+                <div id="bp-visu-cycle-btns" style="display:flex;gap:.5rem;flex-wrap:wrap"></div>
+              </div>
+              <div id="bp-visu-ctrl-sess" style="display:none;align-items:center;gap:.75rem">
+                <label style="font-size:.7rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase">Séance :</label>
+                <div style="display:flex;gap:.5rem">
+                  <button onclick="bpSetVisuSess('A')" id="bp-vs-A" class="tab-pill on" style="padding:.3rem .875rem;font-size:.65rem">A</button>
+                  <button onclick="bpSetVisuSess('B')" id="bp-vs-B" class="tab-pill off" style="padding:.3rem .875rem;font-size:.65rem">B</button>
+                  <button onclick="bpSetVisuSess('C')" id="bp-vs-C" class="tab-pill off" style="padding:.3rem .875rem;font-size:.65rem">C</button>
+                  <button onclick="bpSetVisuSess('D')" id="bp-vs-D" class="tab-pill off" style="padding:.3rem .875rem;font-size:.65rem">D</button>
+                </div>
+              </div>
+              <div id="bp-visu-ctrl-cycles-check" style="display:none;flex-wrap:wrap;gap:.5rem"></div>
+            </div>
+            <div id="bp-visu-content"></div>
+          </div>
+          
+          <!-- Sub: Paramètres -->
+          <div id="bsub-params" class="hidden card" style="padding:2rem">
+            <h4 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">PARAMÈTRES DU PROGRAMME</h4>
+            
+            <!-- Niveau de planification -->
+            <div style="margin-bottom:2rem">
+              <label style="display:block;font-size:.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:1rem">Niveau de planification</label>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                <button id="bp-hierarchy-micro" onclick="setBaseProgramHierarchyLevel('micro')" style="flex:1;min-width:120px;padding:.75rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Micro only</button>
+                <button id="bp-hierarchy-meso" onclick="setBaseProgramHierarchyLevel('meso')" style="flex:1;min-width:120px;padding:.75rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Méso + Micro</button>
+                <button id="bp-hierarchy-macro" onclick="setBaseProgramHierarchyLevel('macro')" style="flex:1;min-width:120px;padding:.75rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Macro + Méso + Micro</button>
+              </div>
+              <p style="font-size:.7rem;color:var(--muted);margin-top:.75rem;font-style:italic">Détermine comment le programme sera affiché pour les clients. Les microcycles sont toujours obligatoires.</p>
+            </div>
+            
+            <!-- Créateur (visible admin uniquement) -->
+            <div id="bp-creator-section" style="margin-bottom:2rem;padding:1rem;background:var(--surface);border-radius:1rem;border:1px solid var(--border);display:none">
+              <label style="display:block;font-size:.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Créateur du programme</label>
+              <div id="bp-creator-name" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--gold)">—</div>
+            </div>
+            
+            <!-- Visibilité coachs -->
+            <div style="margin-bottom:2rem">
+              <label style="display:block;font-size:.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:1rem">Visibilité pour les coachs</label>
+              <div style="display:flex;gap:.5rem;margin-bottom:1rem">
+                <button id="bp-visibility-all" onclick="setBaseProgramVisibility('all')" style="flex:1;padding:.75rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Tous les coachs</button>
+                <button id="bp-visibility-specific" onclick="setBaseProgramVisibility('specific')" style="flex:1;padding:.75rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)">Coachs spécifiques</button>
+                <button id="bp-visibility-private" onclick="setBaseProgramVisibility('private')" style="flex:1;padding:.75rem;border-radius:.75rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);display:none">Privé (moi uniquement)</button>
+              </div>
+              <div id="bp-coach-selection" style="display:none;margin-top:1rem">
+                <label style="display:block;font-size:.65rem;color:var(--muted);margin-bottom:.5rem">Sélectionner les coachs autorisés :</label>
+                <div id="bp-coach-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:200px;overflow-y:auto;padding:.5rem;background:var(--surface);border-radius:.5rem;border:1px solid var(--border)"></div>
+              </div>
+            </div>
+            
+            <!-- Assignation clients -->
+            <div style="margin-bottom:2rem">
+              <label style="display:block;font-size:.7rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:1rem">Clients assignés</label>
+              <div style="display:flex;gap:.5rem;margin-bottom:1rem">
+                <button class="btn btn-primary btn-sm" onclick="openAssignClientToBP()">+ Assigner un client</button>
+              </div>
+              <div id="bp-assigned-clients" style="display:flex;flex-direction:column;gap:.5rem;max-height:300px;overflow-y:auto;padding:.5rem;background:var(--surface);border-radius:.5rem;border:1px solid var(--border)">
+                <p style="color:var(--muted);font-style:italic;font-size:.8rem;text-align:center;padding:1rem">Aucun client assigné</p>
+              </div>
+            </div>
+            
+            <div style="display:flex;gap:1rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border)">
+              <button class="btn btn-gold" onclick="saveBaseProgramParams()">💾 SAUVEGARDER</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /view-coach -->
+  </div><!-- /main -->
+</div><!-- /screen-app -->
+
+<!-- Modal Mot de passe oublie -->
+<div id="modal-forgot-password" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:400px;width:100%">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1rem">Mot de passe oublié</h3>
+    <p style="font-size:.7rem;color:var(--muted);margin-bottom:1.5rem">Entre ton email pour recevoir un lien de réinitialisation.</p>
+    <div style="margin-bottom:1.5rem">
+      <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Email</label>
+      <input type="email" id="forgot-email" class="inp" placeholder="ton@email.com">
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="sendPasswordReset(document.getElementById('forgot-email').value); closeModal('modal-forgot-password');">ENVOYER LE LIEN</button>
+    <button onclick="closeModal('modal-forgot-password')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+
+<!-- Modal Changer mot de passe -->
+<div id="modal-change-password" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:420px;width:100%">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1rem">Changer mot de passe</h3>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem">
+      <div>
+        <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Mot de passe actuel</label>
+        <input type="password" id="current-password" class="inp" placeholder="••••••">
+      </div>
+      <div>
+        <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Nouveau mot de passe (min. 6 car.)</label>
+        <input type="password" id="new-password" class="inp" placeholder="••••••">
+      </div>
+      <div>
+        <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Confirmer le nouveau</label>
+        <input type="password" id="confirm-password" class="inp" placeholder="••••••">
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="const np=document.getElementById('new-password').value,cp=document.getElementById('confirm-password').value;if(np!==cp){toast('Les mots de passe ne correspondent pas','e');return;}changePassword(document.getElementById('current-password').value,np);closeModal('modal-change-password');">MODIFIER</button>
+    <button onclick="closeModal('modal-change-password')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+
+<!-- Confirm validation -->
+<div id="modal-confirm" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:380px;width:100%;text-align:center;border-color:rgba(240,165,0,.2)">
+    <h3 style="font-size:2rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.5rem">Confirmer ?</h3>
+    <p style="color:var(--muted);margin-bottom:.5rem">RPE : <span id="confirm-rpe" style="color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:1.5rem;font-weight:900;font-style:italic">5</span>/10</p>
+    <p style="color:var(--muted);font-size:.75rem;margin-bottom:2rem">Rapport transmis au coach.</p>
+    <button type="button" class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="console.log('Valider clicked'); submitValidation();">OUI, VALIDER</button>
+    <button type="button" onclick="console.log('Annuler clicked'); closeModal('modal-confirm');" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+<!-- Already done -->
+<div id="modal-done" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:360px;width:100%;text-align:center">
+    <h3 style="font-size:2.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.5rem;color:var(--gold)">VALIDE !</h3>
+    <p style="color:var(--muted);margin-bottom:2rem">Séance déjà complétée.</p>
+    <button type="button" class="btn btn-gold" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="console.log('Consulter clicked'); closeModal('modal-done'); openDetail();">CONSULTER</button>
+    <button type="button" onclick="console.log('Retour clicked'); closeModal('modal-done');" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Retour</button>
+  </div>
+</div>
+<!-- Add client -->
+<div id="modal-add-client" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:440px;width:100%">
+    <h3 style="font-size:2rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:2rem">NOUVEAU CLIENT</h3>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem">
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Prénom / Nom</label><input type="text" id="nc-prenom" class="inp" placeholder="Emmanuel Martin"></div>
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Code d'accès unique</label><input type="text" id="nc-code" class="inp" placeholder="EMMA2024" style="text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:900;font-style:italic;letter-spacing:.1em"></div>
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Objectif</label><input type="text" id="nc-objectif" class="inp" placeholder="Renforcement..."></div>
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Groupe</label>
+        <select id="nc-group" class="inp"><option value="">Aucun groupe</option></select>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="createClient()">CRÉER CE CLIENT</button>
+    <button onclick="closeModal('modal-add-client')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+<!-- Add coach (admin) -->
+<div id="modal-add-coach" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:440px;width:100%">
+    <h3 style="font-size:2rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.5rem">NOUVEAU COACH</h3>
+    <p style="font-size:.7rem;color:var(--muted);margin-bottom:1.5rem;font-style:italic">Crée le compte Firebase + le profil Firestore (role coach). Reserve a l&apos;admin connecte.</p>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem">
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Prénom / nom affiché</label><input type="text" id="ncoach-name" class="inp" placeholder="Max"></div>
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Email (login)</label><input type="email" id="ncoach-email" class="inp" placeholder="coach@email.com" autocomplete="off"></div>
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Mot de passe (min. 6 car.)</label><input type="password" id="ncoach-password" class="inp" placeholder="••••••" autocomplete="new-password"></div>
+    </div>
+    <button type="button" class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="adminCreateCoachAccount()">CRÉER CE COACH</button>
+    <button type="button" onclick="closeModal('modal-add-coach')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+<!-- Add group -->
+<div id="modal-add-group" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:400px;width:100%">
+    <h3 style="font-size:2rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:2rem">NOUVEAU GROUPE</h3>
+    <div style="margin-bottom:1.5rem">
+      <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Nom du groupe</label>
+      <input type="text" id="new-group-name" class="inp" placeholder="Ex: Lundi matin, Sportifs confirmés...">
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="createGroup()">CRÉER CE GROUPE</button>
+    <button onclick="closeModal('modal-add-group')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+<!-- Add exercise to DB -->
+<div id="modal-add-exercise" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:560px;width:100%;max-height:90vh;overflow-y:auto">
+    <h3 style="font-size:2rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:2rem">AJOUTER UN EXERCICE</h3>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem">
+      <input type="text" id="dbex-name" class="inp" placeholder="Nom de l'exercice *">
+      <div class="grid-2">
+        <div>
+          <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Zone du corps *</label>
+          <input type="text" id="dbex-zone" class="inp" placeholder="Ex: Tronc, Épaules, Jambes..." list="zone-list">
+          <datalist id="zone-list"></datalist>
+        </div>
+        <div>
+          <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Pattern *</label>
+          <input type="text" id="dbex-pattern" class="inp" placeholder="Ex: Gainage, Tirage, Poussé..." list="pattern-list">
+          <datalist id="pattern-list"></datalist>
+        </div>
+      </div>
+      <div>
+        <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Latéralité</label>
+        <select id="dbex-lat" class="inp"><option>Bilatéral</option><option>Unilatéral</option><option>Alterné</option></select>
+      </div>
+      <div>
+        <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Description</label>
+        <textarea id="dbex-desc" class="inp" rows="2" placeholder="Consignes techniques..."></textarea>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">URL Photo</label>
+          <input type="text" id="dbex-photo-url" class="inp" placeholder="https://...">
+        </div>
+        <div>
+          <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Upload Photo</label>
+          <input type="file" id="dbex-photo-file" accept="image/*" class="inp" style="padding:.5rem">
+        </div>
+      </div>
+      <div>
+        <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">URL Vidéo</label>
+        <input type="text" id="dbex-video" class="inp" placeholder="https://youtube.com/...">
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="saveExerciseToDb()">AJOUTER À LA BASE</button>
+    <div style="margin-bottom:1rem;padding:1rem;background:var(--surface);border-radius:.5rem;border:1px dashed var(--border)">
+      <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Import CSV (en masse)</label>
+      <input type="file" id="dbex-csv-file" accept=".csv" class="inp" style="padding:.5rem;margin-bottom:.5rem">
+      <button class="btn btn-gold btn-sm" style="width:100%" onclick="importExercisesFromCsv()">IMPORTER CSV</button>
+      <p style="font-size:.65rem;color:var(--muted);margin-top:.5rem;margin-bottom:0">Colonnes: name, zone, pattern, lat, desc, photo, video</p>
+    </div>
+    <button onclick="closeModal('modal-add-exercise')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+<!-- Modal copier params exercice -->
+<div id="modal-copy-params" class="modal-bg hidden">
+  <div class="card" style="padding:2rem;max-width:380px;width:100%">
+    <h3 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1rem">Copier les paramètres vers :</h3>
+    <p style="font-size:.7rem;color:var(--muted);margin-bottom:1rem">Reps, tempo, séries, récup, RPE seront copiés.</p>
+    <div id="copy-params-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:300px;overflow-y:auto;margin-bottom:1rem"></div>
+    <button onclick="closeModal('modal-copy-params')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+<!-- Modal ajouter une séance -->
+<div id="modal-add-session" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">AJOUTER UNE SÉANCE</h3>
+    <!-- Step 1: choix -->
+    <div id="modal-add-sess-step1">
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:1.5rem">Comment voulez-vous créer cette séance ?</p>
+      <div style="display:flex;flex-direction:column;gap:.75rem">
+        <button onclick="startAddSess('blank')" class="btn btn-gold" style="font-size:.9rem;padding:1.1rem">+ Séance vierge</button>
+        <button onclick="startAddSess('copy')" class="btn btn-ghost" style="font-size:.9rem;padding:1.1rem">Copier depuis une séance existante</button>
+      </div>
+    </div>
+    <!-- Step 2a: vierge -->
+    <div id="modal-add-sess-blank" class="hidden">
+      <p style="font-size:.7rem;color:var(--muted);margin-bottom:1rem">Choisissez la lettre de séance à créer :</p>
+      <div id="sess-letter-picker" style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem"></div>
+      <button onclick="addBlankSession()" class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem">CRÉER LA SÉANCE</button>
+      <button onclick="document.getElementById('modal-add-sess-blank').classList.add('hidden');document.getElementById('modal-add-sess-step1').classList.remove('hidden')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">← Retour</button>
+    </div>
+    <!-- Step 2b: copier -->
+    <div id="modal-add-sess-copy" class="hidden">
+      <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem">
+        <div>
+          <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Client source</label>
+          <select id="copy-src-client" class="inp" onchange="loadCopySrcCycles()"></select>
+        </div>
+        <div>
+          <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Cycle source</label>
+          <select id="copy-src-cycle" class="inp" onchange="loadCopySrcSessions()"></select>
+        </div>
+        <div id="copy-src-sessions"></div>
+        <div>
+          <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Lettre cible dans le cycle actuel</label>
+          <div id="sess-letter-picker-copy" style="display:flex;gap:.75rem;flex-wrap:wrap"></div>
+        </div>
+      </div>
+      <button onclick="addCopySession()" class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem">COPIER CETTE SÉANCE</button>
+      <button onclick="document.getElementById('modal-add-sess-copy').classList.add('hidden');document.getElementById('modal-add-sess-step1').classList.remove('hidden')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">← Retour</button>
+    </div>
+    <button onclick="closeModal('modal-add-session')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem;margin-top:.5rem">Fermer</button>
+  </div>
+</div>
+
+<!-- Modal PDF -->
+<div id="modal-pdf" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:480px;width:100%">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.5rem">GÉNÉRER PDF</h3>
+    <p style="font-size:.75rem;color:var(--muted);margin-bottom:1.5rem">Ouvre une fenêtre d'impression / sauvegarde PDF.</p>
+    <div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem">
+      <button onclick="generatePDF('session')" class="btn btn-gold" style="width:100%;padding:1rem;font-size:.9rem">📄 Séance actuelle</button>
+      <button onclick="generatePDF('cycle')" class="btn btn-ghost" style="width:100%;padding:1rem;font-size:.9rem;color:var(--text)">📋 Cycle complet</button>
+      <button onclick="generatePDF('all')" class="btn btn-ghost" style="width:100%;padding:1rem;font-size:.9rem;color:var(--text)">📚 Tout le programme</button>
+    </div>
+    <button onclick="closeModal('modal-pdf')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Fermer</button>
+  </div>
+</div>
+<!-- Modal ajout document -->
+<div id="modal-add-doc" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:500px;width:100%">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">AJOUTER UN DOCUMENT</h3>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem">
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Titre *</label>
+        <input type="text" id="doc-title" class="inp" placeholder="Programme nutrition, Bilan mensuel...">
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Type</label>
+        <select id="doc-type" class="inp"><option value="pdf">PDF</option><option value="image">Image</option><option value="link">Lien externe</option></select>
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">URL / lien</label>
+        <input type="url" id="doc-url" class="inp" placeholder="https://...">
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Ou uploader une image / PDF (max 2Mo)</label>
+        <input type="file" id="doc-file" accept="image/*,.pdf" class="inp" style="padding:.5rem">
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Notes (optionnel)</label>
+        <textarea id="doc-notes" class="inp" rows="2" placeholder="Description..."></textarea>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="saveDocument()">AJOUTER CE DOCUMENT</button>
+    <button onclick="closeModal('modal-add-doc')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+
+<!-- Modal Performance saisie poids/reps -->
+<div id="modal-perf" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:420px;width:100%;max-height:90vh;overflow-y:auto">
+    <h3 id="perf-ex-name" style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem;color:var(--gold)">EXERCICE</h3>
+    <div id="perf-modal-content"></div>
+    <button class="btn btn-gold" style="width:100%;font-size:.9rem;padding:1rem;margin-top:1.5rem;margin-bottom:.75rem" onclick="savePerfModal()">ENREGISTRER</button>
+    <button onclick="closeModal('modal-perf')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+<!-- Modal ajout manuel PR -->
+<div id="modal-manual-pr" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:400px;width:100%">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">AJOUTER UN RECORD</h3>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem">
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Exercice *</label>
+        <input type="text" id="manual-pr-exname-input" class="inp" placeholder="Nom de l'exercice" list="manual-pr-exnames-list">
+        <datalist id="manual-pr-exnames-list"></datalist>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Poids (kg) *</label>
+          <input type="number" step="0.5" min="0" id="manual-pr-weight" class="inp" placeholder="100">
+        </div>
+        <div>
+          <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Reps (0=1RM direct)</label>
+          <input type="number" min="0" id="manual-pr-reps" class="inp" placeholder="5">
+        </div>
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Date</label>
+        <input type="date" id="manual-pr-date" class="inp">
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="saveManualPR()">AJOUTER CE RECORD</button>
+    <button onclick="closeModal('modal-manual-pr')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+
+<!-- Modal édition PR -->
+<div id="modal-edit-pr" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:400px;width:100%">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">MODIFIER UN RECORD</h3>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:1.5rem">
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Exercice actuel</label>
+        <div id="edit-pr-exname" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;color:var(--gold)"></div>
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Nouvel exercice (optionnel)</label>
+        <input type="text" id="edit-pr-new-exname" class="inp" placeholder="Laisser vide pour ne pas changer" list="manual-pr-exnames-list">
+        <datalist id="manual-pr-exnames-list"></datalist>
+      </div>
+      <div class="grid-2">
+        <div>
+          <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Poids (kg) *</label>
+          <input type="number" step="0.5" min="0" id="edit-pr-weight" class="inp" placeholder="100">
+        </div>
+        <div>
+          <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Reps (0=1RM direct)</label>
+          <input type="number" min="0" id="edit-pr-reps" class="inp" placeholder="5">
+        </div>
+      </div>
+      <div>
+        <label style="display:block;font-size:.6rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Date</label>
+        <input type="date" id="edit-pr-date" class="inp">
+      </div>
+      <input type="hidden" id="edit-pr-original-exname">
+      <input type="hidden" id="edit-pr-original-index">
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="saveEditedPR()">ENREGISTRER LES MODIFICATIONS</button>
+    <button onclick="closeModal('modal-edit-pr')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+
+<!-- Modal duplication cycle -->
+<div id="modal-dup-cycle" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">DUPLIQUER LE CYCLE</h3>
+    <div id="dup-cycle-source" style="font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:1.5rem;padding:1rem;background:var(--surface);border-radius:.5rem"></div>
+    
+    <!-- Choix destination -->
+    <div style="margin-bottom:1.5rem">
+      <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:1rem">Destination</label>
+      <div style="display:flex;gap:1rem;margin-bottom:1rem">
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="radio" name="dup-dest" value="new" checked onchange="toggleDupDest()">
+          <span style="font-size:.8rem">Nouveau cycle</span>
+        </label>
+        <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer">
+          <input type="radio" name="dup-dest" value="existing" onchange="toggleDupDest()">
+          <span style="font-size:.8rem">Cycle(s) existant(s)</span>
+        </label>
+      </div>
+    </div>
+    
+    <!-- Option: Nouveau cycle -->
+    <div id="dup-new-section" style="margin-bottom:1.5rem">
+      <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Nom du nouveau cycle</label>
+      <input type="text" id="dup-new-name" class="inp" placeholder="Nom / focus du cycle">
+    </div>
+    
+    <!-- Option: Cycles existants -->
+    <div id="dup-existing-section" class="hidden" style="margin-bottom:1.5rem">
+      <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem">Cycles cibles (sélection multiple)</label>
+      <div id="dup-existing-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:200px;overflow-y:auto;padding:.5rem;background:var(--surface);border-radius:.5rem"></div>
+      <div style="margin-top:1rem;padding:1rem;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:.5rem">
+        <p style="font-size:.75rem;color:#ef4444;font-weight:700;margin:0">⚠️ ATTENTION : Cette action écrasera toutes les données des cycles cibles sélectionnés.</p>
+      </div>
+    </div>
+    
+    <button id="dup-cycle-btn" class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="executeDupCycle()">DUPLIQUER</button>
+    <button onclick="closeModal('modal-dup-cycle')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+
+<!-- Scripts (ordre important) -->
+<script src="state.js"></script>
+<script src="utils.js"></script>
+<script src="auth.js"></script>
+<script src="client.js"></script>
+<script src="client-workout.js"></script>
+<script src="client-tracking.js"></script>
+<script src="coach-main.js"></script>
+<script src="coach-cycles.js"></script>
+<script src="coach-cycles-hierarchy.js"></script>
+<script src="coach-planning.js"></script>
+<script src="coach-editor.js"></script>
+<script src="coach-visu.js"></script>
+<script src="coach-profiles.js"></script>
+<script src="coach-extras.js"></script>
+<script src="coach-database.js"></script>
+<!-- Modal add base program -->
+<div id="modal-add-baseprogram" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:440px;width:100%">
+    <h3 style="font-size:2rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:2rem">NOUVEAU PROGRAMME DE BASE</h3>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem">
+      <div>
+        <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Nom du programme</label>
+        <input type="text" id="nbp-name" class="inp" placeholder="Ex: Programme Débutant Force, Programme Perte de poids...">
+      </div>
+      <div>
+        <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Description (optionnel)</label>
+        <textarea id="nbp-desc" class="inp" rows="3" placeholder="Objectif, public cible, durée..."></textarea>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%;font-size:.9rem;padding:1rem;margin-bottom:.75rem" onclick="createBaseProgram()">CRÉER LE PROGRAMME</button>
+    <button onclick="closeModal('modal-add-baseprogram')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Annuler</button>
+  </div>
+</div>
+
+<script src="coach-baseprograms-cycles.js"></script>
+<script src="coach-baseprograms-hierarchy.js"></script>
+<script src="coach-baseprograms-editor.js"></script>
+<script src="coach-baseprograms-visu.js"></script>
+<script src="coach-baseprograms.js"></script>
+<script src="chat.js"></script>
+<script src="transfer.js"></script>
+
+<!-- Modal assigner client à programme de base -->
+<div id="modal-assign-client-bp" class="modal-bg hidden">
+  <div class="card" style="padding:2.5rem;max-width:500px;width:100%;max-height:85vh;overflow-y:auto">
+    <h3 style="font-size:1.75rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1.5rem">ASSIGNER UN CLIENT</h3>
+    <div style="margin-bottom:1.5rem">
+      <label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem">Rechercher un client</label>
+      <input type="text" id="bp-assign-search" class="inp" placeholder="Nom ou code..." oninput="filterBPAssignClients()">
+    </div>
+    <div id="bp-assign-clients-list" style="display:flex;flex-direction:column;gap:.5rem;max-height:300px;overflow-y:auto;padding:.5rem;background:var(--surface);border-radius:.5rem;border:1px solid var(--border);margin-bottom:1.5rem">
+      <p style="color:var(--muted);font-style:italic;text-align:center;padding:1rem">Chargement...</p>
+    </div>
+    <button onclick="closeModal('modal-assign-client-bp')" style="width:100%;background:none;border:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;padding:.75rem">Fermer</button>
+  </div>
+</div>
+
+</body>
+</html>
