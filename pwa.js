@@ -47,6 +47,7 @@
 #pwa-tuto{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;font-family:Arial,sans-serif}
 #pwa-tuto .sheet{width:100%;background:#141d2b;color:#e8edf3;border-radius:22px 22px 0 0;border-top:1px solid #26384d;padding:22px 20px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -20px 60px #000a}
 #pwa-tuto .hd{display:flex;align-items:center;gap:12px}
+#pwa-tuto svg{display:inline-block}
 #pwa-tuto .hd img{width:52px;height:52px;border-radius:12px}
 #pwa-tuto h3{margin:0;font-size:18px}
 #pwa-tuto .sub{color:#8da0b8;font-size:13px;margin-top:3px;line-height:1.4}
