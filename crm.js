@@ -53,7 +53,7 @@ function renderProspects() {
   const statuses = { new: 'Nouveau', contacted: 'Contacté', booked: 'RDV pris', proposal: 'Proposition', converted: 'Client', lost: 'Perdu' };
   el.innerHTML = crmState.prospects.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).map(p => `
     <div class="card" style="padding:1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
-      <div style="flex:1;min-width:220px"><strong>${h(p.name)}</strong><div style="font-size:.75rem;color:var(--muted)">${h(p.email)} ${p.phone ? '· ' + h(p.phone) : ''}</div><div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${h(p.objective || 'Objectif non renseigné')}</div></div>
+      <div style="flex:1;min-width:220px"><strong>${h(p.name)}</strong><div style="font-size:.75rem;color:var(--muted)">${h(p.email)} ${p.phone ? '· ' + h(p.phone) : ''}</div><div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${p.objectiveType ? `<b style="color:var(--gold)">${h(p.objectiveType)}</b> · ` : ''}${h(p.objective || 'Objectif non renseigné')}</div></div>
       <select class="inp" style="width:auto" onchange="updateProspectStatus('${p.id}', this.value)">${Object.entries(statuses).map(([k, v]) => `<option value="${k}" ${p.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
       ${p.status !== 'converted' ? `<button class="btn btn-gold btn-sm" onclick="convertProspect('${p.id}')">Convertir</button>` : '<span class="badge badge-client">CLIENT</span>'}
     </div>`).join('') || '<p style="color:var(--muted);font-style:italic">Aucun prospect pour le moment.</p>';
@@ -116,7 +116,7 @@ function renderAppointments() {
   el.innerHTML = rows.map(a => `<div class="card" style="padding:1rem;display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;${a.status === 'cancelled' ? 'opacity:.55' : ''}">
       <div style="flex:1;min-width:220px"><strong>${h(a.name)}</strong> ${a.source === 'tunnel' ? '<span class="badge" style="background:rgba(240,165,0,.12);color:var(--gold);margin-left:.35rem">TUNNEL</span>' : ''}
         <div style="font-size:.75rem;color:var(--muted)">${h(a.email || '')}${a.phone ? ' · <a href="tel:' + h(a.phone) + '" style="color:inherit">' + h(a.phone) + '</a>' : ''}</div>
-        ${a.objective ? `<div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${h(a.objective)}</div>` : ''}</div>
+        ${a.objective || a.objectiveType ? `<div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${a.objectiveType ? `<b style="color:var(--gold)">${h(a.objectiveType)}</b> · ` : ''}${h(a.objective || '')}</div>` : ''}</div>
       <span class="badge" style="background:rgba(16,185,129,.12);color:${colors[a.status] || 'var(--green)'}">${h(a.date)} · ${h(a.time)}</span>
       <select class="inp" style="width:auto" onchange="updateAppointmentStatus('${a.id}', this.value)">${Object.entries(APPOINTMENT_STATUSES).map(([k, v]) => `<option value="${k}" ${(a.status || 'booked') === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
       <button class="btn btn-ghost btn-sm" title="Supprimer" onclick="deleteAppointment('${a.id}')">✕</button>

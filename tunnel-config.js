@@ -3,7 +3,7 @@ window.TUNNEL_DEFAULTS = {
   eyebrow: 'Bilan découverte offert',
   title: 'Révèle ton',
   titleHighlight: 'vrai potentiel.',
-  subtitle: 'Un accompagnement précis pour progresser physiquement, mentalement et énergétiquement — avec une méthode conçue autour de toi.',
+  subtitle: 'Préparation physique, transformation physique ou forme & bien-être : un coaching précis, construit autour de toi et de ton objectif.',
   formTitle: 'Réserve ton appel stratégique',
   formSubtitle: 'Tu recevras également ton mini-plan personnalisé après la réservation.',
   ctaLabel: 'JE RÉSERVE MON BILAN OFFERT',

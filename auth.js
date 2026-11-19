@@ -223,6 +223,7 @@ function enterApp() {
   document.getElementById('screen-login').classList.add('hidden');
   document.getElementById('screen-app').classList.remove('hidden');
   document.getElementById('btn-refresh').classList.remove('hidden');
+  try { if (!currentUser.isCoach) localStorage.setItem('delta-is-client', '1'); } catch (e) {}
   if (currentUser.isCoach) {
     document.getElementById('nav-badge').className = 'badge badge-coach';
     document.getElementById('nav-badge').innerText = currentUser.role === 'admin' ? 'ADMIN' : 'COACH';
