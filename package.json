@@ -1,0 +1,24 @@
+{
+  "name": "delta-performance",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DELTA Performance - espace coach Electron et application client web",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^38.1.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.deltaperformance.coach",
+    "productName": "DELTA Performance Coach",
+    "icon": "Source de données/LOGO DELTA 2023.jpg",
+    "files": ["index.html", "*.js", "*.css", "firebase-init.js", "Source de donne\u0301es/**/*", "manifest.json"],
+    "mac": { "category": "public.app-category.business" },
+    "win": { "target": "nsis" }
+  }
+}

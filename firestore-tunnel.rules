@@ -1,0 +1,31 @@
+    // --- Tunnel de réservation (public) ---
+    function deltaUser() {
+      return get(/databases/$(database)/documents/apps/delta-perf-v2/users/$(request.auth.uid));
+    }
+    function isDeltaCoach() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/apps/delta-perf-v2/users/$(request.auth.uid));
+    }
+    function isDeltaAdmin() {
+      return isDeltaCoach() && deltaUser().data.role in ['admin', 'Admin', 'administrateur'];
+    }
+    match /apps/delta-perf-v2/settings/tunnel {
+      allow read: if true;
+      allow write: if isDeltaAdmin();
+    }
+    match /apps/delta-perf-v2/tunnel_slots/{slotId} {
+      allow read: if true;
+      allow create: if slotId == request.resource.data.date + '_' + request.resource.data.time
+                    && request.resource.data.keys().hasOnly(['date', 'time', 'createdAt']);
+      allow update, delete: if isDeltaCoach();
+    }
+    match /apps/delta-perf-v2/prospects/{id} {
+      allow create: if id.matches('tunnel_.*')
+                    && request.resource.data.source == 'tunnel'
+                    && request.resource.data.status == 'booked';
+    }
+    match /apps/delta-perf-v2/appointments/{id} {
+      allow create: if id.matches('tunnel_.*')
+                    && request.resource.data.source == 'tunnel'
+                    && request.resource.data.status == 'booked';
+    }

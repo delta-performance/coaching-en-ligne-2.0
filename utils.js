@@ -51,6 +51,43 @@ function getActiveSessions(c) {
 function getWorkoutData() { return (typeof workoutData !== 'undefined') ? workoutData : {}; }
 function getSessParamsSafe(c,t) { return typeof getSessParams === 'function' ? getSessParams(c,t) : {}; }
 
+function normalizeSessionData(session) {
+  if (!session || Array.isArray(session)) {
+    return { type: 'physical', rest: '45s', tours: '3', mode: 'circuit', comment: '', exercises: Array.isArray(session) ? session : [] };
+  }
+  return {
+    type: session.type || 'physical',
+    rest: session.rest || '45s',
+    tours: session.tours || '3',
+    mode: session.mode || 'circuit',
+    comment: session.comment || '',
+    exercises: Array.isArray(session.exercises) ? session.exercises : [],
+    energetic: session.energetic || null,
+    mental: session.mental || null
+  };
+}
+
+function sessionTypeLabel(type) {
+  return ({ physical: 'Physique', energetic: 'Énergétique', mental: 'Prépa mentale' })[type] || 'Physique';
+}
+
+function parseEnergeticBlocks(raw) {
+  return String(raw || '').split('\\n').map(line => line.trim()).filter(Boolean).map(line => {
+    const [title = '', duration = '', instruction = ''] = line.split('|').map(x => x.trim());
+    return { title, duration, instruction };
+  });
+}
+
+function formatEnergeticBlocks(blocks) {
+  return (Array.isArray(blocks) ? blocks : []).map(b => [b.title, b.duration, b.instruction].filter(Boolean).join(' | ')).join('\\n');
+}
+
+function sessionTypeChanged(prefix) {
+  const type = document.getElementById(prefix === 'ed' ? 'ed-session-type' : 'bp-ed-session-type')?.value || 'physical';
+  const fields = document.getElementById(prefix + '-energetic-fields');
+  if (fields) fields.style.display = type === 'energetic' ? 'block' : 'none';
+}
+
 const SESS_COLORS = ['#3b82f6','#10b981','#f97316','#8b5cf6','#ec4899','#14b8a6','#f59e0b','#6366f1'];
 function getSessColor(sessKey, idx) {
   if (!isNaN(idx)) return SESS_COLORS[idx % SESS_COLORS.length];

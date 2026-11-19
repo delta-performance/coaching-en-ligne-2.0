@@ -7,7 +7,7 @@ const firebaseConfig = {
   appId: "1:335271116250:web:f8a26e13f1e248a42814e3"
 };
 firebase.initializeApp(firebaseConfig);
-const _auth = firebase.auth();
+const _auth = typeof firebase.auth === 'function' ? firebase.auth() : null;
 const _db = firebase.firestore();
 window.db = _db;
 
@@ -41,4 +41,4 @@ window.fdb = {
   writeBatch: (db) => db.batch()
 };
 
-_auth.onAuthStateChanged(u => { window.anonUid = u ? u.uid : null; });
+if (_auth) _auth.onAuthStateChanged(u => { window.anonUid = u ? u.uid : null; });

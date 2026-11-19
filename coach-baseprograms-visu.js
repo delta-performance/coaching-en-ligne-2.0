@@ -902,8 +902,8 @@ function bpGetSessColor(s, ti) {
 
 function bpGetSessParams(c, sess) {
   const s = c.sessions?.[sess];
-  if (!s || Array.isArray(s)) return { rest: '45s', tours: '3', mode: 'circuit', comment: '' };
-  return { rest: s.rest || '45s', tours: s.tours || '3', mode: s.mode || 'circuit', comment: s.comment || '' };
+  if (!s || Array.isArray(s)) return { type: 'physical', rest: '45s', tours: '3', mode: 'circuit', comment: '' };
+  return { type: s.type || 'physical', rest: s.rest || '45s', tours: s.tours || '3', mode: s.mode || 'circuit', comment: s.comment || '' };
 }
 
 function bpGetSessEx(c, sess) {

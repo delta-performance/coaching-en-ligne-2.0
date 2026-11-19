@@ -1,0 +1,32 @@
+{
+  "name": "DELTA Performance",
+  "short_name": "DELTA",
+  "description": "Préparation physique, énergétique et mentale",
+  "start_url": "./index.html?app=1",
+  "display": "standalone",
+  "background_color": "#080c12",
+  "theme_color": "#c8102e",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "id": "./index.html",
+  "scope": "./",
+  "orientation": "portrait"
+}

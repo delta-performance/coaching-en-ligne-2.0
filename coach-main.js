@@ -175,25 +175,36 @@ async function deleteClient(clientId) {
 async function createClient() {
   if (!currentUser || !currentUser.isCoach) return;
   const name = document.getElementById('nc-prenom').value.trim();
+  const email = document.getElementById('nc-email')?.value.trim().toLowerCase() || '';
+  const password = document.getElementById('nc-password')?.value || '';
   const code = document.getElementById('nc-code').value.trim().toUpperCase();
   const objectif = document.getElementById('nc-objectif').value.trim();
   const group = document.getElementById('nc-group').value;
   const selectedCoachUid = document.getElementById('nc-coach')?.value || '';
   
-  if (!name||!code) { toast('Nom et code requis','w'); return; }
-  if (allClients.find(c => c.code === code)) { toast('Code déjà utilisé','w'); return; }
+  if (!name || !email || !password) { toast('Nom, email et mot de passe requis','w'); return; }
+  if (password.length < 6) { toast('Mot de passe : minimum 6 caractères','w'); return; }
+  if (code && allClients.find(c => c.code === code)) { toast('Code déjà utilisé','w'); return; }
+  if (allClients.find(c => String(c.email || '').toLowerCase() === email)) { toast('Email déjà utilisé','w'); return; }
   
   const newId = 'client_'+Date.now();
   const coachUid = isCoachUser() ? currentUser.uid : selectedCoachUid;
+  let authUid;
+  try {
+    authUid = await createClientAuthAccount(email, password);
+  } catch (e) {
+    toast(e.code === 'auth/email-already-in-use' ? 'Cet email existe déjà dans Firebase' : (e.message || 'Impossible de créer le compte client'), 'e');
+    return;
+  }
   
-  const clientPayload = { 
-    name, 
-    code, 
-    objectif, 
-    group, 
+  const clientPayload = {
+    name, email, authUid,
+    code,
+    objectif,
+    group,
     coachUid, 
     archived:false, 
-    createdAt:new Date().toISOString() 
+    createdAt:new Date().toISOString()
   };
   
   await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',newId), clientPayload);
@@ -236,8 +247,8 @@ async function createClient() {
   await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',newId,'data','unlock'), { unlocked: [1], archived: [] });
   
   closeModal('modal-add-client');
-  ['nc-prenom','nc-code','nc-objectif'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  toast(name + ' créé ! Code: ' + code, 's');
+  ['nc-prenom','nc-email','nc-password','nc-code','nc-objectif'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  toast(name + ' créé ! Compte: ' + email, 's');
   await loadAllData();
 }
 
@@ -491,7 +502,7 @@ function switchCoachTab(tab) {
   }
   
   console.log('>>> Step 2: Toggling tabs');
-  ['clients','fiche','groupes','transfer','database','coachs','baseprograms','messages'].forEach(t => {
+  ['clients','fiche','groupes','transfer','database','coachs','baseprograms','crm','messages'].forEach(t => {
     const el = document.getElementById('coach-'+t); 
     if (el) {
       el.classList.toggle('hidden', t!==tab);
@@ -505,6 +516,10 @@ function switchCoachTab(tab) {
   });
   
   console.log('>>> Step 3: Running tab-specific functions');
+  if (tab==='crm' && typeof crmLoad === 'function') {
+    crmLoad();
+    openCrmTab('prospects');
+  }
   if (tab==='transfer') {
     console.log('>>> Calling populateTransferSelects');
     populateTransferSelects();
