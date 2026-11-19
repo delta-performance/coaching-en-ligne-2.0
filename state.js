@@ -19,6 +19,7 @@ window.transferSess='A';
 window.visuMode='same-cycle';
 window.visuSess='A';
 window.currentSessMode='circuit';
+window.currentSessType='physical';
 window.unsubLogs=null;
 window.archOpen=false;
 window.editorExos=[];

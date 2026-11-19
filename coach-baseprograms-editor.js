@@ -154,6 +154,15 @@ function bpSyncEditor() {
   if (restEl) restEl.value = sp.rest || '45s';
   if (toursEl) toursEl.value = sp.tours || '3';
   if (commentEl) commentEl.value = sp.comment || '';
+  const typeEl = document.getElementById('bp-ed-session-type');
+  if (typeEl) typeEl.value = sp.type || 'physical';
+  const energeticEl = document.getElementById('bp-ed-energetic-blocks');
+  if (energeticEl) energeticEl.value = formatEnergeticBlocks(sp.energetic?.blocks);
+  const terrainEl = document.getElementById('bp-ed-energetic-terrain');
+  const sportEl = document.getElementById('bp-ed-energetic-sport');
+  if (terrainEl) terrainEl.value = sp.energetic?.terrain || '';
+  if (sportEl) sportEl.value = sp.energetic?.sport || '';
+  sessionTypeChanged('bp-ed');
   
   bpSetSessMode(sp.mode || 'circuit', false);
   
@@ -564,8 +573,11 @@ async function bpSaveFullSession() {
   const rest = restEl?.value.trim() || '45s';
   const tours = toursEl?.value.trim() || '3';
   const comment = commentEl?.value.trim() || '';
+  const type = document.getElementById('bp-ed-session-type')?.value || 'physical';
   
-  const sessionData = { rest, tours, mode: _bpSessMode, comment, exercises: JSON.parse(JSON.stringify(_bpEditorExos)) };
+  const energeticBlocks = parseEnergeticBlocks(document.getElementById('bp-ed-energetic-blocks')?.value);
+  const energetic = type === 'energetic' ? { blocks: energeticBlocks, terrain: document.getElementById('bp-ed-energetic-terrain')?.value || '', sport: document.getElementById('bp-ed-energetic-sport')?.value.trim() || '', source: 'energetique' } : null;
+  const sessionData = { type, rest, tours, mode: _bpSessMode, comment, exercises: JSON.parse(JSON.stringify(_bpEditorExos)), energetic, mental: type === 'mental' ? { protocol: [], journalPrompt: '' } : null };
   
   // Use hierarchy if available
   if (typeof bpGetMicroById === 'function' && window._bpHierarchy) {
@@ -732,8 +744,8 @@ function bpGetSessColor(s) {
 
 function bpGetSessParams(c, sess) {
   const s = c.sessions?.[sess];
-  if (!s || Array.isArray(s)) return { rest: '45s', tours: '3', mode: 'circuit', comment: '' };
-  return { rest: s.rest || '45s', tours: s.tours || '3', mode: s.mode || 'circuit', comment: s.comment || '' };
+  if (!s || Array.isArray(s)) return { type: 'physical', rest: '45s', tours: '3', mode: 'circuit', comment: '' };
+  return { type: s.type || 'physical', rest: s.rest || '45s', tours: s.tours || '3', mode: s.mode || 'circuit', comment: s.comment || '' };
 }
 
 function bpGetSessEx(c, sess) {

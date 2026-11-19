@@ -151,8 +151,11 @@ async function saveClientUnlock(clientId) {
   await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',cid,'data','unlock'), { unlocked: Array.from(clientUnlocked), archived: Array.from(clientArchived) });
 }
 
-function getSessParams(c, t) { const s = c.sessions[t]; if (!s||Array.isArray(s)) return { rest:'45s',tours:'3',mode:'circuit',comment:'' }; return { rest:s.rest||'45s', tours:s.tours||'3', mode:s.mode||'circuit', comment:s.comment||'' }; }
-function getSessEx(c, t) { const s = c.sessions[t]; if (!s) return []; if (Array.isArray(s)) return s; return s.exercises||[]; }
+function getSessParams(c, t) {
+  const s = c?.sessions?.[t];
+  return normalizeSessionData(s);
+}
+function getSessEx(c, t) { return getSessParams(c, t).exercises; }
 
 // ── CLIENT GRID ──────────────────────────────────────
 function renderClientGrid() {
@@ -419,7 +422,7 @@ function openDetail() {
 
   document.getElementById('detail-bar').style.background = `linear-gradient(90deg,${col},${col}44)`;
   document.getElementById('detail-tag').innerText = 'CYCLE '+cycle+' • S-'+type;
-  document.getElementById('detail-title').innerText = 'SÉANCE ' + type;
+  document.getElementById('detail-title').innerText = 'SÉANCE ' + type + ' · ' + sessionTypeLabel(sp.type);
   document.getElementById('detail-focus').innerText = c.focus;
   document.getElementById('detail-mode-badge').innerHTML = isCircuit
     ? `<span class="badge" style="background:rgba(240,165,0,.15);color:var(--gold);border:1px solid rgba(240,165,0,.3)">⟳ CIRCUIT</span>`
@@ -435,7 +438,14 @@ function openDetail() {
   document.getElementById('detail-stats').innerHTML = statsHTML;
 
   let exHTML = '';
-  if (isCircuit) {
+  if (sp.type === 'energetic') {
+    const blocks = sp.energetic?.blocks || [];
+    const terrainLabel = { rugby:'Rugby', football:'Football', basketball:'Basketball', handball:'Handball', volleyball:'Volleyball', tennis:'Tennis', natation:'Natation / piscine', athletisme:'Athlétisme', individuel:'Sport individuel', autre:'Autre' }[sp.energetic?.terrain] || '';
+    const context = [terrainLabel, sp.energetic?.sport].filter(Boolean).join(' · ');
+    exHTML = `${context ? `<div class="badge" style="display:inline-block;margin-bottom:1rem;background:rgba(16,185,129,.12);color:var(--green)">Terrain : ${h(context)}</div>` : ''}${blocks.length ? `<div style="display:flex;flex-direction:column;gap:.75rem">${blocks.map((b, i) => `<div class="card" style="padding:1.25rem;border-left:3px solid ${col}"><div style="display:flex;justify-content:space-between;gap:1rem"><strong>${i + 1}. ${h(b.title || 'Bloc énergétique')}</strong><span style="color:var(--gold);font-size:.8rem">${h(b.duration || '')}</span></div><p style="color:var(--muted);font-size:.85rem;line-height:1.5;margin-top:.5rem">${h(b.instruction || '')}</p></div>`).join('')}</div>` : '<p style="color:var(--muted);font-style:italic">Protocole énergétique en préparation.</p>'}`;
+  } else if (sp.type === 'mental') {
+    exHTML = '<div class="card" style="padding:1.5rem"><h4 style="font-size:1.1rem">Préparation mentale</h4><p style="color:var(--muted);margin-top:.5rem">Suis les consignes de ton coach, puis note ton état avant et après la séance.</p></div>';
+  } else if (isCircuit) {
     exHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem">`;
     exs.forEach((e, i) => { exHTML += exCard(e, i, type, col, true); });
     exHTML += `</div>`;

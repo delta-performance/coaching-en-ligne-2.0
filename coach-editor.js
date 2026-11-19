@@ -136,6 +136,16 @@ function syncEditor() {
   document.getElementById('ed-rest').value = sp.rest||'45s';
   document.getElementById('ed-tours').value = sp.tours||'3';
   document.getElementById('ed-sess-comment').value = sp.comment||'';
+  const typeEl = document.getElementById('ed-session-type');
+  currentSessType = sp.type || 'physical';
+  if (typeEl) typeEl.value = currentSessType;
+  const energeticEl = document.getElementById('ed-energetic-blocks');
+  if (energeticEl) energeticEl.value = formatEnergeticBlocks(sp.energetic?.blocks);
+  const terrainEl = document.getElementById('ed-energetic-terrain');
+  const sportEl = document.getElementById('ed-energetic-sport');
+  if (terrainEl) terrainEl.value = sp.energetic?.terrain || '';
+  if (sportEl) sportEl.value = sp.energetic?.sport || '';
+  sessionTypeChanged('ed');
   setSessMode(sp.mode||'circuit', false);
   editorExos = JSON.parse(JSON.stringify(getSessEx(c, sess)));
   edDropdownState = {};
@@ -494,7 +504,11 @@ async function saveFullSession() {
   const rest = document.getElementById('ed-rest').value.trim()||'45s';
   const tours = document.getElementById('ed-tours').value.trim()||'3';
   const comment = document.getElementById('ed-sess-comment').value.trim();
-  const sessionData = { rest, tours, mode:currentSessMode, comment, exercises:JSON.parse(JSON.stringify(editorExos)) };
+  const type = document.getElementById('ed-session-type')?.value || currentSessType || 'physical';
+  currentSessType = type;
+  const energeticBlocks = parseEnergeticBlocks(document.getElementById('ed-energetic-blocks')?.value);
+  const energetic = type === 'energetic' ? { blocks: energeticBlocks, terrain: document.getElementById('ed-energetic-terrain')?.value || '', sport: document.getElementById('ed-energetic-sport')?.value.trim() || '', source: 'energetique' } : null;
+  const sessionData = { type, rest, tours, mode:currentSessMode, comment, exercises:JSON.parse(JSON.stringify(editorExos)), energetic, mental: type === 'mental' ? { protocol: [], journalPrompt: '' } : null };
   
   // Utiliser la hiérarchie si disponible
   if (typeof getMicroById === 'function' && window._hierarchy) {

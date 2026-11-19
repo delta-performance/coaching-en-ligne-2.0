@@ -1,0 +1,14 @@
+{
+  "name": "DELTA Performance",
+  "short_name": "DELTA",
+  "description": "Préparation physique, énergétique et mentale",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#080c12",
+  "theme_color": "#c8102e",
+  "icons": [{
+    "src": "Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg",
+    "sizes": "1280x720",
+    "type": "image/jpeg"
+  }]
+}

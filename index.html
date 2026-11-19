@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DELTA Performance 2.0</title>
+<link rel="icon" type="image/jpeg" href="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg">
+<link rel="manifest" href="manifest.json">
+<meta property="og:title" content="DELTA Performance">
+<meta property="og:image" content="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -382,7 +386,7 @@ h1,h2,h3,h4,h5{font-family:'Barlow Condensed',sans-serif;}
 #screen-login::before{content:'';position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(200,16,46,.12) 0%,transparent 70%);top:-100px;left:-100px;pointer-events:none;}
 .login-box{background:var(--card);border:1px solid var(--border);border-radius:2rem;padding:3rem;width:100%;max-width:420px;position:relative;z-index:1;box-shadow:0 40px 80px rgba(0,0,0,.6);}
 .login-logo{font-family:'Barlow Condensed',sans-serif;font-size:3rem;font-weight:900;font-style:italic;color:var(--text);letter-spacing:-.02em;text-transform:uppercase;line-height:1;}
-.login-logo span{color:var(--gold);}
+.login-logo span{color:var(--gold);}.brand-logo{width:3.5rem;height:3.5rem;object-fit:cover;border-radius:.85rem;vertical-align:middle;margin-right:.65rem;border:1px solid rgba(240,165,0,.35);}.nav-logo{width:2rem;height:2rem;object-fit:cover;border-radius:.45rem;vertical-align:middle;margin-right:.45rem;border:1px solid rgba(240,165,0,.35);}
 .code-input{width:100%;background:var(--surface);border:2px solid var(--border);border-radius:1rem;padding:1.25rem 1.5rem;font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:900;font-style:italic;color:var(--text);text-align:center;letter-spacing:.15em;text-transform:uppercase;outline:none;transition:border-color .2s;}
 .code-input:focus{border-color:var(--gold);}
 /* NAV */
@@ -525,18 +529,20 @@ select.inp option{background:var(--surface);}
 <div id="screen-login">
   <div class="login-box">
     <div style="text-align:center;margin-bottom:2.5rem">
-      <div class="login-logo">DELTA <span>Performance</span></div>
+      <div class="login-logo"><img class="brand-logo" src="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg" alt="DELTA">DELTA <span>Performance</span></div>
       <div style="font-size:.7rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.3em;margin-top:.5rem">Coaching Elite 2.0</div>
     </div>
     
-    <!-- Mode CLIENT (par défaut) : connexion par code -->
+    <!-- Mode CLIENT : connexion email / mot de passe -->
     <div id="login-client-mode">
-      <label style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:.75rem">Code d'accès</label>
-      <input type="text" id="login-code" class="code-input" placeholder="EMMA2024" autocomplete="off" style="text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:900;font-style:italic;letter-spacing:.1em">
-      <p id="login-error" class="hidden" style="text-align:center;color:#f87171;font-size:.75rem;margin-top:.75rem;font-family:'Barlow Condensed',sans-serif;font-style:italic;">Code incorrect.</p>
-      <p id="login-hint" style="font-size:.65rem;color:var(--muted);margin-top:.75rem;line-height:1.45;font-style:italic">Entre ton code personnel pour accéder à ton programme.</p>
-      <button class="btn btn-primary" style="width:100%;margin-top:1.5rem;font-size:1rem;padding:1.1rem" onclick="doLogin()">ACCÉDER</button>
-      
+      <label style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:.75rem">Email</label>
+      <input type="email" id="login-client-email" class="code-input" placeholder="toi@email.com" autocomplete="email" style="text-transform:none;letter-spacing:.02em;font-size:1.1rem;margin-bottom:1rem">
+      <label style="display:block;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);margin-bottom:.75rem">Mot de passe</label>
+      <input type="password" id="login-client-password" class="code-input" placeholder="••••••" autocomplete="current-password" style="font-size:1.1rem">
+      <p id="login-error-client" class="hidden" style="text-align:center;color:#f87171;font-size:.75rem;margin-top:.75rem;font-family:'Barlow Condensed',sans-serif;font-style:italic;"></p>
+      <p style="font-size:.65rem;color:var(--muted);margin-top:.75rem;line-height:1.45;font-style:italic">Utilise les identifiants transmis par ton coach.</p>
+      <button class="btn btn-primary" style="width:100%;margin-top:1.5rem;font-size:1rem;padding:1.1rem" onclick="doClientLogin()">SE CONNECTER</button>
+      <a href="#" onclick="openModal('modal-forgot-password'); return false;" style="font-size:.65rem;color:var(--gold);text-decoration:underline;display:block;margin-top:1rem;text-align:center;font-family:'Barlow Condensed',sans-serif;font-style:italic;">Mot de passe oublié ?</a>
       <div style="text-align:center;margin-top:1.5rem">
         <button onclick="toggleCoachLogin()" style="background:none;border:none;color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.75rem;text-transform:uppercase;cursor:pointer;text-decoration:underline">Je suis coach / admin</button>
       </div>
@@ -572,7 +578,7 @@ select.inp option{background:var(--surface);}
 <div id="screen-app" class="hidden">
   <nav>
     <div class="nav-inner">
-      <div class="nav-brand">DELTA <span>Performance</span></div>
+      <div class="nav-brand"><img class="nav-logo" src="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg" alt="DELTA">DELTA <span>Performance</span></div>
       <div style="display:flex;align-items:center;gap:.75rem">
         <span id="nav-badge" class="badge badge-client">—</span>
         <span id="nav-name" style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;font-size:.9rem">—</span>
@@ -727,7 +733,23 @@ select.inp option{background:var(--surface);}
         <button class="tab-pill off" id="ctab-baseprograms" onclick="switchCoachTab('baseprograms')">Programmes de base</button>
         <button class="tab-pill off" id="ctab-transfer" onclick="switchCoachTab('transfer')">Transfert</button>
         <button class="tab-pill off" id="ctab-database" onclick="switchCoachTab('database')">Base d'exercices</button>
+        <button class="tab-pill off" id="ctab-crm" onclick="switchCoachTab('crm')">CRM & RDV</button>
         <button class="tab-pill off" id="ctab-messages" onclick="console.log('Messages clicked!'); console.log('switchCoachTab exists:', typeof switchCoachTab); switchCoachTab('messages')">💬 Messages <span id="global-chat-badge" class="chat-badge" style="display:none;margin-left:.5rem;font-size:.65rem;min-width:1rem;height:1rem">0</span></button>
+      </div>
+
+      <!-- TAB CRM -->
+      <div id="coach-crm" class="hidden">
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem">
+          <button class="tab-pill on" data-crm-tab="prospects" onclick="openCrmTab('prospects')">Prospects</button>
+          <button class="tab-pill off" data-crm-tab="appointments" onclick="openCrmTab('appointments')">Rendez-vous</button>
+          <button class="tab-pill off" data-crm-tab="tunnel" onclick="openCrmTab('tunnel')">Tunnel</button>
+        </div>
+        <div data-crm-view="prospects">
+          <div class="card" style="padding:1.5rem;margin-bottom:1.5rem"><h3 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1rem">Ajouter un prospect</h3><div class="grid-2" style="gap:.75rem"><input id="prospect-name" class="inp" placeholder="Nom complet"><input id="prospect-email" type="email" class="inp" placeholder="Email"><input id="prospect-phone" class="inp" placeholder="Téléphone"><input id="prospect-objective" class="inp" placeholder="Objectif principal"></div><button class="btn btn-primary" style="margin-top:1rem" onclick="createProspect()">AJOUTER AU PIPELINE</button></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem"><h3 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase">Pipeline commercial</h3></div><div id="prospects-list" style="display:flex;flex-direction:column;gap:.75rem"></div>
+        </div>
+        <div data-crm-view="appointments" class="hidden"><div class="card" style="padding:1.5rem;margin-bottom:1.5rem"><h3 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:1rem">Ajouter un rendez-vous</h3><div class="grid-2" style="gap:.75rem"><input id="appointment-name" class="inp" placeholder="Nom du prospect"><input id="appointment-email" type="email" class="inp" placeholder="Email"><input id="appointment-date" type="date" class="inp"><input id="appointment-time" type="time" class="inp"></div><button class="btn btn-primary" style="margin-top:1rem" onclick="createAppointment()">ENREGISTRER LE RDV</button></div><div id="appointments-list" style="display:flex;flex-direction:column;gap:.75rem"></div></div>
+        <div data-crm-view="tunnel" class="hidden"><div class="card" style="padding:2rem"><h3 style="font-size:1.5rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:.75rem">Tunnel de vente</h3><p style="color:var(--muted);font-size:.85rem;line-height:1.5">Le tunnel public est disponible dans <code>tunnel.html</code>. Les prospects qui le remplissent apparaîtront dans ce pipeline dès que la règle Firestore publique sera activée.</p><a class="btn btn-gold" href="tunnel.html" target="_blank" style="display:inline-block;margin-top:1rem">OUVRIR LE TUNNEL</a></div></div>
       </div>
 
       <!-- TAB CLIENTS -->
@@ -820,6 +842,11 @@ select.inp option{background:var(--surface);}
             <button onclick="openAddSessModal()" class="btn btn-ghost btn-sm" style="color:var(--green);border-color:rgba(16,185,129,.3);font-size:1.2rem;padding:.4rem .7rem;margin-left:auto" title="Ajouter une séance">+</button>
           </div>
           <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem">
+            <select id="ed-session-type" class="inp" style="width:auto;min-width:150px" title="Type de séance" onchange="sessionTypeChanged('ed')">
+              <option value="physical">Physique</option>
+              <option value="energetic">Énergétique</option>
+              <option value="mental">Prépa mentale</option>
+            </select>
             <button id="mode-circuit-btn" onclick="setSessMode('circuit')" style="padding:.4rem .7rem;border-radius:.5rem;font-size:1rem;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)" title="Mode Circuit">⟳</button>
             <button id="mode-classic-btn" onclick="setSessMode('classic')" style="padding:.4rem .7rem;border-radius:.5rem;font-size:1rem;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)" title="Mode Classique">≡</button>
             <button class="btn btn-ghost btn-sm" onclick="dupCycle()">⧉ Dupliquer cycle</button>
@@ -836,6 +863,11 @@ select.inp option{background:var(--surface);}
             <div style="flex:1;min-width:200px">
               <label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Commentaire séance</label>
               <input type="text" id="ed-sess-comment" class="inp" placeholder="Notes générales sur la séance...">
+            </div>
+            <div id="ed-energetic-fields" style="display:none;flex:1;min-width:100%">
+              <label style="display:block;font-size:.6rem;color:var(--muted);font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Protocole énergétique · une ligne par bloc : Nom | durée | consigne</label>
+              <textarea id="ed-energetic-blocks" class="inp" rows="4" placeholder="Respiration | 5 min | Inspiration lente, expiration longue\nVisualisation | 8 min | Se concentrer sur le geste..." ></textarea>
+              <div class="grid-2" style="margin-top:.75rem;gap:.75rem"><select id="ed-energetic-terrain" class="inp"><option value="">Terrain / environnement...</option><option value="rugby">Rugby</option><option value="football">Football</option><option value="basketball">Basketball</option><option value="handball">Handball</option><option value="volleyball">Volleyball</option><option value="tennis">Tennis</option><option value="natation">Natation / piscine</option><option value="athletisme">Athlétisme</option><option value="individuel">Sport individuel</option><option value="autre">Autre</option></select><input id="ed-energetic-sport" class="inp" placeholder="Sport ou contexte précis"></div>
             </div>
           </div>
           <!-- Exercises list -->
@@ -1102,6 +1134,11 @@ select.inp option{background:var(--surface);}
               <button onclick="bpOpenAddSessModal()" class="btn btn-ghost btn-sm" style="color:var(--green);border-color:rgba(16,185,129,.3);font-size:1.2rem;padding:.4rem .7rem;margin-left:auto" title="Ajouter une séance">+</button>
             </div>
             <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem">
+              <select id="bp-ed-session-type" class="inp" style="width:auto;min-width:150px" title="Type de séance" onchange="sessionTypeChanged('bp-ed')">
+                <option value="physical">Physique</option>
+                <option value="energetic">Énergétique</option>
+                <option value="mental">Prépa mentale</option>
+              </select>
               <button id="bp-mode-circuit-btn" onclick="bpSetSessMode('circuit')" style="padding:.4rem .7rem;border-radius:.5rem;font-size:1rem;cursor:pointer;border:1px solid rgba(240,165,0,.5);background:rgba(240,165,0,.15);color:var(--gold)" title="Mode Circuit">⟳</button>
               <button id="bp-mode-classic-btn" onclick="bpSetSessMode('classic')" style="padding:.4rem .7rem;border-radius:.5rem;font-size:1rem;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted)" title="Mode Classique">≡</button>
               <button class="btn btn-ghost btn-sm" onclick="bpDupCycle()">⧉ Dupliquer cycle</button>
@@ -1118,6 +1155,11 @@ select.inp option{background:var(--surface);}
               <div style="flex:1;min-width:200px">
                 <label style="display:block;font-size:.6rem;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Commentaire séance</label>
                 <input type="text" id="bp-ed-sess-comment" class="inp" placeholder="Notes générales sur la séance...">
+              </div>
+              <div id="bp-ed-energetic-fields" style="display:none;flex:1;min-width:100%">
+                <label style="display:block;font-size:.6rem;color:var(--muted);font-weight:900;text-transform:uppercase;margin-bottom:.35rem">Protocole énergétique · une ligne par bloc : Nom | durée | consigne</label>
+                <textarea id="bp-ed-energetic-blocks" class="inp" rows="4" placeholder="Respiration | 5 min | Inspiration lente, expiration longue\nVisualisation | 8 min | Se concentrer sur le geste..."></textarea>
+                <div class="grid-2" style="margin-top:.75rem;gap:.75rem"><select id="bp-ed-energetic-terrain" class="inp"><option value="">Terrain / environnement...</option><option value="rugby">Rugby</option><option value="football">Football</option><option value="basketball">Basketball</option><option value="handball">Handball</option><option value="volleyball">Volleyball</option><option value="tennis">Tennis</option><option value="natation">Natation / piscine</option><option value="athletisme">Athlétisme</option><option value="individuel">Sport individuel</option><option value="autre">Autre</option></select><input id="bp-ed-energetic-sport" class="inp" placeholder="Sport ou contexte précis"></div>
               </div>
             </div>
             <!-- Exercises list -->
@@ -1293,7 +1335,9 @@ select.inp option{background:var(--surface);}
     <h3 style="font-size:2rem;font-weight:900;font-style:italic;text-transform:uppercase;margin-bottom:2rem">NOUVEAU CLIENT</h3>
     <div style="display:flex;flex-direction:column;gap:1rem;margin-bottom:2rem">
       <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Prénom / Nom</label><input type="text" id="nc-prenom" class="inp" placeholder="Emmanuel Martin"></div>
-      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Code d'accès unique</label><input type="text" id="nc-code" class="inp" placeholder="EMMA2024" style="text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:900;font-style:italic;letter-spacing:.1em"></div>
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Email du client</label><input type="email" id="nc-email" class="inp" placeholder="client@email.com" autocomplete="off"></div>
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Mot de passe initial</label><input type="password" id="nc-password" class="inp" placeholder="Minimum 6 caractères" autocomplete="new-password"></div>
+      <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Code historique (optionnel)</label><input type="text" id="nc-code" class="inp" placeholder="EMMA2024" style="text-transform:uppercase;font-family:'Barlow Condensed',sans-serif;font-size:1.25rem;font-weight:900;font-style:italic;letter-spacing:.1em"></div>
       <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Objectif</label><input type="text" id="nc-objectif" class="inp" placeholder="Renforcement..."></div>
       <div><label style="display:block;font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem">Groupe</label>
         <select id="nc-group" class="inp"><option value="">Aucun groupe</option></select>
@@ -1633,6 +1677,7 @@ select.inp option{background:var(--surface);}
 <script src="coach-baseprograms-visu.js"></script>
 <script src="coach-baseprograms.js"></script>
 <script src="chat.js"></script>
+<script src="crm.js"></script>
 <script src="transfer.js"></script>
 
 <!-- Modal assigner client à programme de base -->

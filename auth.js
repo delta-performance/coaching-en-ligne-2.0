@@ -33,11 +33,35 @@ function _normalizeRole(raw) {
   return 'coach';
 }
 
-/** Cherche un client par son authUid Firebase - OBSOLÈTE */
-async function findClientByAuthUid(uid) {
-  // Fonction conservée pour compatibilité mais non utilisée
-  // Les clients utilisent maintenant l'authentification anonyme avec code
-  return null;
+async function findClientByAuthUid(uid, email = '') {
+  if (!uid && !email) return null;
+  const snap = await window.fdb.getDocs(window.fdb.collection(window.db, 'apps', APP_ID, 'clients'));
+  let found = null;
+  snap.forEach(d => {
+    const c = d.data() || {};
+    if ((uid && c.authUid === uid) || (email && String(c.email || '').toLowerCase() === email.toLowerCase())) {
+      found = { id: d.id, ...c };
+    }
+  });
+  return found;
+}
+
+async function restoreEmailClientSession(fbUser) {
+  const found = await findClientByAuthUid(fbUser.uid, fbUser.email || '');
+  if (!found) return false;
+  currentAuthUser = fbUser;
+  currentUserRole = 'client';
+  currentUserAccess = { role: 'client', managedClientIds: [] };
+  currentUser = { ...found, isCoach: false, id: found.id, isCodeLogin: false };
+  enterApp();
+  return true;
+}
+
+async function createClientAuthAccount(email, password) {
+  const sec = window.getSecondaryAuth();
+  const cred = await sec.createUserWithEmailAndPassword(email, password);
+  await sec.signOut();
+  return cred.user.uid;
 }
 
 /** Admin uniquement : crée un compte Firebase Auth + doc users (coach). */
@@ -119,7 +143,9 @@ async function doLogin() {
   }
 }
 
-document.getElementById('login-code').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('login-code')?.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('login-client-email')?.addEventListener('keydown', e => { if (e.key === 'Enter') doClientLogin(); });
+document.getElementById('login-client-password')?.addEventListener('keydown', e => { if (e.key === 'Enter') doClientLogin(); });
 document.getElementById('login-email')?.addEventListener('keydown', e => { if (e.key === 'Enter') doCoachLogin(); });
 document.getElementById('login-password')?.addEventListener('keydown', e => { if (e.key === 'Enter') doCoachLogin(); });
 
@@ -129,16 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const saved = localStorage.getItem(_CREDENTIALS_KEY);
   if (saved) {
     try {
-      const { email, password } = JSON.parse(saved);
+      const { email } = JSON.parse(saved);
       const emailEl = document.getElementById('login-email');
-      const pwdEl = document.getElementById('login-password');
       if (email && emailEl) emailEl.value = email;
-      if (password && pwdEl) pwdEl.value = password;
-      document.getElementById('login-remember').checked = true;
-      // Basculer automatiquement en mode coach si des identifiants sont sauvegardés
-      if (email && password) {
-        toggleCoachLogin();
-      }
+      const rememberEl = document.getElementById('login-remember');
+      if (rememberEl) rememberEl.checked = true;
+      if (email) toggleCoachLogin();
     } catch (e) {
       console.warn('Failed to restore credentials', e);
     }
@@ -187,10 +209,9 @@ _auth.onAuthStateChanged(async (fbUser) => {
       enterApp();
       return;
     }
-    // Si ce n'est pas un coach (users/), ce n'est pas un compte valide
-    // Les clients utilisent l'authentification anonyme avec code, pas email/password
+    if (await restoreEmailClientSession(fbUser)) return;
     await _auth.signOut();
-    toast('Compte non reconnu. Les clients doivent utiliser leur code d\'accès.', 'e', 6000);
+    toast('Compte non reconnu. Demande à ton coach de vérifier ton profil.', 'e', 6000);
   } catch (e) {
     console.error('Auth profile error', e);
     await _auth.signOut();
@@ -259,6 +280,24 @@ function toggleCoachLogin() {
   }
 }
 
+async function doClientLogin() {
+  const email = document.getElementById('login-client-email')?.value.trim() || '';
+  const password = document.getElementById('login-client-password')?.value || '';
+  const errEl = document.getElementById('login-error-client');
+  if (!email || !password) {
+    if (errEl) { errEl.textContent = 'Email et mot de passe requis'; errEl.classList.remove('hidden'); }
+    return;
+  }
+  try {
+    await _auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    await _auth.signInWithEmailAndPassword(email, password);
+    if (errEl) errEl.classList.add('hidden');
+  } catch (e) {
+    console.error(e);
+    if (errEl) { errEl.textContent = 'Connexion impossible. Vérifie tes identifiants.'; errEl.classList.remove('hidden'); }
+  }
+}
+
 async function doCoachLogin() {
   const email = document.getElementById('login-email')?.value.trim() || '';
   const password = document.getElementById('login-password')?.value || '';
@@ -274,12 +313,8 @@ async function doCoachLogin() {
   try {
     localStorage.removeItem(_CODE_SESSION_KEY);
     
-    // Sauvegarder les identifiants si "Rester connecté" est coché
-    if (remember) {
-      localStorage.setItem(_CREDENTIALS_KEY, JSON.stringify({ email, password }));
-    } else {
-      localStorage.removeItem(_CREDENTIALS_KEY);
-    }
+    // Firebase gère la persistance de session ; aucun mot de passe n'est stocké côté navigateur.
+    localStorage.removeItem(_CREDENTIALS_KEY);
     
     await _auth.setPersistence(remember ? firebase.auth.Auth.Persistence.LOCAL : firebase.auth.Auth.Persistence.SESSION);
     await _auth.signInWithEmailAndPassword(email, password);
@@ -378,7 +413,9 @@ function doLogout() {
     coachMode.classList.add('hidden');
   }
   
-  document.getElementById('login-code').value = '';
+  const legacyCodeEl = document.getElementById('login-code');
+  if (legacyCodeEl) legacyCodeEl.value = '';
+  ['login-client-email', 'login-client-password'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   const emailEl = document.getElementById('login-email');
   const pwdEl = document.getElementById('login-password');
   if (emailEl) emailEl.value = '';
