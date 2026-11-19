@@ -236,6 +236,7 @@ function enterApp() {
       else el.style.display = 'none';
     });
     loadAllData();
+    if (typeof crmLoad === 'function') crmLoad();
   } else {
     document.getElementById('nav-badge').className = 'badge badge-client';
     document.getElementById('nav-badge').innerText = 'CLIENT';

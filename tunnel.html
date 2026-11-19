@@ -1,6 +1,85 @@
 <!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ton prochain niveau | DELTA Performance</title><link rel="icon" type="image/jpeg" href="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg"><link rel="manifest" href="manifest.json"><meta property="og:image" content="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg"><style>
-:root{--bg:#080c12;--card:#141d2b;--surface:#0f1620;--border:#26384d;--brand:#c8102e;--gold:#f0a500;--text:#e8edf3;--muted:#8da0b8}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#35111a,transparent 35%),var(--bg);color:var(--text);font-family:Arial,sans-serif}.wrap{max-width:850px;margin:auto;padding:32px 20px 80px}.logo{font-weight:900;font-style:italic;letter-spacing:-.05em;font-size:26px}.logo span{color:var(--gold)}.hero{text-align:center;padding:75px 10px 45px}.eyebrow{color:var(--gold);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px}.hero h1{font-size:clamp(38px,8vw,76px);line-height:.95;margin:18px 0}.hero h1 span{color:var(--gold)}.hero p{color:var(--muted);font-size:18px;line-height:1.55;max-width:650px;margin:0 auto}.card{background:rgba(20,29,43,.9);border:1px solid var(--border);border-radius:22px;padding:28px;margin-top:22px;box-shadow:0 20px 70px #0007}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:650px){.grid{grid-template-columns:1fr}}label{display:block;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;margin:8px 0}.inp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px;color:var(--text);font-size:15px}.btn{border:0;border-radius:11px;padding:15px 22px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--brand),#8a0c1f);color:#fff}.gold{background:var(--gold);color:#1a0900}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}@media(max-width:650px){.steps{grid-template-columns:1fr}}.step{padding:18px;border:1px solid var(--border);border-radius:15px;background:var(--surface)}.step strong{display:block;color:var(--gold);font-size:24px;margin-bottom:8px}.step p{color:var(--muted);font-size:13px;line-height:1.4}.success{display:none;text-align:center;color:#6ee7b7;font-size:18px;line-height:1.5}
-</style></head><body><div class="wrap"><div class="logo"><img src="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg" alt="DELTA" style="width:38px;height:38px;object-fit:cover;border-radius:9px;vertical-align:middle;margin-right:8px">DELTA <span>PERFORMANCE</span></div><section class="hero"><div class="eyebrow">Bilan découverte offert</div><h1>Révèle ton <span>vrai potentiel.</span></h1><p>Un accompagnement précis pour progresser physiquement, mentalement et énergétiquement — avec une méthode conçue autour de toi.</p><div class="steps"><div class="step"><strong>01</strong><p>Tu réponds à quelques questions sur ta situation.</p></div><div class="step"><strong>02</strong><p>Nous identifions tes leviers prioritaires.</p></div><div class="step"><strong>03</strong><p>Tu réserves ton appel stratégique offert.</p></div></div></section><div class="card"><div id="form-wrap"><h2>Réserve ton appel stratégique</h2><p style="color:var(--muted);line-height:1.5">Tu recevras également ton mini-plan personnalisé après la réservation.</p><form id="lead-form"><div class="grid"><div><label>Prénom et nom</label><input class="inp" name="name" required placeholder="Ton nom"></div><div><label>Email</label><input class="inp" type="email" name="email" required placeholder="toi@email.com"></div><div><label>Téléphone</label><input class="inp" name="phone" required placeholder="06..."></div><div><label>Ton objectif principal</label><input class="inp" name="objective" required placeholder="Ce que tu veux transformer"></div><div><label>Date souhaitée</label><input class="inp" type="date" name="date" required></div><div><label>Créneau souhaité</label><select class="inp" name="time" required><option value="">Choisir</option><option>09:00</option><option>11:00</option><option>14:00</option><option>17:00</option><option>19:00</option></select></div></div><label style="margin-top:18px">Ce qui te bloque aujourd'hui</label><textarea class="inp" name="blocker" rows="3" placeholder="Décris brièvement ta situation..."></textarea><button class="btn primary" style="width:100%;margin-top:20px">JE RÉSERVE MON BILAN OFFERT</button></form></div><div id="success" class="success"><h2>Ta demande est bien enregistrée.</h2><p>Nous allons confirmer ton créneau rapidement. Ton mini-plan personnalisé sera préparé pour l'appel.</p></div></div></div><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script><script src="firebase-init.js"></script><script>
-document.getElementById('lead-form').addEventListener('submit',async e=>{e.preventDefault();const f=new FormData(e.target),data=Object.fromEntries(f.entries());data.status='new';data.source='tunnel';data.createdAt=new Date().toISOString();try{const leadId='public_'+Date.now();await window.fdb.setDoc(window.fdb.doc(window.db,'apps','delta-perf-v2','prospects',leadId),data);await window.fdb.setDoc(window.fdb.doc(window.db,'apps','delta-perf-v2','appointments','public_'+Date.now()),{name:data.name,email:data.email,phone:data.phone,date:data.date,time:data.time,status:'booked',source:'tunnel',createdAt:data.createdAt});document.getElementById('form-wrap').style.display='none';document.getElementById('success').style.display='block'}catch(err){alert('La demande n’a pas pu être envoyée. Réessaie dans quelques instants.')}});
+:root{--bg:#080c12;--card:#141d2b;--surface:#0f1620;--border:#26384d;--brand:#c8102e;--gold:#f0a500;--text:#e8edf3;--muted:#8da0b8}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#35111a,transparent 35%),var(--bg);color:var(--text);font-family:Arial,sans-serif}.wrap{max-width:850px;margin:auto;padding:32px 20px 80px}.logo{font-weight:900;font-style:italic;letter-spacing:-.05em;font-size:26px}.logo span{color:var(--gold)}.hero{text-align:center;padding:75px 10px 45px}.eyebrow{color:var(--gold);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px}.hero h1{font-size:clamp(38px,8vw,76px);line-height:.95;margin:18px 0}.hero h1 #t-highlight{color:var(--gold)}.hero p{color:var(--muted);font-size:18px;line-height:1.55;max-width:650px;margin:0 auto}.card{background:rgba(20,29,43,.9);border:1px solid var(--border);border-radius:22px;padding:28px;margin-top:22px;box-shadow:0 20px 70px #0007}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:650px){.grid{grid-template-columns:1fr}}label{display:block;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;margin:8px 0}.inp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px;color:var(--text);font-size:15px}.btn{border:0;border-radius:11px;padding:15px 22px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--brand),#8a0c1f);color:#fff}.gold{background:var(--gold);color:#1a0900}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}@media(max-width:650px){.steps{grid-template-columns:1fr}}.step{padding:18px;border:1px solid var(--border);border-radius:15px;background:var(--surface)}.step strong{display:block;color:var(--gold);font-size:24px;margin-bottom:8px}.step p{color:var(--muted);font-size:13px;line-height:1.4}.success{display:none;text-align:center;color:#6ee7b7;font-size:18px;line-height:1.5}
+.closed{display:none;text-align:center;color:var(--muted);font-size:17px;line-height:1.5}.hint{color:var(--muted);font-size:12px;margin-top:6px;min-height:15px}.err{color:#fca5a5}.btn:disabled{opacity:.6;cursor:wait}</style></head><body><div class="wrap"><div class="logo"><img src="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg" alt="DELTA" style="width:38px;height:38px;object-fit:cover;border-radius:9px;vertical-align:middle;margin-right:8px">DELTA <span>PERFORMANCE</span></div><section class="hero"><div class="eyebrow" id="t-eyebrow">Bilan découverte offert</div><h1><span id="t-title">Révèle ton</span> <span id="t-highlight">vrai potentiel.</span></h1><p id="t-subtitle">Un accompagnement précis pour progresser physiquement, mentalement et énergétiquement — avec une méthode conçue autour de toi.</p><div class="steps"><div class="step"><strong>01</strong><p>Tu réponds à quelques questions sur ta situation.</p></div><div class="step"><strong>02</strong><p>Nous identifions tes leviers prioritaires.</p></div><div class="step"><strong>03</strong><p>Tu réserves ton appel stratégique offert.</p></div></div></section><div class="card"><div id="form-wrap"><h2 id="t-form-title">Réserve ton appel stratégique</h2><p id="t-form-subtitle" style="color:var(--muted);line-height:1.5">Tu recevras également ton mini-plan personnalisé après la réservation.</p><form id="lead-form"><div class="grid"><div><label>Prénom et nom</label><input class="inp" name="name" required maxlength="120" placeholder="Ton nom"></div><div><label>Email</label><input class="inp" type="email" name="email" required maxlength="160" placeholder="toi@email.com"></div><div><label>Téléphone</label><input class="inp" name="phone" required maxlength="30" placeholder="06..."></div><div><label>Ton objectif principal</label><input class="inp" name="objective" required maxlength="300" placeholder="Ce que tu veux transformer"></div><div><label>Date souhaitée</label><input class="inp" type="date" name="date" id="f-date" required><div class="hint" id="date-hint"></div></div><div><label>Créneau souhaité</label><select class="inp" name="time" id="f-time" required><option value="">Choisis d'abord une date</option></select></div></div><label style="margin-top:18px">Ce qui te bloque aujourd'hui</label><textarea class="inp" name="blocker" rows="3" maxlength="1500" placeholder="Décris brièvement ta situation..."></textarea><button class="btn primary" id="t-cta" style="width:100%;margin-top:20px">JE RÉSERVE MON BILAN OFFERT</button></form></div><div id="success" class="success"><h2 id="t-success-title">Ta demande est bien enregistrée.</h2><p id="t-success-text">Nous allons confirmer ton créneau rapidement. Ton mini-plan personnalisé sera préparé pour l'appel.</p></div><div id="closed" class="closed"><h2>Les réservations sont momentanément fermées.</h2><p>Reviens très vite !</p></div></div></div><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script><script src="firebase-init.js"></script><script src="tunnel-config.js"></script><script>
+(function(){
+const APP='delta-perf-v2';
+const col=name=>window.db.collection('apps').doc(APP).collection(name);
+let cfg=Object.assign({},window.TUNNEL_DEFAULTS);
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+
+function applyConfig(){
+  const txt={'t-eyebrow':'eyebrow','t-title':'title','t-highlight':'titleHighlight','t-subtitle':'subtitle','t-form-title':'formTitle','t-form-subtitle':'formSubtitle','t-cta':'ctaLabel','t-success-title':'successTitle','t-success-text':'successText'};
+  Object.entries(txt).forEach(([id,k])=>{if(cfg[k])$(id).textContent=cfg[k];});
+  if(cfg.enabled===false){$('form-wrap').style.display='none';$('closed').style.display='block';}
+  const today=new Date();
+  $('f-date').min=ymd(today);
+  const max=new Date();max.setDate(max.getDate()+(Number(cfg.maxDaysAhead)||30));$('f-date').max=ymd(max);
+}
+
+function dayClosed(dateStr){
+  const d=new Date(dateStr+'T12:00:00');
+  if((cfg.closedWeekdays||[]).map(Number).includes(d.getDay()))return 'Pas de rendez-vous ce jour-là.';
+  if((cfg.blockedDates||[]).includes(dateStr))return 'Cette date est indisponible.';
+  if(dateStr<$('f-date').min||dateStr>$('f-date').max)return 'Choisis une date dans la période proposée.';
+  return '';
+}
+
+async function refreshSlots(){
+  const sel=$('f-time'),hint=$('date-hint'),date=$('f-date').value;
+  sel.innerHTML='<option value="">Choisis d\'abord une date</option>';hint.textContent='';hint.classList.remove('err');
+  if(!date)return;
+  const closed=dayClosed(date);
+  if(closed){hint.textContent=closed;hint.classList.add('err');return;}
+  let taken=new Set();
+  try{const snap=await col('tunnel_slots').where('date','==',date).get();snap.forEach(d=>taken.add(d.data().time));}catch(e){console.warn(e);}
+  const now=new Date(),minLead=(Number(cfg.minHoursBefore)||0)*3600e3;
+  const free=(cfg.slots||[]).filter(t=>!taken.has(t)&&new Date(date+'T'+t+':00').getTime()-now.getTime()>minLead);
+  if(!free.length){sel.innerHTML='<option value="">Aucun créneau libre</option>';hint.textContent='Tous les créneaux de ce jour sont pris.';hint.classList.add('err');return;}
+  sel.innerHTML='<option value="">Choisir</option>'+free.map(t=>'<option>'+t+'</option>').join('');
+  hint.textContent=free.length+' créneau'+(free.length>1?'x':'')+' disponible'+(free.length>1?'s':'');
+}
+
+async function notify(data){
+  if(!cfg.web3formsKey)return;
+  try{
+    await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({
+      access_key:cfg.web3formsKey,subject:'Nouvelle réservation tunnel : '+data.name+' — '+data.date+' '+data.time,from_name:'DELTA Performance — Tunnel',replyto:data.email,
+      'Nom':data.name,'Email':data.email,'Téléphone':data.phone,'Date':data.date,'Créneau':data.time,'Objectif':data.objective,'Blocage':data.blocker||'-'})});
+  }catch(e){console.warn('Notification email non envoyée',e);}
+}
+
+$('f-date').addEventListener('change',refreshSlots);
+$('lead-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const data=Object.fromEntries(new FormData(e.target).entries());
+  Object.keys(data).forEach(k=>data[k]=String(data[k]).trim());
+  data.email=data.email.toLowerCase();
+  const closed=dayClosed(data.date);
+  if(closed){alert(closed);return;}
+  if(!data.time){alert('Choisis un créneau.');return;}
+  const btn=$('t-cta');btn.disabled=true;
+  const id='tunnel_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
+  const createdAt=new Date().toISOString();
+  try{
+    await window.db.runTransaction(async tx=>{
+      const slotRef=col('tunnel_slots').doc(data.date+'_'+data.time);
+      if((await tx.get(slotRef)).exists)throw new Error('SLOT_TAKEN');
+      tx.set(slotRef,{date:data.date,time:data.time,createdAt});
+      tx.set(col('prospects').doc(id),{name:data.name,email:data.email,phone:data.phone,objective:data.objective,blocker:data.blocker||'',date:data.date,time:data.time,status:'booked',source:'tunnel',createdAt});
+      tx.set(col('appointments').doc(id),{name:data.name,email:data.email,phone:data.phone,objective:data.objective,date:data.date,time:data.time,prospectId:id,status:'booked',source:'tunnel',createdAt});
+    });
+  }catch(err){
+    btn.disabled=false;
+    if(String(err&&err.message).includes('SLOT_TAKEN')){alert('Ce créneau vient d\'être réservé. Choisis-en un autre.');refreshSlots();return;}
+    console.error(err);alert('La demande n\u2019a pas pu être envoyée. Réessaie dans quelques instants.');return;
+  }
+  await notify(data);
+  $('form-wrap').style.display='none';$('success').style.display='block';
+});
+
+col('settings').doc('tunnel').get().then(d=>{if(d.exists)cfg=Object.assign(cfg,d.data());}).catch(e=>console.warn('Config tunnel non chargée',e)).finally(applyConfig);
+})();
 </script></body></html>

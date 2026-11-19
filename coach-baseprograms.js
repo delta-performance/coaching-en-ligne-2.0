@@ -800,7 +800,7 @@ window.switchCoachTab = function(tab) {
   }
   
   if (tab === 'baseprograms') {
-    ['clients','fiche','groupes','transfer','database','coachs','baseprograms'].forEach(t => {
+    ['clients','fiche','groupes','transfer','database','coachs','baseprograms','crm','messages'].forEach(t => {
       const el = document.getElementById('coach-'+t);
       if (el) el.classList.toggle('hidden', t !== tab);
       const btn = document.getElementById('ctab-'+t);
@@ -810,22 +810,5 @@ window.switchCoachTab = function(tab) {
     return;
   }
   
-  // Fallback sur la fonction originale ou implémentation de base
-  ['clients','fiche','groupes','transfer','database','coachs','baseprograms','messages'].forEach(t => {
-    const el = document.getElementById('coach-'+t);
-    if (el) el.classList.toggle('hidden', t !== tab);
-    const btn = document.getElementById('ctab-'+t);
-    if (btn) btn.className = 'tab-pill ' + (t === tab ? 'on' : 'off');
-  });
-  
-  if (tab === 'transfer' && typeof populateTransferSelects === 'function') populateTransferSelects();
-  if (tab === 'coachs' && typeof renderCoachsList === 'function') renderCoachsList();
-  if (tab === 'database' && typeof renderDatabase === 'function') { 
-    if (typeof updateDbFilterDropdowns === 'function') updateDbFilterDropdowns();
-    renderDatabase(); 
-  }
-  if (tab === 'baseprograms') loadBasePrograms();
-  if (tab === 'messages' && typeof renderAllMessages === 'function') {
-    setTimeout(() => renderAllMessages(), 50);
-  }
+  if (originalSwitchCoachTabAdminCheck) originalSwitchCoachTabAdminCheck(tab);
 };
