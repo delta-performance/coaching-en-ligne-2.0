@@ -6,6 +6,12 @@
 <title>DELTA Performance 2.0</title>
 <link rel="icon" type="image/jpeg" href="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg">
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#080c12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DELTA">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta property="og:title" content="DELTA Performance">
 <meta property="og:image" content="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg">
 <script src="https://cdn.tailwindcss.com"></script>
@@ -562,7 +568,7 @@ select.inp option{background:var(--surface);}
       <a href="#" onclick="openModal('modal-forgot-password'); return false;" style="font-size:.65rem;color:var(--gold);text-decoration:underline;display:block;margin-top:1rem;font-family:'Barlow Condensed',sans-serif;font-style:italic;">Mot de passe oublié ?</a>
       
       <label style="display:flex;align-items:center;gap:.6rem;margin-top:1rem;cursor:pointer;user-select:none">
-        <input type="checkbox" id="login-remember" style="accent-color:var(--gold);width:1rem;height:1rem">
+        <input type="checkbox" id="login-remember" checked style="accent-color:var(--gold);width:1rem;height:1rem">
         <span style="font-size:.65rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-style:italic;text-transform:uppercase;color:var(--muted)">Rester connecté</span>
       </label>
       
@@ -1705,5 +1711,6 @@ select.inp option{background:var(--surface);}
   </div>
 </div>
 
+<script src="pwa.js"></script>
 </body>
 </html>
