@@ -1,98 +1,544 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ton prochain niveau | DELTA Performance</title><link rel="icon" type="image/jpeg" href="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg"><link rel="manifest" href="manifest.json"><meta property="og:image" content="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg"><script>try{if(localStorage.getItem('delta-is-client')==='1'&&!/[?&](funnel|tunnel|edit)\b/.test(location.search))location.replace('index.html');}catch(e){}</script><style>
-:root{--bg:#080c12;--card:#141d2b;--surface:#0f1620;--border:#26384d;--brand:#c8102e;--gold:#f0a500;--text:#e8edf3;--muted:#8da0b8}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#35111a,transparent 35%),var(--bg);color:var(--text);font-family:Arial,sans-serif}.wrap{max-width:850px;margin:auto;padding:32px 20px 80px}.logo{font-weight:900;font-style:italic;letter-spacing:-.05em;font-size:26px}.logo span{color:var(--gold)}.hero{text-align:center;padding:75px 10px 45px}.eyebrow{color:var(--gold);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px}.hero h1{font-size:clamp(38px,8vw,76px);line-height:.95;margin:18px 0}.hero h1 #t-highlight{color:var(--gold)}.hero p{color:var(--muted);font-size:18px;line-height:1.55;max-width:650px;margin:0 auto}.card{background:rgba(20,29,43,.9);border:1px solid var(--border);border-radius:22px;padding:28px;margin-top:22px;box-shadow:0 20px 70px #0007}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:650px){.grid{grid-template-columns:1fr}}label{display:block;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;margin:8px 0}.inp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px;color:var(--text);font-size:15px}.btn{border:0;border-radius:11px;padding:15px 22px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--brand),#8a0c1f);color:#fff}.gold{background:var(--gold);color:#1a0900}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}@media(max-width:650px){.steps{grid-template-columns:1fr}}.step{padding:18px;border:1px solid var(--border);border-radius:15px;background:var(--surface)}.step strong{display:block;color:var(--gold);font-size:24px;margin-bottom:8px}.step p{color:var(--muted);font-size:13px;line-height:1.4}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.client-link{color:var(--text);text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700;background:var(--surface)}.client-link b{color:var(--gold)}.goals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:10px 0 0}@media(max-width:650px){.goals{grid-template-columns:1fr}}.goal{text-align:left;padding:22px;border:1px solid var(--border);border-radius:18px;background:var(--surface);cursor:pointer;color:var(--text);font:inherit;transition:.15s}.goal:hover,.goal.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}.goal .ico{font-size:28px}.goal h3{margin:10px 0 6px;font-size:18px}.goal p{color:var(--muted);font-size:13px;line-height:1.45;margin:0}.goal ul{color:var(--muted);font-size:12.5px;line-height:1.6;padding-left:18px;margin:10px 0 0}.sec-title{text-align:center;font-size:clamp(24px,4vw,34px);margin:50px 0 6px}.sec-sub{text-align:center;color:var(--muted);margin:0 0 22px}.success{display:none;text-align:center;color:#6ee7b7;font-size:18px;line-height:1.5}
-.closed{display:none;text-align:center;color:var(--muted);font-size:17px;line-height:1.5}.hint{color:var(--muted);font-size:12px;margin-top:6px;min-height:15px}.err{color:#fca5a5}.btn:disabled{opacity:.6;cursor:wait}</style></head><body><div class="wrap"><div class="top"><div class="logo"><img src="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg" alt="DELTA" style="width:38px;height:38px;object-fit:cover;border-radius:9px;vertical-align:middle;margin-right:8px">DELTA <span>PERFORMANCE</span></div><a class="client-link" href="index.html"><span data-k="clientLink">Déjà client ?</span> <b>Me connecter →</b></a></div><section class="hero"><div class="eyebrow" id="t-eyebrow" data-k="eyebrow">Bilan découverte offert</div><h1><span id="t-title" data-k="title">Révèle ton</span> <span id="t-highlight" data-k="titleHighlight">vrai potentiel.</span></h1><p id="t-subtitle" data-k="subtitle">Un accompagnement précis pour progresser physiquement, mentalement et énergétiquement — avec une méthode conçue autour de toi.</p><div class="steps"><div class="step"><strong>01</strong><p data-k="step1">Tu réponds à quelques questions sur ta situation.</p></div><div class="step"><strong>02</strong><p data-k="step2">Nous identifions tes leviers prioritaires.</p></div><div class="step"><strong>03</strong><p data-k="step3">Tu réserves ton appel stratégique offert.</p></div></div><h2 class="sec-title" data-k="goalsTitle">Quel est ton objectif ?</h2><p class="sec-sub" data-k="goalsSub">Trois accompagnements, une même exigence : une méthode construite autour de toi.</p><div class="goals">
-<div class="goal" role="button" tabindex="0" data-goal="Préparation physique &amp; performance"><div class="ico">⚡</div><h3 data-k="g1Title">Préparation physique &amp; performance</h3><p data-k="g1Text">Pour les sportifs qui veulent passer un cap : saison, compétition, test ou concours.</p><ul><li data-k="g1L1">Force, vitesse, explosivité, endurance</li><li data-k="g1L2">Planification selon ton calendrier</li><li data-k="g1L3">Prévention des blessures &amp; reprise</li></ul></div>
-<div class="goal" role="button" tabindex="0" data-goal="Transformation physique"><div class="ico">🔥</div><h3 data-k="g2Title">Transformation physique</h3><p data-k="g2Text">Perdre du gras, prendre du muscle, te recomposer — avec des résultats mesurables.</p><ul><li data-k="g2L1">Programme d'entraînement sur mesure</li><li data-k="g2L2">Stratégie nutrition simple et tenable</li><li data-k="g2L3">Suivi des mesures &amp; ajustements</li></ul></div>
-<div class="goal" role="button" tabindex="0" data-goal="Forme &amp; bien-être"><div class="ico">🌿</div><h3 data-k="g3Title">Forme &amp; bien-être</h3><p data-k="g3Text">Retrouver de l'énergie, bouger sans douleur et installer de bonnes habitudes durables.</p><ul><li data-k="g3L1">Énergie, sommeil, gestion du stress</li><li data-k="g3L2">Mobilité, posture, santé articulaire</li><li data-k="g3L3">Routine adaptée à ton emploi du temps</li></ul></div>
-</div></section><div class="card"><div id="form-wrap"><h2 id="t-form-title" data-k="formTitle">Réserve ton appel stratégique</h2><p id="t-form-subtitle" data-k="formSubtitle" style="color:var(--muted);line-height:1.5">Tu recevras également ton mini-plan personnalisé après la réservation.</p><form id="lead-form"><div class="grid"><div><label>Prénom et nom</label><input class="inp" name="name" required maxlength="120" placeholder="Ton nom"></div><div><label>Email</label><input class="inp" type="email" name="email" required maxlength="160" placeholder="toi@email.com"></div><div><label>Téléphone</label><input class="inp" name="phone" required maxlength="30" placeholder="06..."></div><div><label>Ton accompagnement</label><select class="inp" name="objectiveType" id="f-goal" required><option value="">Choisir</option><option>Préparation physique &amp; performance</option><option>Transformation physique</option><option>Forme &amp; bien-être</option></select></div><div><label>Ton objectif précis</label><input class="inp" name="objective" id="f-objective" required maxlength="300" placeholder="Ce que tu veux atteindre"></div><div><label>Date souhaitée</label><input class="inp" type="date" name="date" id="f-date" required><div class="hint" id="date-hint"></div></div><div><label>Créneau souhaité</label><select class="inp" name="time" id="f-time" required><option value="">Choisis d'abord une date</option></select></div></div><label style="margin-top:18px">Ce qui te bloque aujourd'hui</label><textarea class="inp" name="blocker" rows="3" maxlength="1500" placeholder="Décris brièvement ta situation..."></textarea><button class="btn primary" id="t-cta" style="width:100%;margin-top:20px"><span data-k="ctaLabel">JE RÉSERVE MON BILAN OFFERT</span></button></form></div><div id="success" class="success"><h2 id="t-success-title" data-k="successTitle">Ta demande est bien enregistrée.</h2><p id="t-success-text" data-k="successText">Nous allons confirmer ton créneau rapidement. Ton mini-plan personnalisé sera préparé pour l'appel.</p></div><div id="closed" class="closed"><h2 data-k="closedTitle">Les réservations sont momentanément fermées.</h2><p data-k="closedText">Reviens très vite !</p></div></div></div><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script><script src="firebase-init.js"></script><script src="tunnel-config.js"></script><script>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>David Pellier — Préparateur physique | Coaching individualisé DELTA Performance</title>
+<meta name="description" content="Coaching en ligne individualisé par David Pellier, préparateur physique en rugby professionnel. Performance, transformation physique ou forme : réserve ton bilan découverte offert.">
+<link rel="icon" type="image/jpeg" href="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg"><link rel="manifest" href="manifest.json">
+<meta property="og:title" content="David Pellier — Coaching individualisé DELTA Performance"><meta property="og:description" content="La méthode d’un préparateur physique pro, construite pour toi. Bilan découverte offert."><meta property="og:image" content="img/david-pellier.jpg">
+<meta name="theme-color" content="#080c12">
+<script>try{if(localStorage.getItem('delta-is-client')==='1'&&!/[?&](funnel|tunnel|edit)\b/.test(location.search))location.replace('index.html');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c12;--bg2:#0b1119;--card:#121a26;--surface:#0f1620;--border:#233447;--brand:#c8102e;--brand2:#8a0c1f;--gold:#f0a500;--text:#e8edf3;--muted:#93a4ba;--head:'Barlow Condensed',Impact,Arial Narrow,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}img{max-width:100%;display:block}
+.wrap{max-width:1080px;margin:auto;padding:0 20px}
+h1,h2,h3{font-family:var(--head);text-transform:uppercase;letter-spacing:.01em;line-height:.98;margin:0}
+.eyebrow{display:inline-block;color:var(--gold);font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:12px}
+.sec{padding:84px 0}.sec.alt{background:var(--bg2);border-top:1px solid #121c29;border-bottom:1px solid #121c29}
+.sec-head{text-align:center;max-width:720px;margin:0 auto 42px}
+.sec-head h2{font-size:clamp(34px,5.4vw,56px);margin:10px 0 12px}.sec-head h2 em{font-style:italic;color:var(--gold)}
+.sec-head p{color:var(--muted);font-size:17px;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:16px 26px;font:800 15px Inter,Arial,sans-serif;letter-spacing:.02em;cursor:pointer;text-decoration:none;text-transform:uppercase;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px)}
+.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 12px 34px rgba(200,16,46,.35)}
+.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
+.reassure{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:13px;margin-top:16px}
+.reassure span::before{content:"✓ ";color:var(--gold);font-weight:800}
+/* top */
+.top{position:absolute;top:0;left:0;right:0;z-index:5}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:18px}
+.logo{display:flex;align-items:center;gap:10px;font:800 italic 24px var(--head);letter-spacing:.02em;text-decoration:none}
+.logo img{width:36px;height:36px;object-fit:cover;border-radius:9px}.logo span{color:var(--gold)}
+.client-link{color:var(--text);text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:9px 16px;font-size:13px;font-weight:600;background:rgba(15,22,32,.7);backdrop-filter:blur(6px);white-space:nowrap}
+.client-link b{color:var(--gold)}
+/* hero */
+.hero{position:relative;padding:120px 0 64px;background:radial-gradient(900px 500px at 85% 10%,rgba(200,16,46,.22),transparent 60%),radial-gradient(700px 400px at 0 0,rgba(240,165,0,.08),transparent 60%);overflow:hidden}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:120px;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative;z-index:1}
+.coach-chip{display:inline-flex;align-items:center;gap:12px;padding:6px 16px 6px 6px;border:1px solid var(--border);border-radius:999px;background:rgba(18,26,38,.8);margin-bottom:22px}
+.coach-chip .ph{width:44px;height:44px;border-radius:50%;overflow:hidden;flex:none}
+.coach-chip img{width:100%;height:100%;object-fit:cover}
+.coach-chip b{display:block;font-size:14px}.coach-chip small{display:block;color:var(--muted);font-size:12px}
+.hero h1{font-size:clamp(46px,7.4vw,86px);margin:14px 0 20px}
+.hero h1 .hl{color:var(--gold);font-style:italic;display:block}
+.hero .lead{color:#c4cfdc;font-size:clamp(16px,2vw,19px);max-width:600px;margin:0 0 28px}
+.hero-photo{position:relative}
+.hero-photo .ph{border-radius:26px;overflow:hidden;border:1px solid var(--border);box-shadow:0 30px 80px #000a;aspect-ratio:4/5;background:#151c26}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.hero-photo .tag{position:absolute;left:-18px;bottom:28px;background:rgba(8,12,18,.92);border:1px solid var(--gold);border-radius:14px;padding:12px 16px;box-shadow:0 14px 40px #000a;max-width:250px}
+.hero-photo .tag b{display:block;font:800 22px var(--head);text-transform:uppercase;color:var(--gold)}.hero-photo .tag span{font-size:12.5px;color:var(--muted)}
+@media(max-width:520px){.logo{font-size:19px;gap:8px}.logo img{width:30px;height:30px}.client-link{padding:8px 12px;font-size:12px}.client-link .cl-pre{display:none}}
+@media(max-width:860px){.hero{padding-top:96px}.hero-grid{grid-template-columns:1fr}.hero-photo{display:none}}
+/* parcours */
+.proofs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.proof{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.proof b{display:block;font:800 30px var(--head);text-transform:uppercase;color:var(--gold);line-height:1}
+.proof span{display:block;color:#c9d3df;font-size:14.5px;margin-top:8px}
+.me{display:flex;gap:22px;align-items:center;max-width:780px;margin:34px auto 0;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:22px}
+.me .ph{width:96px;height:96px;border-radius:50%;overflow:hidden;flex:none;border:2px solid var(--gold)}
+.me img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.me p{margin:0;color:#c9d3df;font-size:15.5px}.me b{color:var(--text)}
+@media(max-width:860px){.proofs{grid-template-columns:1fr}}
+@media(max-width:560px){.me{flex-direction:column;text-align:center}}
+/* testimonials */
+.testis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.testi{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.testi p{margin:0 0 14px;color:#d3dce7;font-size:15px}.testi p::before{content:"“";color:var(--gold);font:800 40px/0 var(--head);vertical-align:-14px;margin-right:4px}
+.testi b{display:block}.testi small{color:var(--gold);font-weight:600}
+@media(max-width:860px){.testis{grid-template-columns:1fr}}
+/* quiz */
+.quiz{max-width:640px;margin:auto;background:var(--card);border:1px solid var(--border);border-radius:26px;padding:28px;box-shadow:0 30px 80px #0009}
+@media(max-width:560px){.quiz{padding:20px 16px;border-radius:20px}}
+.qtop{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.qback{border:1px solid var(--border);background:transparent;color:var(--text);width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:18px;flex:none}
+.qback.hide{visibility:hidden}
+.qbar{flex:1;height:6px;border-radius:99px;background:#1b2635;overflow:hidden}.qbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffcc4d);transition:width .35s}
+.qcount{font-size:12px;color:var(--muted);font-weight:700;min-width:30px;text-align:right}
+.qstep{display:none}.qstep.on{display:block;animation:qin .35s ease}
+@keyframes qin{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:none}}
+.qstep h3{font-size:clamp(28px,4.4vw,38px);margin:0 0 6px}
+.qsub{color:var(--muted);margin:0 0 20px;font-size:15px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:15px 16px;border:1px solid var(--border);border-radius:16px;background:var(--surface);color:var(--text);cursor:pointer;font:inherit;transition:.15s}
+.opt:hover{border-color:#3a5370}.opt.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:rgba(240,165,0,.07)}
+.opt .ico{font-size:22px;width:46px;height:46px;flex:none;border-radius:12px;background:rgba(240,165,0,.1);display:flex;align-items:center;justify-content:center}
+.opt b{display:block;font-size:16px}.opt small{display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip{padding:10px 14px;border:1px solid var(--border);border-radius:999px;background:var(--surface);color:var(--text);cursor:pointer;font:600 14px Inter,sans-serif}
+.chip.on{border-color:var(--gold);color:var(--gold);background:rgba(240,165,0,.08)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.day{flex:none;width:66px;padding:10px 0;border:1px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);cursor:pointer;text-align:center;font:inherit;scroll-snap-align:start}
+.day small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;font-weight:700}.day b{display:block;font:800 26px/1.1 var(--head)}.day.on{border-color:var(--gold);background:rgba(240,165,0,.08)}.day.on small{color:var(--gold)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px;margin-top:14px}
+.slot{padding:12px 0;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);font:700 15px Inter,sans-serif;cursor:pointer}.slot.on{border-color:var(--gold);color:var(--gold);background:rgba(240,165,0,.08)}
+.quiz.all .qstep{display:block;margin-bottom:26px;padding-bottom:22px;border-bottom:1px dashed var(--border)}
+.sub-eyebrow{text-align:center;color:var(--muted);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px;margin:40px 0 14px}
+.clubs{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.club{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.club .lg{width:64px;height:64px;display:none;align-items:center;justify-content:center;margin-bottom:6px}.club .lg img{max-width:100%;max-height:100%;object-fit:contain}
+.club.has-logo .lg{display:flex}
+.club img[src=""]{display:none}
+.club b{font:800 17px/1.05 var(--head);text-transform:uppercase}.club small{color:var(--muted);font-size:12px}
+.certs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cert{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px}
+.cico{font-size:20px;width:40px;height:40px;flex:none;border-radius:11px;background:rgba(240,165,0,.1);display:flex;align-items:center;justify-content:center}
+.cert b{display:block;font-size:14.5px}.cert small{display:block;color:var(--muted);font-size:12px}
+@media(max-width:860px){.clubs{grid-template-columns:repeat(3,1fr)}.certs{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.clubs{grid-template-columns:1fr 1fr}.certs{grid-template-columns:1fr}}
+.opts.grid{grid-template-columns:1fr 1fr}.opts.grid .opt{justify-content:center;text-align:center;min-height:58px}
+.more{display:none;margin-top:12px}.qstep.other .more{display:block}
+.qstep .chips+.inp{margin-top:2px}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.scale .opt{justify-content:center;font:800 24px var(--head);padding:12px 0}
+.scale-l{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:8px}
+.qstage{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:-12px 0 16px;min-height:18px;font-size:12px}.qstage b{color:var(--gold);text-transform:uppercase;letter-spacing:.12em;font-size:11px}.qstage span{color:var(--muted);font-weight:600}
+.success .when{color:var(--gold);font-weight:800;font-size:18px;margin:6px 0 10px}.frow.center{justify-content:center}.frow.center .btn{flex:0 1 auto}.success .skip{margin-top:14px}
+.p2 .sec-head{display:none}
+.ed-hint{display:none}body.editing .ed-hint{display:block;margin:16px auto;max-width:640px;text-align:center;font-size:13px;color:#1a0900;background:var(--gold);border-radius:10px;padding:10px 14px}
+body.editing #q-dyn{display:none}
+.quiz.all .qstep[data-label]::before{content:attr(data-label);display:inline-block;margin-bottom:10px;font:700 11px Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#1a0900;background:var(--gold);border-radius:6px;padding:3px 8px}
+.quiz.all .more{display:block}
+.fields{display:grid;gap:12px}
+label{display:block;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin:0 0 6px}
+.inp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;color:var(--text);font:16px Inter,Arial,sans-serif}
+.inp:focus{outline:none;border-color:var(--gold)}
+.frow{display:flex;gap:10px;margin-top:20px}.frow .btn{flex:1}
+.skip{background:none;border:0;color:var(--muted);font:600 14px Inter,sans-serif;cursor:pointer;text-decoration:underline;flex:0 0 auto!important;padding:0 8px}
+.hint{color:var(--muted);font-size:13px;margin-top:10px;min-height:16px}.err{color:#fca5a5}
+.sec-head .eyebrow+h2{margin-top:10px}
+.success,.closed{display:none;text-align:center;font-size:17px}.success h2,.closed h2{font-size:clamp(32px,5vw,46px);margin-bottom:10px}.success h2{color:#6ee7b7}.closed p,.success p{color:var(--muted)}
+footer{padding:40px 0 110px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid #121c29}
+footer a{color:var(--gold);text-decoration:none}
+.sticky{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:50;display:none}
+.sticky .btn{width:100%;box-shadow:0 12px 40px #000c}
+@media(max-width:860px){.sticky.show{display:block}}
+body.editing .sticky{display:none!important}
+[data-opt]:empty{display:none}
+body.editing [data-opt]:empty{display:block;min-height:1.4em}
+body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-style:italic}
+</style></head><body>
+<header class="top"><div class="wrap"><a class="logo" href="#"><img src="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg" alt="DELTA">DELTA <span>PERFORMANCE</span></a><a class="client-link" href="index.html"><span class="cl-pre" data-k="clientLink">Déjà client ?</span> <b>Me connecter →</b></a></div></header>
+
+<section class="hero"><div class="wrap"><div class="hero-grid"><div>
+  <div class="coach-chip"><div class="ph"><img data-img="heroPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><div><b data-k="coachName">David Pellier</b><small data-k="coachRole">Préparateur physique · Rugby professionnel</small></div></div>
+  <div class="eyebrow" data-k="eyebrow">Coaching en ligne 100 % individualisé</div>
+  <h1><span data-k="title">La méthode d’un prépa physique pro,</span> <span class="hl" data-k="titleHighlight">construite pour toi.</span></h1>
+  <p class="lead" data-k="subtitle">Performance, transformation physique ou forme : je construis ton programme autour de ton corps, de ton niveau et de ta vie.</p>
+  <a class="btn primary" href="#reserver"><span data-k="cta1">Réserver mon bilan offert</span> →</a>
+  <div class="reassure"><span data-k="re1">Gratuit</span><span data-k="re2">Sans engagement</span><span data-k="re3">2 minutes</span></div>
+</div><div class="hero-photo"><div class="ph"><img data-img="heroPhoto" src="img/david-pellier.jpg" alt="David Pellier, préparateur physique"></div><div class="tag"><b data-k="tagTitle">Rugby pro</b><span data-k="tagText">Préparateur physique au Sporting Club Albigeois</span></div></div></div></div></section>
+
+<section class="sec" id="parcours"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow" data-k="trackEyebrow">Mon parcours</span><h2 data-k="trackTitle">Du haut niveau à ton quotidien</h2></div>
+  <div class="proofs">
+    <div class="proof"><b data-k="pr1T">Rugby pro</b><span data-k="pr1S">Sporting Club Albigeois et Toulouse Olympique XIII, en Super League.</span></div>
+    <div class="proof"><b data-k="pr2T">Judoka</b><span data-k="pr2S">15 ans de compétition : je sais ce que la performance demande.</span></div>
+    <div class="proof"><b data-k="pr3T">Depuis 2018</b><span data-k="pr3S">Des sportifs amateurs et des actifs accompagnés en transformation physique et en forme.</span></div>
+  </div>
+  <div class="sub-eyebrow" data-k="clubsEyebrow">Clubs et structures</div>
+  <div class="clubs" id="clubs"></div>
+  <div class="sub-eyebrow" data-k="certsEyebrow">Diplômes et certifications</div>
+  <div class="certs" id="certs"></div>
+  <p class="ed-hint" data-k="expHint">Les expériences, logos et certifications se modifient dans Admin → CRM &amp; RDV → Tunnel.</p>
+  <div class="me"><div class="ph"><img data-img="aboutPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><p data-k="meText">Moi, c’est David : judoka à la base, préparateur physique aujourd’hui, et papa de deux jeunes enfants. Ton plan sera construit pour ta vraie vie, pas pour une vie idéale.</p></div>
+</div></section>
+
+<section class="sec alt" data-opt-section><div class="wrap">
+  <div class="sec-head"><span class="eyebrow" data-k="testiEyebrow">Témoignages</span><h2 data-k="testiTitle">Ils m’ont fait confiance</h2></div>
+  <div class="testis">
+    <div class="testi" data-opt-group><p data-k="t1Text" data-opt data-ph="Témoignage du client (laisser vide pour masquer)"></p><b data-k="t1Name" data-opt data-ph="Prénom, âge ou sport"></b><small data-k="t1Res" data-opt data-ph="Résultat obtenu"></small></div>
+    <div class="testi" data-opt-group><p data-k="t2Text" data-opt data-ph="Témoignage du client (laisser vide pour masquer)"></p><b data-k="t2Name" data-opt data-ph="Prénom, âge ou sport"></b><small data-k="t2Res" data-opt data-ph="Résultat obtenu"></small></div>
+    <div class="testi" data-opt-group><p data-k="t3Text" data-opt data-ph="Témoignage du client (laisser vide pour masquer)"></p><b data-k="t3Name" data-opt data-ph="Prénom, âge ou sport"></b><small data-k="t3Res" data-opt data-ph="Résultat obtenu"></small></div>
+  </div>
+</div></section>
+
+<section class="sec" id="reserver"><div class="wrap">
+  <div id="form-wrap">
+    <div class="sec-head"><span class="eyebrow" data-k="formEyebrow">Bilan découverte offert</span><h2 data-k="formTitle">Réserve ton bilan avec moi</h2><p data-k="formSubtitle">4 étapes pour réserver, puis quelques questions pour préparer notre échange.</p></div>
+    <div class="quiz" id="quiz">
+      <div class="qtop"><button type="button" class="qback hide" id="q-back" aria-label="Retour">←</button><div class="qbar"><i id="q-bar"></i></div><div class="qcount" id="q-count"></div></div>
+      <div class="qstage"><b id="q-stage"></b><span id="q-enc"></span></div>
+      <form id="lead-form" novalidate>
+        <input type="hidden" id="f-date"><input type="hidden" id="f-time">
+        <p class="ed-hint" data-k="quizHint">Les questions se modifient dans Admin → CRM &amp; RDV → Tunnel → Questionnaire. Ici, seuls le créneau et les coordonnées sont modifiables.</p>
+        <div class="qstep" data-step="prenom" data-type="name"><h3 data-k="cFnT">Avant de commencer, c’est quoi ton prénom ?</h3><p class="qsub" data-k="cFnS" data-opt>4 étapes pour réserver ton bilan, puis quelques questions pour que je le prépare.</p><input class="inp" id="f-first" maxlength="60" autocomplete="given-name" placeholder="Ton prénom"><div class="frow"><button type="button" class="btn primary" data-next>Continuer →</button></div></div>
+        <div id="q-dyn"></div>
+        <div class="qstep" data-step="slot" data-type="slot"><h3 data-k="cStT">Choisis ton créneau</h3><p class="qsub" data-k="cStS" data-opt>30 minutes en visio ou par téléphone, avec moi.</p><div class="days" id="days"></div><div class="slots" id="slots"></div><div class="hint" id="date-hint"></div></div>
+        <div class="qstep" data-step="contact" data-type="contact"><h3 data-k="cCtT">Dernière étape, {prenom} !</h3><p class="qsub" data-k="cCtS" data-opt>Pour te confirmer le rendez-vous.</p><div class="fields">
+            <div><label for="f-last">Nom (facultatif)</label><input class="inp" id="f-last" maxlength="80" autocomplete="family-name" placeholder="Ton nom"></div>
+            <div><label for="f-email">Email</label><input class="inp" type="email" name="email" id="f-email" required maxlength="160" autocomplete="email" placeholder="toi@email.com"></div>
+            <div><label for="f-phone">Téléphone</label><input class="inp" type="tel" name="phone" id="f-phone" required maxlength="30" autocomplete="tel" placeholder="06..."></div>
+          </div>
+          <div class="frow"><button class="btn primary" id="t-cta"><span data-k="ctaLabel">Je réserve mon bilan offert</span></button></div>
+          <div class="reassure" style="justify-content:center"><span data-k="re7">Gratuit</span><span data-k="re8">Sans engagement</span><span data-k="re9">Tes infos restent entre nous</span></div></div>
+      </form>
+    </div>
+  </div>
+  <div id="bridge" class="success quiz"><h2 data-k="bridgeTitle">C’est réservé, {prenom} !</h2><p class="when" id="bridge-when"></p><p data-k="bridgeText">Pour que je prépare ton bilan sur mesure, réponds à quelques questions sur toi, ton sport et ton quotidien. Environ 2 minutes.</p><div class="frow center"><button type="button" class="btn primary" id="b-go"><span data-k="bridgeGo">C’est parti</span> →</button></div><button type="button" class="skip" id="b-later"><span data-k="bridgeLater">Plus tard</span></button></div>
+  <div id="later" class="success quiz"><h2 data-k="laterTitle">Pas de souci, {prenom} !</h2><p data-k="laterText">Ton créneau est bien réservé. Reviens sur cette page quand tu veux pour finir le questionnaire : tes réponses sont gardées.</p><div class="frow center"><button type="button" class="btn ghost" id="l-resume"><span data-k="laterGo">Reprendre le questionnaire</span></button></div></div>
+  <div id="success" class="success quiz"><h2 data-k="successTitle">Merci {prenom}, j’ai tout ce qu’il me faut !</h2><p data-k="successText">Je prépare ton bilan à partir de tes réponses. À très vite !</p></div>
+  <div id="closed" class="closed quiz"><h2 data-k="closedTitle">Les réservations sont momentanément fermées.</h2><p data-k="closedText">Reviens très vite !</p></div>
+</div></section>
+
+<footer><div class="wrap"><p data-k="footerText">DELTA Performance — Coaching individualisé par David Pellier, préparateur physique.</p><a href="index.html">Espace client</a></div></footer>
+<div class="sticky" id="sticky"><a class="btn primary" href="#reserver"><span data-k="stickyCta">Réserver mon bilan offert</span> →</a></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script><script src="firebase-init.js"></script><script src="tunnel-config.js"></script><script src="quiz-default.js"></script><script>
 (function(){
 const APP='delta-perf-v2';
 const col=name=>window.db.collection('apps').doc(APP).collection(name);
 let cfg=Object.assign({},window.TUNNEL_DEFAULTS);
+const media={};
 const EDIT=/[?&]edit\b/.test(location.search);
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,'0');
 const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-
 const LEGACY_KEYS=['eyebrow','title','titleHighlight','subtitle','formTitle','formSubtitle','ctaLabel','successTitle','successText'];
-const DEFAULT_TEXTS={};
+const DEFAULT_TEXTS={},DEFAULT_IMGS={};
+let STEPS=[],Q=[],QM={};
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let cur=0,minDate='',maxDate='';
+
+function applyOptional(){
+  document.querySelectorAll('[data-opt-group]').forEach(g=>{g.style.display=EDIT||[...g.querySelectorAll('[data-opt]')].some(e=>e.textContent.trim())?'':'none';});
+  document.querySelectorAll('[data-opt-section]').forEach(s=>{s.style.display=EDIT||[...s.querySelectorAll('[data-opt-group]')].some(g=>g.style.display!=='none')?'':'none';});
+}
 function applyConfig(){
-  document.querySelectorAll('[data-k]').forEach(el=>{const k=el.dataset.k;if(!(k in DEFAULT_TEXTS))DEFAULT_TEXTS[k]=el.textContent;const v=(cfg.texts&&cfg.texts[k])||(LEGACY_KEYS.includes(k)&&cfg[k])||DEFAULT_TEXTS[k];el.textContent=v;});
-  document.querySelectorAll('.goal').forEach((g,i)=>{const o=$('f-goal').options[i+1];if(o)o.textContent=g.querySelector('h3').textContent;});
+  document.querySelectorAll('[data-k]').forEach(el=>{const k=el.dataset.k;if(!(k in DEFAULT_TEXTS))DEFAULT_TEXTS[k]=el.textContent;const t=cfg.texts||{};el.textContent=(k in t&&typeof t[k]==='string')?t[k]:DEFAULT_TEXTS[k];if(!EDIT)el.dataset.tpl=el.textContent;});
+  document.querySelectorAll('[data-img]').forEach(el=>{const k=el.dataset.img;if(!(k in DEFAULT_IMGS))DEFAULT_IMGS[k]=el.getAttribute('src');el.src=media[k]||DEFAULT_IMGS[k];});
+  applyOptional();renderParcours();buildQuiz();
   if(cfg.enabled===false&&!EDIT){$('form-wrap').style.display='none';$('closed').style.display='block';}
-  const today=new Date();
-  $('f-date').min=ymd(today);
-  const max=new Date();max.setDate(max.getDate()+(Number(cfg.maxDaysAhead)||30));$('f-date').max=ymd(max);
+  if(EDIT)$('quiz').classList.add('all');
+  const max=new Date();max.setDate(max.getDate()+(Number(cfg.maxDaysAhead)||30));
+  minDate=ymd(new Date());maxDate=ymd(max);
+  buildDays();go(0);restore();
 }
 
 function dayClosed(dateStr){
   const d=new Date(dateStr+'T12:00:00');
   if((cfg.closedWeekdays||[]).map(Number).includes(d.getDay()))return 'Pas de rendez-vous ce jour-là.';
   if((cfg.blockedDates||[]).includes(dateStr))return 'Cette date est indisponible.';
-  if(dateStr<$('f-date').min||dateStr>$('f-date').max)return 'Choisis une date dans la période proposée.';
+  if(dateStr<minDate||dateStr>maxDate)return 'Choisis une date dans la période proposée.';
   return '';
 }
-
+const DOW=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],MON=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+function buildDays(){
+  const box=$('days');box.innerHTML='';
+  const d=new Date();d.setHours(12,0,0,0);
+  for(let i=0;i<=(Number(cfg.maxDaysAhead)||30);i++,d.setDate(d.getDate()+1)){
+    const v=ymd(d);if(dayClosed(v))continue;
+    const b=document.createElement('button');b.type='button';b.className='day';b.dataset.v=v;
+    b.innerHTML='<small>'+DOW[d.getDay()]+'</small><b>'+d.getDate()+'</b><small>'+MON[d.getMonth()]+'</small>';
+    b.onclick=()=>{if(EDIT)return;$('f-date').value=v;$('f-time').value='';box.querySelectorAll('.day').forEach(x=>x.classList.toggle('on',x===b));refreshSlots();};
+    box.appendChild(b);
+  }
+  if(!box.children.length)$('date-hint').textContent='Aucune date disponible pour le moment.';
+}
 async function refreshSlots(){
-  const sel=$('f-time'),hint=$('date-hint'),date=$('f-date').value;
-  sel.innerHTML='<option value="">Choisis d\'abord une date</option>';hint.textContent='';hint.classList.remove('err');
+  const box=$('slots'),hint=$('date-hint'),date=$('f-date').value;
+  box.innerHTML='';hint.textContent='';hint.classList.remove('err');
   if(!date)return;
   const closed=dayClosed(date);
   if(closed){hint.textContent=closed;hint.classList.add('err');return;}
+  hint.textContent='Chargement des créneaux…';
   let taken=new Set();
   try{const snap=await col('tunnel_slots').where('date','==',date).get();snap.forEach(d=>taken.add(d.data().time));}catch(e){console.warn(e);}
+  if($('f-date').value!==date)return;
   const now=new Date(),minLead=(Number(cfg.minHoursBefore)||0)*3600e3;
   const free=(cfg.slots||[]).filter(t=>!taken.has(t)&&new Date(date+'T'+t+':00').getTime()-now.getTime()>minLead);
-  if(!free.length){sel.innerHTML='<option value="">Aucun créneau libre</option>';hint.textContent='Tous les créneaux de ce jour sont pris.';hint.classList.add('err');return;}
-  sel.innerHTML='<option value="">Choisir</option>'+free.map(t=>'<option>'+t+'</option>').join('');
+  if(!free.length){hint.textContent='Plus de créneau libre ce jour-là, choisis un autre jour.';hint.classList.add('err');return;}
   hint.textContent=free.length+' créneau'+(free.length>1?'x':'')+' disponible'+(free.length>1?'s':'');
+  free.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='slot';b.textContent=t;
+    b.onclick=()=>{if(EDIT)return;$('f-time').value=t;box.querySelectorAll('.slot').forEach(x=>x.classList.toggle('on',x===b));setTimeout(next,250);};box.appendChild(b);});
 }
 
-async function notify(data){
-  if(!cfg.web3formsKey)return;
+
+const GOAL_HINTS={perf:'Ex : être plus explosif et ne plus me blesser cette saison',transfo:'Ex : perdre 8 kg et me sentir bien en maillot cet été',forme:'Ex : avoir de l’énergie le soir et ne plus avoir mal au dos'};
+const STORE='delta-quiz-v1';
+let phase=1,booking=null,goalQ=null,finishing=false,resumeStep='',ready=false;
+const txt=el=>el.textContent.replace(/\s+/g,' ').trim();
+const step=id=>STEPS.find(x=>x.dataset.step===id);
+const qOf=st=>QM[st.dataset.step];
+const picked=st=>[...st.querySelectorAll('.opt.on,.chip.on')];
+const byRole=r=>Q.filter(q=>q.role===r).map(q=>step(q.id)).filter(Boolean);
+const first=()=>$('f-first').value.trim();
+function fill(t){
+  const n=first();
+  let v=String(t).replace(/\{prenom\}/g,n);
+  if(!n)v=v.replace(/^\s*,\s*/,'').replace(/\s*,(\s*[!?.:])/g,'$1').replace(/\s+([!?])/g,' $1');
+  return v.replace(/\s{2,}/g,' ').replace(/^./,c=>c.toUpperCase());
+}
+function personalize(root){if(EDIT)return;root.querySelectorAll('[data-tpl]').forEach(el=>{const t=el.dataset.tpl;if(t.includes('{prenom}'))el.textContent=fill(t);});}
+function renderParcours(){
+  const ex=Array.isArray(cfg.experiences)?cfg.experiences:window.EXP_DEFAULT,ce=Array.isArray(cfg.certs)?cfg.certs:window.CERT_DEFAULT;
+  $('clubs').innerHTML=ex.filter(e=>e&&e.name).map(e=>{const lg=media['exp_'+e.id];return '<div class="club'+(lg?' has-logo':'')+'">'+(lg?'<div class="lg"><img src="'+esc(lg)+'" alt="'+esc(e.name)+'"></div>':'')+'<b>'+esc(e.name)+'</b>'+(e.detail?'<small>'+esc(e.detail)+'</small>':'')+'</div>';}).join('');
+  $('certs').innerHTML=ce.filter(c=>c&&c.name).map(c=>'<div class="cert"><span class="cico">🎓</span><div><b>'+esc(c.name)+'</b>'+(c.detail?'<small>'+esc(c.detail)+'</small>':'')+'</div></div>').join('');
+  $('clubs').previousElementSibling.style.display=$('clubs').children.length?'':'none';
+  $('certs').previousElementSibling.style.display=$('certs').children.length?'':'none';
+}
+function nextRow(q){return '<div class="frow">'+(q.optional?'<button type="button" class="skip" data-skip>Passer</button>':'')+'<button type="button" class="btn primary" data-next>Continuer →</button></div>';}
+function stepHtml(q){
+  const opts=Array.isArray(q.options)?q.options:[];
+  let h='<div class="qstep" data-step="'+esc(q.id)+'" data-type="'+esc(q.type)+'"><h3 data-tpl="'+esc(q.title)+'">'+esc(q.title)+'</h3>'+(q.sub?'<p class="qsub" data-tpl="'+esc(q.sub)+'">'+esc(q.sub)+'</p>':'');
+  if(q.type==='one'){
+    const big=opts.some(o=>o.sub||o.icon);
+    h+='<div class="opts'+(q.grid&&!big?' grid':'')+'">'+opts.map(o=>'<button type="button" class="opt" data-o="'+esc(o.id)+'"'+(o.other?' data-other':'')+'>'+(o.icon?'<span class="ico">'+esc(o.icon)+'</span>':'')+'<span><b>'+esc(o.label)+'</b>'+(o.sub?'<small>'+esc(o.sub)+'</small>':'')+'</span></button>').join('')+'</div>';
+    if(opts.some(o=>o.other))h+='<div class="more"><input class="inp" maxlength="300" placeholder="'+esc(q.otherPh||'Précise')+'">'+nextRow({})+'</div>';
+  }else if(q.type==='many'){
+    h+='<div class="chips">'+opts.map(o=>'<button type="button" class="chip" data-o="'+esc(o.id)+'"'+(o.excl?' data-excl':'')+'>'+esc(o.label)+'</button>').join('')+'</div>';
+    if(q.extraText)h+='<textarea class="inp" rows="2" maxlength="600" placeholder="'+esc(q.extraText)+'"></textarea>';
+    h+=nextRow(q);
+  }else if(q.type==='text'){
+    h+=(q.long?'<textarea class="inp" rows="3" maxlength="600"':'<input class="inp" maxlength="300"')+' placeholder="'+esc(q.placeholder||'')+'"'+(q.long?'></textarea>':'>')+nextRow(q);
+  }else if(q.type==='scale'){
+    h+='<div class="scale">'+[1,2,3,4,5,6,7,8,9,10].map(i=>'<button type="button" class="opt" data-o="'+i+'">'+i+'</button>').join('')+'</div><div class="scale-l"><span>'+esc(q.low||'')+'</span><span>'+esc(q.high||'')+'</span></div>';
+  }
+  return h+'</div>';
+}
+function buildQuiz(){
+  const src=cfg.quiz&&Array.isArray(cfg.quiz.questions)&&cfg.quiz.questions.length?cfg.quiz.questions:window.QUIZ_DEFAULT.questions;
+  Q=src.filter(q=>q&&q.id&&q.title&&['one','many','text','scale'].includes(q.type));QM={};Q.forEach(q=>{QM[q.id]=q;});
+  goalQ=Q.find(q=>q.role==='objectiveType'&&!(q.if&&q.if.q))||null;
+  $('q-dyn').innerHTML=Q.map(stepHtml).join('');
+  STEPS=[step0('prenom'),...$('q-dyn').querySelectorAll('.qstep'),step0('slot'),step0('contact')];
+}
+function step0(id){return document.querySelector('.qstep[data-step='+id+']');}
+const inP1=st=>['prenom','slot','contact'].includes(st.dataset.step)||(!!goalQ&&st.dataset.step===goalQ.id);
+function shown(st,est,depth){
+  const q=qOf(st);if(!q||!q.if||!q.if.q)return true;
+  if((depth||0)>40)return false;
+  const ref=QM[q.if.q],rs=ref&&step(ref.id);
+  if(!rs||!shown(rs,est,(depth||0)+1))return false;
+  let sel=picked(rs).map(b=>b.dataset.o);
+  if(!sel.length&&est&&ref.options&&ref.options[0])sel=[ref.options[0].id];
+  return sel.some(x=>(q.if.in||[]).includes(x));
+}
+const flow=est=>STEPS.filter(st=>phase===1?inP1(st):(!inP1(st)&&shown(st,est)));
+function answer(st){
+  const t=st.dataset.type;
+  if(t==='text'||t==='name'){const el=st.querySelector('.inp');return el?el.value.trim():'';}
+  if(t==='one'||t==='scale'){
+    const b=st.querySelector('.opt.on');if(!b)return '';
+    let v=txt(b.querySelector('b')||b);
+    const more=st.querySelector('.more .inp');
+    if(b.hasAttribute('data-other')&&more&&more.value.trim())v+=' : '+more.value.trim();
+    return t==='scale'?v+'/10':v;
+  }
+  if(t==='many'){const a=picked(st).map(txt);const ta=st.querySelector('textarea');if(ta&&ta.value.trim())a.push(ta.value.trim());return a.join(' · ');}
+  if(t==='slot')return $('f-date').value&&$('f-time').value?'ok':'';
+  return 'ok';
+}
+function sectionOf(F,i){
+  if(phase===1)return 'Ta réservation';
+  for(let j=i;j>=0;j--){const q=qOf(F[j]);if(q&&q.section)return q.section;}
+  return 'Ton bilan';
+}
+function go(n){
+  if(EDIT)return;
+  const F=flow();
+  if(phase===2&&n>=F.length){finish();return;}
+  cur=Math.max(0,Math.min(n,F.length-1));
+  const st=F[cur];
+  STEPS.forEach(s=>s.classList.toggle('on',s===st));
+  personalize(st);
+  const total=phase===2?Math.max(F.length,flow(true).length):F.length;
+  $('q-bar').style.width=((cur+1)/total*100)+'%';
+  $('q-count').textContent=(cur+1)+'/'+total;
+  $('q-back').classList.toggle('hide',cur===0);
+  const left=total-cur;
+  $('q-stage').textContent=sectionOf(F,cur);
+  $('q-enc').textContent=phase===1?(cur===0?'2 minutes':''):left===1?'Dernière question !':left<=3?'Plus que '+left+' questions':cur===Math.floor(total/2)?'Tu es à mi-chemin 💪':'';
+  st.querySelectorAll('[data-next]').forEach(b=>{b.textContent=phase===2&&cur===F.length-1&&left===1?'Envoyer mes réponses →':'Continuer →';});
+  const inp=st.querySelector('input.inp,textarea.inp');
+  if(inp&&(st.dataset.type==='text'||st.dataset.type==='name')&&matchMedia('(hover:hover)').matches)inp.focus({preventScroll:true});
+  save();
+}
+const next=()=>go(cur+1);
+function stepValid(st){
+  st=st||flow()[cur];
+  const q=qOf(st)||{};
+  if(st.dataset.type==='slot'){if(!answer(st)){const h=$('date-hint');h.textContent='Choisis un jour puis un horaire.';h.classList.add('err');return false;}return true;}
+  if(st.dataset.type==='contact'||q.optional)return true;
+  if(answer(st))return true;
+  const inp=st.querySelector('.inp');
+  if((st.dataset.type==='text'||st.dataset.type==='name')&&inp){inp.setCustomValidity(st.dataset.type==='name'?'Ton prénom 🙂':'Réponds en quelques mots 🙂');inp.reportValidity();inp.focus();setTimeout(()=>inp.setCustomValidity(''),1500);}
+  else{const g=st.querySelector('.chips,.opts,.scale');if(g&&g.animate)g.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:250});}
+  return false;
+}
+function save(){
+  if(EDIT||!ready)return;
   try{
-    await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({
-      access_key:cfg.web3formsKey,subject:'Nouvelle réservation tunnel : '+data.name+' ('+data.objectiveType+') — '+data.date+' '+data.time,from_name:'DELTA Performance — Tunnel',replyto:data.email,
-      'Nom':data.name,'Email':data.email,'Téléphone':data.phone,'Date':data.date,'Créneau':data.time,'Accompagnement':data.objectiveType,'Objectif':data.objective,'Blocage':data.blocker||'-'})});
+    const sel={};
+    STEPS.forEach(st=>{
+      if(['slot','contact'].includes(st.dataset.type))return;
+      const o=picked(st).map(b=>b.dataset.o),t=[...st.querySelectorAll('.inp')].map(i=>i.value);
+      if(o.length||t.some(Boolean))sel[st.dataset.step]={o,t};
+    });
+    const F=flow();
+    localStorage.setItem(STORE,JSON.stringify({v:1,ts:Date.now(),phase,booking,cur:F[cur]?F[cur].dataset.step:'',sel,last:$('f-last').value,email:$('f-email').value,phone:$('f-phone').value}));
+  }catch(e){}
+}
+function restore(){
+  if(EDIT||cfg.enabled===false)return;
+  let d=null;try{d=JSON.parse(localStorage.getItem(STORE)||'null');}catch(e){}
+  ready=true;
+  if(!d||d.v!==1)return;
+  if(Date.now()-d.ts>30*864e5||(d.booking&&d.booking.date<minDate)){try{localStorage.removeItem(STORE);}catch(e){}return;}
+  Object.entries(d.sel||{}).forEach(([id,v])=>{
+    const st=step(id);if(!st)return;
+    st.querySelectorAll('.opt,.chip').forEach(b=>b.classList.toggle('on',(v.o||[]).includes(b.dataset.o)));
+    if(st.querySelector('.opt.on[data-other]'))st.classList.add('other');
+    st.querySelectorAll('.inp').forEach((i,k)=>{if(v.t&&v.t[k]!=null)i.value=v.t[k];});
+  });
+  $('f-last').value=d.last||'';$('f-email').value=d.email||'';$('f-phone').value=d.phone||'';
+  const g=goalQ&&step(goalQ.id),gb=g&&g.querySelector('.opt.on'),oi=byRole('objective')[0];
+  if(gb&&oi&&oi.querySelector('.inp'))oi.querySelector('.inp').placeholder=GOAL_HINTS[gb.dataset.o]||oi.querySelector('.inp').placeholder;
+  if(d.phase===2&&d.booking){phase=2;booking=d.booking;resumeStep=d.cur||'';showBridge(true);return;}
+  const F=flow();let i=F.findIndex(s=>s.dataset.step===d.cur);
+  if(i<0)i=0;
+  if(F[i]&&F[i].dataset.type==='contact'&&!answer(step('slot')))i=F.indexOf(step('slot'));
+  go(i);
+}
+const fmtDate=d=>new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+function showBridge(resume){
+  $('form-wrap').style.display='none';$('later').style.display='none';
+  if(!flow().length){$('success').style.display='block';personalize($('success'));return;}
+  $('bridge-when').textContent='📅 '+fmtDate(booking.date)+' à '+booking.time;
+  personalize($('bridge'));$('bridge').style.display='block';
+  if(!resume)$('reserver').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function startPhase2(){
+  $('bridge').style.display='none';$('later').style.display='none';
+  $('form-wrap').style.display='';$('form-wrap').classList.add('p2');
+  const F=flow();let i=F.findIndex(s=>s.dataset.step===resumeStep);resumeStep='';
+  go(i<0?0:i);
+  $('reserver').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('b-go').addEventListener('click',()=>{if(!EDIT)startPhase2();});
+$('l-resume').addEventListener('click',()=>{if(!EDIT)startPhase2();});
+$('b-later').addEventListener('click',()=>{if(EDIT)return;$('bridge').style.display='none';personalize($('later'));$('later').style.display='block';});
+async function notify(data,kind){
+  if(!cfg.web3formsKey)return;
+  const done=kind==='answers';
+  try{
+    await fetch('https://api.web3forms.com/submit',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(Object.assign({
+      access_key:cfg.web3formsKey,subject:(done?'Questionnaire complété : ':'Nouvelle réservation tunnel : ')+data.name+' ('+data.objectiveType+') — '+data.date+' '+data.time,from_name:'DELTA Performance — Tunnel',replyto:data.email,
+      'Nom':data.name,'Email':data.email,'Téléphone':data.phone,'Date':data.date,'Créneau':data.time,'Accompagnement':data.objectiveType||'-'},
+      done?{'Niveau':data.level||'-','Objectif':data.objective||'-','Blocage':data.blocker||'-','Entretien':(data.answers||[]).map(x=>'• '+x.q+' → '+x.a).join('\n')||'-'}:{'Questionnaire':'Le prospect remplit le questionnaire juste après : tu recevras un 2e mail avec ses réponses.'}))});
   }catch(e){console.warn('Notification email non envoyée',e);}
 }
-
-const GOAL_HINTS={'Préparation physique & performance':'Ex : gagner en explosivité pour la saison de foot','Transformation physique':'Ex : perdre 8 kg et prendre du muscle d\'ici l\'été','Forme & bien-être':'Ex : retrouver de l\'énergie et ne plus avoir mal au dos'};
-function setGoal(g){$('f-goal').value=g;document.querySelectorAll('.goal').forEach(b=>b.classList.toggle('on',b.dataset.goal===g));$('f-objective').placeholder=GOAL_HINTS[g]||'Ce que tu veux atteindre';}
-document.querySelectorAll('.goal').forEach(b=>{const go=()=>{if(EDIT)return;setGoal(b.dataset.goal);$('form-wrap').scrollIntoView({behavior:'smooth',block:'start'});};b.addEventListener('click',go);b.addEventListener('keydown',e=>{if(!EDIT&&(e.key==='Enter'||e.key===' ')){e.preventDefault();go();}});});
-$('f-goal').addEventListener('change',e=>setGoal(e.target.value));
-$('f-date').addEventListener('change',refreshSlots);
+async function finish(){
+  if(finishing||!booking)return;
+  const F=flow();
+  const bad=F.findIndex(st=>!stepValid(st));
+  if(bad>=0){go(bad);return;}
+  finishing=true;
+  const role=r=>{const st=byRole(r).find(x=>F.includes(x)&&answer(x));return st?answer(st):'';};
+  const upd={answers:F.map(st=>({q:txt(st.querySelector('h3')),a:answer(st)})).filter(x=>x.a),level:role('level'),objective:role('objective'),blocker:role('blocker'),answeredAt:new Date().toISOString()};
+  try{await Promise.all(['prospects','appointments'].map(c=>col(c).doc(booking.id).set(upd,{merge:true})));}
+  catch(e){finishing=false;console.error(e);alert('Tes réponses n’ont pas pu être envoyées. Réessaie dans un instant.');return;}
+  notify(Object.assign({},booking,upd),'answers');
+  try{localStorage.removeItem(STORE);}catch(e){}
+  $('form-wrap').style.display='none';personalize($('success'));$('success').style.display='block';
+  $('reserver').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('lead-form').addEventListener('click',e=>{
+  if(EDIT)return;
+  const st=e.target.closest('.qstep');if(!st)return;
+  const b=e.target.closest('.opt'),c=e.target.closest('.chip');
+  if(b){
+    st.querySelectorAll('.opt').forEach(x=>x.classList.toggle('on',x===b));
+    const q=qOf(st);
+    if(q&&q.role==='objectiveType'){const o=byRole('objective')[0];const i=o&&o.querySelector('.inp');if(i)i.placeholder=GOAL_HINTS[b.dataset.o]||(QM[o.dataset.step].placeholder||'');}
+    if(b.hasAttribute('data-other')){st.classList.add('other');const m=st.querySelector('.more .inp');if(m)setTimeout(()=>m.focus(),50);save();return;}
+    st.classList.remove('other');save();
+    setTimeout(next,250);return;
+  }
+  if(c){
+    c.classList.toggle('on');
+    if(c.classList.contains('on'))st.querySelectorAll('.chip').forEach(x=>{if(x!==c&&(x.hasAttribute('data-excl')||c.hasAttribute('data-excl')))x.classList.remove('on');});
+    save();return;
+  }
+  if(e.target.closest('[data-next]')){if(stepValid(st))next();return;}
+  if(e.target.closest('[data-skip]')){st.querySelectorAll('.inp').forEach(i=>{i.value='';});st.querySelectorAll('.chip.on').forEach(x=>x.classList.remove('on'));next();}
+});
+$('lead-form').addEventListener('input',()=>save());
+$('lead-form').addEventListener('keydown',e=>{
+  if(e.key!=='Enter'||e.target.tagName!=='INPUT')return;
+  const st=e.target.closest('.qstep');if(!st||st.dataset.type==='contact')return;
+  e.preventDefault();if(stepValid(st))next();
+});
+$('q-back').addEventListener('click',()=>go(cur-1));
 $('lead-form').addEventListener('submit',async e=>{
   e.preventDefault();
-  if(EDIT)return;
-  const data=Object.fromEntries(new FormData(e.target).entries());
-  Object.keys(data).forEach(k=>data[k]=String(data[k]).trim());
-  data.email=data.email.toLowerCase();
+  if(EDIT||phase!==1)return;
+  const F=flow();
+  if(F[cur].dataset.type!=='contact'){if(stepValid())next();return;}
+  for(const id of ['f-email','f-phone']){const el=$(id);if(!el.checkValidity()||!el.value.trim()){el.reportValidity();el.focus();return;}}
+  const bad=F.findIndex(st=>!stepValid(st));
+  if(bad>=0){go(bad);return;}
+  const data={
+    objectiveType:goalQ?answer(step(goalQ.id)):'',level:'',objective:'',blocker:'',answers:[],
+    date:$('f-date').value,time:$('f-time').value,name:(first()+' '+$('f-last').value.trim()).trim(),email:$('f-email').value.trim().toLowerCase(),phone:$('f-phone').value.trim()
+  };
   const closed=dayClosed(data.date);
-  if(closed){alert(closed);return;}
-  if(!data.time){alert('Choisis un créneau.');return;}
-  const btn=$('t-cta');btn.disabled=true;
+  if(closed){alert(closed);go(F.indexOf(step('slot')));return;}
+  const btn=$('t-cta');if(btn.disabled)return;btn.disabled=true;
   const id='tunnel_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
   const createdAt=new Date().toISOString();
+  const base={name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType,level:'',objective:'',blocker:'',answers:[],date:data.date,time:data.time,status:'booked',source:'tunnel',createdAt};
   try{
     await window.db.runTransaction(async tx=>{
       const slotRef=col('tunnel_slots').doc(data.date+'_'+data.time);
       if((await tx.get(slotRef)).exists)throw new Error('SLOT_TAKEN');
       tx.set(slotRef,{date:data.date,time:data.time,createdAt});
-      tx.set(col('prospects').doc(id),{name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType,objective:data.objective,blocker:data.blocker||'',date:data.date,time:data.time,status:'booked',source:'tunnel',createdAt});
-      tx.set(col('appointments').doc(id),{name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType,objective:data.objective,date:data.date,time:data.time,prospectId:id,status:'booked',source:'tunnel',createdAt});
+      tx.set(col('prospects').doc(id),base);
+      tx.set(col('appointments').doc(id),Object.assign({prospectId:id},base));
     });
   }catch(err){
     btn.disabled=false;
-    if(String(err&&err.message).includes('SLOT_TAKEN')){alert('Ce créneau vient d\'être réservé. Choisis-en un autre.');refreshSlots();return;}
+    if(String(err&&err.message).includes('SLOT_TAKEN')){alert('Ce créneau vient d\'être réservé. Choisis-en un autre.');$('f-time').value='';go(F.indexOf(step('slot')));refreshSlots();return;}
     console.error(err);alert('La demande n\u2019a pas pu être envoyée. Réessaie dans quelques instants.');return;
   }
-  await notify(data);
-  $('form-wrap').style.display='none';$('success').style.display='block';
+  booking={id,date:data.date,time:data.time,name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType};
+  phase=2;cur=0;save();
+  notify(data,'booking');
+  showBridge(false);
 });
 
-window.TUNNEL={col,LEGACY_KEYS,DEFAULT_TEXTS,get cfg(){return cfg;}};
-col('settings').doc('tunnel').get().then(d=>{if(d.exists)cfg=Object.assign(cfg,d.data());}).catch(e=>console.warn('Config tunnel non chargée',e)).finally(()=>{applyConfig();if(EDIT){const s=document.createElement('script');s.src='tunnel-editor.js';document.body.appendChild(s);}});
+if('IntersectionObserver' in window){
+  const vis={hero:true,form:false};
+  const upd=()=>$('sticky').classList.toggle('show',!vis.hero&&!vis.form);
+  new IntersectionObserver(es=>{es.forEach(en=>{vis.hero=en.isIntersecting;});upd();}).observe(document.querySelector('.hero'));
+  new IntersectionObserver(es=>{es.forEach(en=>{vis.form=en.isIntersecting;});upd();}).observe($('reserver'));
+}
+
+window.TUNNEL={col,LEGACY_KEYS,DEFAULT_TEXTS,DEFAULT_IMGS,media,applyOptional,get cfg(){return cfg;}};
+Promise.all([
+  col('settings').doc('tunnel').get().then(d=>{if(d.exists)cfg=Object.assign(cfg,d.data());}).catch(e=>console.warn('Config tunnel non chargée',e)),
+  col('tunnel_media').get().then(s=>s.forEach(d=>{const v=d.data();if(v&&v.src)media[d.id]=v.src;})).catch(e=>console.warn('Photos non chargées',e))
+]).finally(()=>{applyConfig();if(EDIT){const s=document.createElement('script');s.src='tunnel-editor.js';document.body.appendChild(s);}});
 })();
 </script></body></html>

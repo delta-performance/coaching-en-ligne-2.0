@@ -89,12 +89,18 @@ async function crmAfterClientCreated(email, clientId) {
   renderProspects(); renderAppointments();
 }
 
+function answersHtml(x) {
+  const qa = Array.isArray(x.answers) ? x.answers : [];
+  if (!qa.length) return x.source === 'tunnel' ? '<div style="font-size:.72rem;color:var(--muted);margin-top:.35rem;font-style:italic">Questionnaire pas encore rempli</div>' : '';
+  return `<details style="font-size:.75rem;color:var(--muted);margin-top:.35rem"><summary style="cursor:pointer;color:var(--gold)">Voir l'entretien (${qa.length} réponses)</summary><div style="margin-top:.35rem;display:grid;gap:.25rem">${qa.map(r => `<div><span style="opacity:.75">${h(r.q)}</span><br><b style="color:var(--text);font-weight:600">${h(r.a)}</b></div>`).join('')}</div></details>`;
+}
+
 function renderProspects() {
   const el = document.getElementById('prospects-list'); if (!el) return;
   const statuses = { new: 'Nouveau', contacted: 'Contacté', booked: 'RDV pris', proposal: 'Proposition', converted: 'Client', lost: 'Perdu' };
   el.innerHTML = crmState.prospects.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).map(p => `
     <div class="card" style="padding:1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
-      <div style="flex:1;min-width:220px"><strong>${h(p.name)}</strong><div style="font-size:.75rem;color:var(--muted)">${h(p.email)} ${p.phone ? '· ' + h(p.phone) : ''}</div><div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${p.objectiveType ? `<b style="color:var(--gold)">${h(p.objectiveType)}</b> · ` : ''}${h(p.objective || 'Objectif non renseigné')}</div></div>
+      <div style="flex:1;min-width:220px"><strong>${h(p.name)}</strong><div style="font-size:.75rem;color:var(--muted)">${h(p.email)} ${p.phone ? '· ' + h(p.phone) : ''}</div><div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${p.objectiveType ? `<b style="color:var(--gold)">${h(p.objectiveType)}</b> · ` : ''}${h(p.objective || 'Objectif non renseigné')}</div>${p.level || p.blocker ? `<div style="font-size:.75rem;color:var(--muted);margin-top:.25rem">${p.level ? h(p.level) : ''}${p.level && p.blocker ? ' · ' : ''}${p.blocker ? 'Frein : ' + h(p.blocker) : ''}</div>` : ''}${answersHtml(p)}</div>
       <select class="inp" style="width:auto" onchange="updateProspectStatus('${p.id}', this.value)">${Object.entries(statuses).map(([k, v]) => `<option value="${k}" ${p.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
       ${p.status !== 'converted' && !isExistingClientEmail(p.email) ? `<button class="btn btn-gold btn-sm" onclick="convertProspect('${p.id}')">+ Créer le client</button>` : '<span class="badge badge-client">CLIENT</span>'}
     </div>`).join('') || '<p style="color:var(--muted);font-style:italic">Aucun prospect pour le moment.</p>';
@@ -157,7 +163,7 @@ function renderAppointments() {
   el.innerHTML = rows.map(a => `<div class="card" style="padding:1rem;display:flex;justify-content:space-between;gap:1rem;align-items:center;flex-wrap:wrap;${a.status === 'cancelled' ? 'opacity:.55' : ''}">
       <div style="flex:1;min-width:220px"><strong>${h(a.name)}</strong> ${a.source === 'tunnel' ? '<span class="badge" style="background:rgba(240,165,0,.12);color:var(--gold);margin-left:.35rem">TUNNEL</span>' : ''}
         <div style="font-size:.75rem;color:var(--muted)">${h(a.email || '')}${a.phone ? ' · <a href="tel:' + h(a.phone) + '" style="color:inherit">' + h(a.phone) + '</a>' : ''}</div>
-        ${a.objective || a.objectiveType ? `<div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${a.objectiveType ? `<b style="color:var(--gold)">${h(a.objectiveType)}</b> · ` : ''}${h(a.objective || '')}</div>` : ''}</div>
+        ${a.objective || a.objectiveType ? `<div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${a.objectiveType ? `<b style="color:var(--gold)">${h(a.objectiveType)}</b> · ` : ''}${h(a.objective || '')}</div>` : ''}${answersHtml(a)}</div>
       <span class="badge" style="background:rgba(16,185,129,.12);color:${colors[a.status] || 'var(--green)'}">${h(a.date)} · ${h(a.time)}</span>
       <select class="inp" style="width:auto" onchange="updateAppointmentStatus('${a.id}', this.value)">${Object.entries(APPOINTMENT_STATUSES).map(([k, v]) => `<option value="${k}" ${(a.status || 'booked') === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
       ${a.clientId || isExistingClientEmail(a.email) ? '<span class="badge badge-client">CLIENT</span>' : `<button class="btn btn-gold btn-sm" onclick="convertAppointment('${a.id}')">+ Créer le client</button>`}
@@ -166,7 +172,7 @@ function renderAppointments() {
 }
 
 const WEEKDAYS = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-const TUNNEL_TEXT_FIELDS = ['eyebrow', 'title', 'titleHighlight', 'subtitle', 'formTitle', 'formSubtitle', 'ctaLabel', 'successTitle', 'successText', 'web3formsKey', 'publicUrl'];
+const TUNNEL_TEXT_FIELDS = ['web3formsKey', 'publicUrl'];
 
 function renderTunnelSettings() {
   const t = crmState.tunnel;
@@ -186,6 +192,7 @@ function renderTunnelSettings() {
     const fromTunnel = crmState.appointments.filter(a => a.source === 'tunnel');
     stats.textContent = `${fromTunnel.filter(a => String(a.createdAt).startsWith(month)).length} résa(s) ce mois · ${fromTunnel.length} au total`;
   }
+  if (typeof renderQuizEditor === 'function') renderQuizEditor(t);
 }
 
 function readTunnelForm() {
