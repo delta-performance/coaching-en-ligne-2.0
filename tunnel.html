@@ -1,26 +1,306 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ton prochain niveau | DELTA Performance</title><link rel="icon" type="image/jpeg" href="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg"><link rel="manifest" href="manifest.json"><meta property="og:image" content="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg"><script>try{if(localStorage.getItem('delta-is-client')==='1'&&!/[?&](funnel|tunnel|edit)\b/.test(location.search))location.replace('index.html');}catch(e){}</script><style>
-:root{--bg:#080c12;--card:#141d2b;--surface:#0f1620;--border:#26384d;--brand:#c8102e;--gold:#f0a500;--text:#e8edf3;--muted:#8da0b8}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 15% 0,#35111a,transparent 35%),var(--bg);color:var(--text);font-family:Arial,sans-serif}.wrap{max-width:850px;margin:auto;padding:32px 20px 80px}.logo{font-weight:900;font-style:italic;letter-spacing:-.05em;font-size:26px}.logo span{color:var(--gold)}.hero{text-align:center;padding:75px 10px 45px}.eyebrow{color:var(--gold);font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:12px}.hero h1{font-size:clamp(38px,8vw,76px);line-height:.95;margin:18px 0}.hero h1 #t-highlight{color:var(--gold)}.hero p{color:var(--muted);font-size:18px;line-height:1.55;max-width:650px;margin:0 auto}.card{background:rgba(20,29,43,.9);border:1px solid var(--border);border-radius:22px;padding:28px;margin-top:22px;box-shadow:0 20px 70px #0007}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:650px){.grid{grid-template-columns:1fr}}label{display:block;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;margin:8px 0}.inp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px;color:var(--text);font-size:15px}.btn{border:0;border-radius:11px;padding:15px 22px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,var(--brand),#8a0c1f);color:#fff}.gold{background:var(--gold);color:#1a0900}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:24px 0}@media(max-width:650px){.steps{grid-template-columns:1fr}}.step{padding:18px;border:1px solid var(--border);border-radius:15px;background:var(--surface)}.step strong{display:block;color:var(--gold);font-size:24px;margin-bottom:8px}.step p{color:var(--muted);font-size:13px;line-height:1.4}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.client-link{color:var(--text);text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:9px 16px;font-size:13px;font-weight:700;background:var(--surface)}.client-link b{color:var(--gold)}.goals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:10px 0 0}@media(max-width:650px){.goals{grid-template-columns:1fr}}.goal{text-align:left;padding:22px;border:1px solid var(--border);border-radius:18px;background:var(--surface);cursor:pointer;color:var(--text);font:inherit;transition:.15s}.goal:hover,.goal.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}.goal .ico{font-size:28px}.goal h3{margin:10px 0 6px;font-size:18px}.goal p{color:var(--muted);font-size:13px;line-height:1.45;margin:0}.goal ul{color:var(--muted);font-size:12.5px;line-height:1.6;padding-left:18px;margin:10px 0 0}.sec-title{text-align:center;font-size:clamp(24px,4vw,34px);margin:50px 0 6px}.sec-sub{text-align:center;color:var(--muted);margin:0 0 22px}.success{display:none;text-align:center;color:#6ee7b7;font-size:18px;line-height:1.5}
-.closed{display:none;text-align:center;color:var(--muted);font-size:17px;line-height:1.5}.hint{color:var(--muted);font-size:12px;margin-top:6px;min-height:15px}.err{color:#fca5a5}.btn:disabled{opacity:.6;cursor:wait}</style></head><body><div class="wrap"><div class="top"><div class="logo"><img src="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg" alt="DELTA" style="width:38px;height:38px;object-fit:cover;border-radius:9px;vertical-align:middle;margin-right:8px">DELTA <span>PERFORMANCE</span></div><a class="client-link" href="index.html"><span data-k="clientLink">Déjà client ?</span> <b>Me connecter →</b></a></div><section class="hero"><div class="eyebrow" id="t-eyebrow" data-k="eyebrow">Bilan découverte offert</div><h1><span id="t-title" data-k="title">Révèle ton</span> <span id="t-highlight" data-k="titleHighlight">vrai potentiel.</span></h1><p id="t-subtitle" data-k="subtitle">Un accompagnement précis pour progresser physiquement, mentalement et énergétiquement — avec une méthode conçue autour de toi.</p><div class="steps"><div class="step"><strong>01</strong><p data-k="step1">Tu réponds à quelques questions sur ta situation.</p></div><div class="step"><strong>02</strong><p data-k="step2">Nous identifions tes leviers prioritaires.</p></div><div class="step"><strong>03</strong><p data-k="step3">Tu réserves ton appel stratégique offert.</p></div></div><h2 class="sec-title" data-k="goalsTitle">Quel est ton objectif ?</h2><p class="sec-sub" data-k="goalsSub">Trois accompagnements, une même exigence : une méthode construite autour de toi.</p><div class="goals">
-<div class="goal" role="button" tabindex="0" data-goal="Préparation physique &amp; performance"><div class="ico">⚡</div><h3 data-k="g1Title">Préparation physique &amp; performance</h3><p data-k="g1Text">Pour les sportifs qui veulent passer un cap : saison, compétition, test ou concours.</p><ul><li data-k="g1L1">Force, vitesse, explosivité, endurance</li><li data-k="g1L2">Planification selon ton calendrier</li><li data-k="g1L3">Prévention des blessures &amp; reprise</li></ul></div>
-<div class="goal" role="button" tabindex="0" data-goal="Transformation physique"><div class="ico">🔥</div><h3 data-k="g2Title">Transformation physique</h3><p data-k="g2Text">Perdre du gras, prendre du muscle, te recomposer — avec des résultats mesurables.</p><ul><li data-k="g2L1">Programme d'entraînement sur mesure</li><li data-k="g2L2">Stratégie nutrition simple et tenable</li><li data-k="g2L3">Suivi des mesures &amp; ajustements</li></ul></div>
-<div class="goal" role="button" tabindex="0" data-goal="Forme &amp; bien-être"><div class="ico">🌿</div><h3 data-k="g3Title">Forme &amp; bien-être</h3><p data-k="g3Text">Retrouver de l'énergie, bouger sans douleur et installer de bonnes habitudes durables.</p><ul><li data-k="g3L1">Énergie, sommeil, gestion du stress</li><li data-k="g3L2">Mobilité, posture, santé articulaire</li><li data-k="g3L3">Routine adaptée à ton emploi du temps</li></ul></div>
-</div></section><div class="card"><div id="form-wrap"><h2 id="t-form-title" data-k="formTitle">Réserve ton appel stratégique</h2><p id="t-form-subtitle" data-k="formSubtitle" style="color:var(--muted);line-height:1.5">Tu recevras également ton mini-plan personnalisé après la réservation.</p><form id="lead-form"><div class="grid"><div><label>Prénom et nom</label><input class="inp" name="name" required maxlength="120" placeholder="Ton nom"></div><div><label>Email</label><input class="inp" type="email" name="email" required maxlength="160" placeholder="toi@email.com"></div><div><label>Téléphone</label><input class="inp" name="phone" required maxlength="30" placeholder="06..."></div><div><label>Ton accompagnement</label><select class="inp" name="objectiveType" id="f-goal" required><option value="">Choisir</option><option>Préparation physique &amp; performance</option><option>Transformation physique</option><option>Forme &amp; bien-être</option></select></div><div><label>Ton objectif précis</label><input class="inp" name="objective" id="f-objective" required maxlength="300" placeholder="Ce que tu veux atteindre"></div><div><label>Date souhaitée</label><input class="inp" type="date" name="date" id="f-date" required><div class="hint" id="date-hint"></div></div><div><label>Créneau souhaité</label><select class="inp" name="time" id="f-time" required><option value="">Choisis d'abord une date</option></select></div></div><label style="margin-top:18px">Ce qui te bloque aujourd'hui</label><textarea class="inp" name="blocker" rows="3" maxlength="1500" placeholder="Décris brièvement ta situation..."></textarea><button class="btn primary" id="t-cta" style="width:100%;margin-top:20px"><span data-k="ctaLabel">JE RÉSERVE MON BILAN OFFERT</span></button></form></div><div id="success" class="success"><h2 id="t-success-title" data-k="successTitle">Ta demande est bien enregistrée.</h2><p id="t-success-text" data-k="successText">Nous allons confirmer ton créneau rapidement. Ton mini-plan personnalisé sera préparé pour l'appel.</p></div><div id="closed" class="closed"><h2 data-k="closedTitle">Les réservations sont momentanément fermées.</h2><p data-k="closedText">Reviens très vite !</p></div></div></div><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script><script src="firebase-init.js"></script><script src="tunnel-config.js"></script><script>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>David Pellier — Préparateur physique | Coaching individualisé DELTA Performance</title>
+<meta name="description" content="Coaching en ligne individualisé par David Pellier, préparateur physique en rugby professionnel. Performance, transformation physique ou forme : réserve ton bilan découverte offert.">
+<link rel="icon" type="image/jpeg" href="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg"><link rel="manifest" href="manifest.json">
+<meta property="og:title" content="David Pellier — Coaching individualisé DELTA Performance"><meta property="og:description" content="La méthode d’un préparateur physique pro, construite pour toi. Bilan découverte offert."><meta property="og:image" content="img/david-pellier.jpg">
+<meta name="theme-color" content="#080c12">
+<script>try{if(localStorage.getItem('delta-is-client')==='1'&&!/[?&](funnel|tunnel|edit)\b/.test(location.search))location.replace('index.html');}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c12;--bg2:#0b1119;--card:#121a26;--surface:#0f1620;--border:#233447;--brand:#c8102e;--brand2:#8a0c1f;--gold:#f0a500;--text:#e8edf3;--muted:#93a4ba;--head:'Barlow Condensed',Impact,Arial Narrow,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}img{max-width:100%;display:block}
+.wrap{max-width:1080px;margin:auto;padding:0 20px}
+h1,h2,h3{font-family:var(--head);text-transform:uppercase;letter-spacing:.01em;line-height:.98;margin:0}
+.eyebrow{display:inline-block;color:var(--gold);font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:12px}
+.sec{padding:84px 0}.sec.alt{background:var(--bg2);border-top:1px solid #121c29;border-bottom:1px solid #121c29}
+.sec-head{text-align:center;max-width:720px;margin:0 auto 42px}
+.sec-head h2{font-size:clamp(34px,5.4vw,56px);margin:10px 0 12px}.sec-head h2 em{font-style:italic;color:var(--gold)}
+.sec-head p{color:var(--muted);font-size:17px;margin:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:16px 26px;font:800 15px Inter,Arial,sans-serif;letter-spacing:.02em;cursor:pointer;text-decoration:none;text-transform:uppercase;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px)}
+.primary{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 12px 34px rgba(200,16,46,.35)}
+.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
+.reassure{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--muted);font-size:13px;margin-top:16px}
+.reassure span::before{content:"✓ ";color:var(--gold);font-weight:800}
+/* top */
+.top{position:absolute;top:0;left:0;right:0;z-index:5}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:18px}
+.logo{display:flex;align-items:center;gap:10px;font:800 italic 24px var(--head);letter-spacing:.02em;text-decoration:none}
+.logo img{width:36px;height:36px;object-fit:cover;border-radius:9px}.logo span{color:var(--gold)}
+.client-link{color:var(--text);text-decoration:none;border:1px solid var(--border);border-radius:999px;padding:9px 16px;font-size:13px;font-weight:600;background:rgba(15,22,32,.7);backdrop-filter:blur(6px);white-space:nowrap}
+.client-link b{color:var(--gold)}
+/* hero */
+.hero{position:relative;padding:120px 0 64px;background:radial-gradient(900px 500px at 85% 10%,rgba(200,16,46,.22),transparent 60%),radial-gradient(700px 400px at 0 0,rgba(240,165,0,.08),transparent 60%);overflow:hidden}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:120px;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;position:relative;z-index:1}
+.coach-chip{display:inline-flex;align-items:center;gap:12px;padding:6px 16px 6px 6px;border:1px solid var(--border);border-radius:999px;background:rgba(18,26,38,.8);margin-bottom:22px}
+.coach-chip .ph{width:44px;height:44px;border-radius:50%;overflow:hidden;flex:none}
+.coach-chip img{width:100%;height:100%;object-fit:cover}
+.coach-chip b{display:block;font-size:14px}.coach-chip small{display:block;color:var(--muted);font-size:12px}
+.hero h1{font-size:clamp(46px,7.4vw,86px);margin:14px 0 20px}
+.hero h1 .hl{color:var(--gold);font-style:italic;display:block}
+.hero .lead{color:#c4cfdc;font-size:clamp(16px,2vw,19px);max-width:600px;margin:0 0 28px}
+.hero-photo{position:relative}
+.hero-photo .ph{border-radius:26px;overflow:hidden;border:1px solid var(--border);box-shadow:0 30px 80px #000a;aspect-ratio:4/5;background:#151c26}
+.hero-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.hero-photo .tag{position:absolute;left:-18px;bottom:28px;background:rgba(8,12,18,.92);border:1px solid var(--gold);border-radius:14px;padding:12px 16px;box-shadow:0 14px 40px #000a;max-width:250px}
+.hero-photo .tag b{display:block;font:800 22px var(--head);text-transform:uppercase;color:var(--gold)}.hero-photo .tag span{font-size:12.5px;color:var(--muted)}
+@media(max-width:520px){.logo{font-size:19px;gap:8px}.logo img{width:30px;height:30px}.client-link{padding:8px 12px;font-size:12px}.client-link .cl-pre{display:none}}
+@media(max-width:860px){.hero{padding-top:96px}.hero-grid{grid-template-columns:1fr}.hero-photo{display:none}}
+/* proofs */
+.proofs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-top:8px;position:relative;z-index:2}
+.proof{background:var(--card);padding:20px 18px}
+.proof b{display:block;font:800 21px var(--head);text-transform:uppercase;color:var(--text);line-height:1.05}
+.proof span{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+@media(max-width:860px){.proofs{grid-template-columns:1fr 1fr}}
+/* pains */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pain{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 20px 20px 52px;position:relative;font-size:15.5px;color:#d3dce7}
+.pain::before{content:"✕";position:absolute;left:18px;top:18px;width:22px;height:22px;border-radius:50%;background:rgba(200,16,46,.16);color:#ff6b81;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.pains-close{text-align:center;font:800 clamp(24px,3.4vw,34px) var(--head);text-transform:uppercase;margin:38px auto 0;max-width:760px;line-height:1.1}
+.pains-close em{color:var(--gold);font-style:italic}
+@media(max-width:860px){.pains{grid-template-columns:1fr}}
+/* about */
+.about{display:grid;grid-template-columns:.8fr 1.2fr;gap:52px;align-items:start}
+.about-photo{position:sticky;top:24px}
+.about-photo .ph{border-radius:24px;overflow:hidden;border:1px solid var(--border);aspect-ratio:1/1;background:#151c26}
+.about-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.about-photo .sign{margin-top:14px;font:800 italic 26px var(--head);text-transform:uppercase}.about-photo .sign small{display:block;font:500 13px Inter,sans-serif;text-transform:none;color:var(--muted)}
+.about h2{font-size:clamp(38px,5.6vw,60px);margin:10px 0 18px}
+.about p{color:#c9d3df;font-size:16.5px;margin:0 0 16px}
+.quote{border-left:3px solid var(--gold);padding:6px 0 6px 18px;margin:24px 0;font:800 italic 24px var(--head);text-transform:uppercase;line-height:1.15;color:var(--text)}
+.creds{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.cred{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
+.cred b{display:block;font-size:14.5px}.cred span{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+@media(max-width:860px){.about{grid-template-columns:1fr;gap:28px}.about-photo{position:static;max-width:340px}.creds{grid-template-columns:1fr}}
+/* method */
+.method{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:m}
+.mstep{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;position:relative;overflow:hidden}
+.mstep::before{counter-increment:m;content:"0" counter(m);font:800 54px var(--head);color:rgba(240,165,0,.16);position:absolute;right:14px;top:6px;line-height:1}
+.mstep h3{font-size:26px;color:var(--gold);margin-bottom:10px}
+.mstep p{color:var(--muted);font-size:14.5px;margin:0}
+@media(max-width:860px){.method{grid-template-columns:1fr 1fr}}@media(max-width:540px){.method{grid-template-columns:1fr}}
+/* goals */
+.goals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.goal{display:flex;flex-direction:column;text-align:left;padding:26px;border:1px solid var(--border);border-radius:20px;background:linear-gradient(180deg,#141e2c,var(--card));cursor:pointer;color:var(--text);transition:.18s}
+.goal:hover,.goal.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset,0 20px 50px #0008;transform:translateY(-2px)}
+.goal .ico{font-size:30px;width:56px;height:56px;border-radius:14px;background:rgba(240,165,0,.1);display:flex;align-items:center;justify-content:center}
+.goal h3{margin:16px 0 8px;font-size:28px}
+.goal .for{color:#c9d3df;font-size:14.5px;margin:0}
+.goal ul{list-style:none;padding:0;margin:16px 0;color:var(--muted);font-size:14px}
+.goal li{padding:7px 0 7px 26px;position:relative;border-top:1px solid #1d2a3a}
+.goal li::before{content:"✓";position:absolute;left:2px;color:var(--gold);font-weight:800}
+.goal .gain{margin-top:auto;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.25);border-radius:12px;padding:12px 14px;font-size:13.5px;color:#f5d48a}
+.goal .gcta{margin-top:14px;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--gold)}
+@media(max-width:860px){.goals{grid-template-columns:1fr}}
+/* bilan */
+.bilan{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;background:radial-gradient(600px 300px at 100% 0,rgba(200,16,46,.2),transparent 70%),var(--card);border:1px solid var(--border);border-radius:26px;padding:44px}
+.bilan h2{font-size:clamp(34px,5vw,54px);margin:10px 0 14px}.bilan>div>p{color:var(--muted);font-size:16.5px;margin:0}
+.bilan ol{list-style:none;padding:0;margin:0;counter-reset:b}
+.bilan li{counter-increment:b;position:relative;padding:14px 0 14px 50px;border-bottom:1px solid var(--border);color:#d3dce7;font-size:15px}
+.bilan li:last-child{border:0}
+.bilan li::before{content:counter(b);position:absolute;left:0;top:12px;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#1a0900;font-weight:800;display:flex;align-items:center;justify-content:center}
+@media(max-width:860px){.bilan{grid-template-columns:1fr;padding:28px 22px}}
+/* testimonials */
+.testis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.testi{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.testi p{margin:0 0 14px;color:#d3dce7;font-size:15px}.testi p::before{content:"“";color:var(--gold);font:800 40px/0 var(--head);vertical-align:-14px;margin-right:4px}
+.testi b{display:block}.testi small{color:var(--gold);font-weight:600}
+@media(max-width:860px){.testis{grid-template-columns:1fr}}
+/* faq */
+.faq{max-width:780px;margin:auto}
+.faq details{border:1px solid var(--border);border-radius:14px;background:var(--card);margin-bottom:10px}
+.faq summary{cursor:pointer;list-style:none;padding:18px 52px 18px 20px;font-weight:700;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:20px;top:14px;font-size:24px;color:var(--gold);transition:.2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{margin:0;padding:0 20px 18px;color:var(--muted)}
+/* form */
+.form-card{max-width:760px;margin:auto;background:var(--card);border:1px solid var(--border);border-radius:26px;padding:36px;box-shadow:0 30px 80px #0009}
+.form-card h2{font-size:clamp(34px,5vw,50px);margin:8px 0 10px;text-align:center}
+.form-card .fsub{color:var(--muted);text-align:center;margin:0 auto 26px;max-width:560px}
+.stepper{display:flex;gap:10px;margin-bottom:22px}
+.stepper div{flex:1;padding:10px 12px;border-radius:12px;border:1px solid var(--border);color:var(--muted);font-size:13px;font-weight:700;text-align:center}
+.stepper div.on{border-color:var(--gold);color:var(--gold);background:rgba(240,165,0,.07)}
+.fstep{display:none}.fstep.on{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.form-card{padding:26px 18px}}
+label{display:block;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin:4px 0 7px}
+label i{text-transform:none;font-style:normal;font-weight:500;opacity:.8}
+.inp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;color:var(--text);font:16px Inter,Arial,sans-serif}
+.inp:focus{outline:none;border-color:var(--gold)}
+.frow{display:flex;gap:10px;margin-top:22px}.frow .btn{flex:1}
+.hint{color:var(--muted);font-size:12px;margin-top:6px;min-height:15px}.err{color:#fca5a5}
+.success,.closed{display:none;text-align:center;font-size:17px}.success h2{color:#6ee7b7}.closed p,.success p{color:var(--muted)}
+footer{padding:40px 0 110px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid #121c29}
+footer a{color:var(--gold);text-decoration:none}
+/* sticky mobile cta */
+.sticky{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:50;display:none}
+.sticky .btn{width:100%;box-shadow:0 12px 40px #000c}
+@media(max-width:860px){.sticky.show{display:block}}
+body.editing .sticky{display:none!important}
+[data-opt]:empty{display:none}
+body.editing [data-opt]:empty{display:block;min-height:1.4em}
+body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-style:italic}
+</style></head><body>
+<header class="top"><div class="wrap"><a class="logo" href="#"><img src="Source%20de%20donne%CC%81es/LOGO%20DELTA%202023.jpg" alt="DELTA">DELTA <span>PERFORMANCE</span></a><a class="client-link" href="index.html"><span class="cl-pre" data-k="clientLink">Déjà client ?</span> <b>Me connecter →</b></a></div></header>
+
+<section class="hero"><div class="wrap"><div class="hero-grid"><div>
+  <div class="coach-chip"><div class="ph"><img data-img="heroPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><div><b data-k="coachName">David Pellier</b><small data-k="coachRole">Préparateur physique · Rugby professionnel</small></div></div>
+  <div class="eyebrow" data-k="eyebrow">Coaching en ligne 100 % individualisé</div>
+  <h1><span data-k="title">La méthode d’un prépa physique pro,</span> <span class="hl" data-k="titleHighlight">construite pour toi.</span></h1>
+  <p class="lead" data-k="subtitle">Je prépare chaque semaine les joueurs d’une équipe de rugby professionnelle. J’applique la même exigence à ton projet — performance, transformation physique ou forme — avec un plan pensé pour ton corps, ton niveau et ta vie.</p>
+  <a class="btn primary" href="#reserver"><span data-k="cta1">Réserver mon bilan offert</span> →</a>
+  <div class="reassure"><span data-k="re1">Gratuit</span><span data-k="re2">Sans engagement</span><span data-k="re3">100 % en ligne</span></div>
+</div><div class="hero-photo"><div class="ph"><img data-img="heroPhoto" src="img/david-pellier.jpg" alt="David Pellier, préparateur physique"></div><div class="tag"><b data-k="tagTitle">Rugby pro</b><span data-k="tagText">Préparateur physique au Sporting Club Albigeois</span></div></div></div>
+<div class="proofs">
+  <div class="proof"><b data-k="pr1T">Rugby pro</b><span data-k="pr1S">Préparateur physique de l’équipe pro du SC Albi</span></div>
+  <div class="proof"><b data-k="pr2T">Super League</b><span data-k="pr2S">Ex-responsable force &amp; puissance au Toulouse Olympique XIII</span></div>
+  <div class="proof"><b data-k="pr3T">Master STAPS</b><span data-k="pr3S">Préparation physique &amp; réathlétisation</span></div>
+  <div class="proof"><b data-k="pr4T">Depuis 2018</b><span data-k="pr4S">Athlètes, sportifs amateurs et actifs</span></div>
+</div></div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow" data-k="painsEyebrow">Tu te reconnais ?</span><h2 data-k="painsTitle">Tu fais des efforts, mais ça ne suit pas</h2></div>
+  <div class="pains">
+    <div class="pain" data-k="p1">Tu t’entraînes, mais tu stagnes depuis des mois.</div>
+    <div class="pain" data-k="p2">Tu as testé des programmes tout faits, sans résultat qui dure.</div>
+    <div class="pain" data-k="p3">Entre le travail, la famille et le reste, tu manques de temps.</div>
+    <div class="pain" data-k="p4">Tu ne sais pas si tu fais les bons exercices, au bon volume.</div>
+    <div class="pain" data-k="p5">Une douleur ou une ancienne blessure te freine.</div>
+    <div class="pain" data-k="p6">Tu as une saison ou une compétition à préparer et tu veux arriver prêt.</div>
+  </div>
+  <p class="pains-close" data-k="painsClose">Le problème n’est pas ta motivation. C’est l’absence d’un plan construit pour toi.</p>
+</div></section>
+
+<section class="sec alt" id="qui"><div class="wrap"><div class="about">
+  <div class="about-photo"><div class="ph"><img data-img="aboutPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><div class="sign"><span data-k="signName">David Pellier</span><small data-k="signRole">Fondateur de DELTA Performance</small></div></div>
+  <div>
+    <span class="eyebrow" data-k="aboutEyebrow">Qui suis-je ?</span>
+    <h2 data-k="aboutTitle">Moi, c’est David.</h2>
+    <p data-k="ab1">Je suis préparateur physique de l’équipe professionnelle du Sporting Club Albigeois, en rugby. Avant ça, j’étais responsable de la force et de la puissance au Toulouse Olympique XIII, en Super League. Je viens moi-même du judo et du rugby.</p>
+    <p data-k="ab2">J’ai aussi travaillé chez Papa Inshape. Depuis 2018, j’accompagne des sportifs de tous horizons — judo (dont des athlètes olympiques), golf, MMA, volley, athlétisme, CrossFit — et des personnes qui veulent simplement se sentir mieux dans leur corps.</p>
+    <p data-k="ab3">Je suis aussi papa de deux jeunes enfants. Je sais ce que c’est de caser ses séances entre le travail et la famille. Mon rôle, c’est de construire un plan qui fonctionne dans ta vie réelle, pas dans une vie idéale.</p>
+    <div class="quote" data-k="aboutQuote">Pas de transformation miracle. Un plan intelligent, des ajustements réguliers et des résultats qui durent.</div>
+    <div class="creds">
+      <div class="cred"><b data-k="c1T">Préparateur physique — Rugby pro</b><span data-k="c1S">Sporting Club Albigeois, depuis 2023</span></div>
+      <div class="cred"><b data-k="c2T">Super League</b><span data-k="c2S">Toulouse Olympique XIII : musculation, force, prévention des blessures</span></div>
+      <div class="cred"><b data-k="c3T">Licence &amp; Master STAPS</b><span data-k="c3S">Préparation physique, mentale et réathlétisation (Lyon 1)</span></div>
+      <div class="cred"><b data-k="c4T">Certifications</b><span data-k="c4S">EXOS Performance Specialist · Préparateur physique rugby (FFR) · BF1 Haltérophilie</span></div>
+    </div>
+  </div>
+</div></div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow" data-k="methodEyebrow">Ma méthode</span><h2 data-k="methodTitle">La rigueur du haut niveau, adaptée à toi</h2><p data-k="methodSub">Les mêmes principes que j’utilise avec des athlètes pros : partir de la personne, mesurer, ajuster.</p></div>
+  <div class="method">
+    <div class="mstep"><h3 data-k="m1T">Analyser</h3><p data-k="m1S">On part de toi : ton niveau, ton historique, tes douleurs, ton emploi du temps et ton matériel.</p></div>
+    <div class="mstep"><h3 data-k="m2T">Construire</h3><p data-k="m2S">Je t’écris un programme sur mesure, planifié selon ton objectif. Rien de copié-collé.</p></div>
+    <div class="mstep"><h3 data-k="m3T">Suivre</h3><p data-k="m3S">Tes séances sont dans l’appli DELTA, sur ton téléphone. Tu notes tes séances et tes ressentis, je les vois.</p></div>
+    <div class="mstep"><h3 data-k="m4T">Ajuster</h3><p data-k="m4S">Le plan évolue avec tes retours et tes progrès. C’est là que se font les vrais résultats.</p></div>
+  </div>
+</div></section>
+
+<section class="sec alt" id="accompagnements"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow" data-k="goalsEyebrow">Accompagnements</span><h2 data-k="goalsTitle">Quel est ton objectif ?</h2><p data-k="goalsSub">Trois accompagnements, une même exigence : un plan construit autour de toi.</p></div>
+  <div class="goals">
+    <div class="goal" role="button" tabindex="0" data-goal="Préparation physique &amp; performance"><div class="ico">⚡</div><h3 data-k="g1Title">Préparation physique &amp; performance</h3><p class="for" data-k="g1Text">Pour toi si tu fais du sport en club ou en compétition et que tu veux passer un cap — ou revenir de blessure plus fort.</p><ul><li data-k="g1L1">Force, vitesse, explosivité, endurance spécifique à ton sport</li><li data-k="g1L2">Planification calée sur ta saison et tes compétitions</li><li data-k="g1L3">Prévention des blessures et réathlétisation</li></ul><div class="gain" data-k="g1Gain">La méthode que j’applique avec des athlètes pros, adaptée à ton niveau.</div><div class="gcta" data-k="g1Cta">Choisir cet accompagnement →</div></div>
+    <div class="goal" role="button" tabindex="0" data-goal="Transformation physique"><div class="ico">🔥</div><h3 data-k="g2Title">Transformation physique</h3><p class="for" data-k="g2Text">Pour toi si tu veux perdre du gras, prendre du muscle ou changer de silhouette — durablement, sans régime extrême.</p><ul><li data-k="g2L1">Programme de musculation construit pour toi</li><li data-k="g2L2">Repères nutrition simples, compatibles avec ta vie</li><li data-k="g2L3">Mesures régulières et ajustements</li></ul><div class="gain" data-k="g2Gain">Des résultats visibles et mesurables, qui tiennent dans le temps.</div><div class="gcta" data-k="g2Cta">Choisir cet accompagnement →</div></div>
+    <div class="goal" role="button" tabindex="0" data-goal="Forme &amp; bien-être"><div class="ico">🌿</div><h3 data-k="g3Title">Forme &amp; bien-être</h3><p class="for" data-k="g3Text">Pour toi si tu veux retrouver de l’énergie, bouger sans douleur et reprendre une activité régulière, même avec peu de temps.</p><ul><li data-k="g3L1">Séances adaptées à ton emploi du temps</li><li data-k="g3L2">Mobilité, posture et renforcement progressif</li><li data-k="g3L3">Des habitudes qui s’installent pour de bon</li></ul><div class="gain" data-k="g3Gain">Te sentir mieux dans ton corps, semaine après semaine.</div><div class="gcta" data-k="g3Cta">Choisir cet accompagnement →</div></div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap"><div class="bilan">
+  <div><span class="eyebrow" data-k="bilanEyebrow">Bilan découverte offert</span><h2 data-k="bilanTitle">30 minutes pour faire le point, ensemble</h2><p data-k="bilanSub">Un vrai échange avec moi, en visio ou par téléphone. Pas un commercial, pas un script.</p>
+    <a class="btn primary" href="#reserver" style="margin-top:24px"><span data-k="cta2">Je réserve mon créneau</span> →</a>
+    <div class="reassure"><span data-k="re4">100 % gratuit</span><span data-k="re5">Sans engagement</span><span data-k="re6">Aucune pression</span></div></div>
+  <ol>
+    <li data-k="b1">On fait le point sur ta situation, ton historique et tes contraintes.</li>
+    <li data-k="b2">Je t’explique ce qui te freine aujourd’hui, selon moi.</li>
+    <li data-k="b3">Tu repars avec tes priorités et les premières actions à mettre en place.</li>
+    <li data-k="b4">Si on est faits pour travailler ensemble, je te présente l’accompagnement adapté. Sinon, je te le dis franchement.</li>
+  </ol>
+</div></div></section>
+
+<section class="sec alt" data-opt-section><div class="wrap">
+  <div class="sec-head"><span class="eyebrow" data-k="testiEyebrow">Témoignages</span><h2 data-k="testiTitle">Ils m’ont fait confiance</h2></div>
+  <div class="testis">
+    <div class="testi" data-opt-group><p data-k="t1Text" data-opt data-ph="Témoignage du client (laisser vide pour masquer)"></p><b data-k="t1Name" data-opt data-ph="Prénom, âge ou sport"></b><small data-k="t1Res" data-opt data-ph="Résultat obtenu"></small></div>
+    <div class="testi" data-opt-group><p data-k="t2Text" data-opt data-ph="Témoignage du client (laisser vide pour masquer)"></p><b data-k="t2Name" data-opt data-ph="Prénom, âge ou sport"></b><small data-k="t2Res" data-opt data-ph="Résultat obtenu"></small></div>
+    <div class="testi" data-opt-group><p data-k="t3Text" data-opt data-ph="Témoignage du client (laisser vide pour masquer)"></p><b data-k="t3Name" data-opt data-ph="Prénom, âge ou sport"></b><small data-k="t3Res" data-opt data-ph="Résultat obtenu"></small></div>
+  </div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow" data-k="faqEyebrow">Questions fréquentes</span><h2 data-k="faqTitle">Tu te poses sûrement la question</h2></div>
+  <div class="faq">
+    <details><summary data-k="q1">Je débute complètement, c’est pour moi ?</summary><p data-k="a1">Oui. Le programme part de ton niveau réel. J’accompagne aussi bien des débutants que des athlètes pros : seul le point de départ change.</p></details>
+    <details><summary data-k="q2">J’ai très peu de temps, ça peut marcher ?</summary><p data-k="a2">C’est justement le principe : on construit le plan autour de ton emploi du temps, pas l’inverse. Deux séances par semaine bien construites font déjà la différence.</p></details>
+    <details><summary data-k="q3">Il me faut une salle de sport ?</summary><p data-k="a3">Non. Le programme s’adapte à ton matériel : salle, maison ou extérieur.</p></details>
+    <details><summary data-k="q4">Comment se passe le suivi ?</summary><p data-k="a4">Tes séances sont dans l’appli DELTA, sur ton téléphone. Tu notes ce que tu fais et tes ressentis, et j’ajuste ton programme au fil des semaines.</p></details>
+    <details><summary data-k="q5">Combien coûte l’accompagnement ?</summary><p data-k="a5">Ça dépend de ton objectif et du niveau de suivi dont tu as besoin. On en parle pendant le bilan, sans engagement.</p></details>
+  </div>
+</div></section>
+
+<section class="sec alt" id="reserver"><div class="wrap"><div class="form-card">
+  <div id="form-wrap">
+    <div style="text-align:center"><span class="eyebrow" data-k="formEyebrow">Bilan découverte offert</span></div>
+    <h2 data-k="formTitle">Réserve ton bilan avec moi</h2>
+    <p class="fsub" data-k="formSubtitle">2 minutes pour me parler de toi et choisir ton créneau. Je prépare notre échange à partir de tes réponses.</p>
+    <div class="stepper"><div class="on" id="st1" data-k="step1Label">1 · Parle-moi de toi</div><div id="st2" data-k="step2Label">2 · Ton créneau</div></div>
+    <form id="lead-form" novalidate>
+      <div class="fstep on" id="fs1"><div class="grid">
+        <div><label for="f-goal">Ton objectif</label><select class="inp" name="objectiveType" id="f-goal" required><option value="">Choisir</option><option value="Préparation physique &amp; performance">Préparation physique &amp; performance</option><option value="Transformation physique">Transformation physique</option><option value="Forme &amp; bien-être">Forme &amp; bien-être</option></select></div>
+        <div><label for="f-level">Ton niveau aujourd’hui</label><select class="inp" name="level" id="f-level" required><option value="">Choisir</option><option>Je débute ou je reprends</option><option>Je m’entraîne de temps en temps</option><option>Je m’entraîne régulièrement</option><option>Je suis compétiteur</option></select></div>
+        <div class="full"><label for="f-objective">Ce que tu veux atteindre</label><input class="inp" name="objective" id="f-objective" required maxlength="300" placeholder="Ex : perdre 8 kg et me sentir plus fort d’ici l’été"></div>
+        <div class="full"><label for="f-blocker">Ce qui te bloque aujourd’hui <i>(facultatif)</i></label><textarea class="inp" name="blocker" id="f-blocker" rows="3" maxlength="1500" placeholder="Manque de temps, douleur, pas de résultats…"></textarea></div>
+      </div><div class="frow"><button type="button" class="btn primary" id="f-next"><span data-k="nextLabel">Continuer</span> →</button></div></div>
+      <div class="fstep" id="fs2"><div class="grid">
+        <div><label for="f-date">Date souhaitée</label><input class="inp" type="date" name="date" id="f-date" required><div class="hint" id="date-hint"></div></div>
+        <div><label for="f-time">Créneau</label><select class="inp" name="time" id="f-time" required><option value="">Choisis d’abord une date</option></select></div>
+        <div class="full"><label for="f-name">Prénom et nom</label><input class="inp" name="name" id="f-name" required maxlength="120" autocomplete="name" placeholder="Ton nom"></div>
+        <div><label for="f-email">Email</label><input class="inp" type="email" name="email" id="f-email" required maxlength="160" autocomplete="email" placeholder="toi@email.com"></div>
+        <div><label for="f-phone">Téléphone</label><input class="inp" type="tel" name="phone" id="f-phone" required maxlength="30" autocomplete="tel" placeholder="06..."></div>
+      </div><div class="frow"><button type="button" class="btn ghost" id="f-back" style="flex:0 0 auto">←</button><button class="btn primary" id="t-cta"><span data-k="ctaLabel">Je réserve mon bilan offert</span></button></div></div>
+      <div class="reassure" style="justify-content:center"><span data-k="re7">Gratuit</span><span data-k="re8">Sans engagement</span><span data-k="re9">Tes infos restent entre nous</span></div>
+    </form>
+  </div>
+  <div id="success" class="success"><h2 data-k="successTitle">C’est noté, à très vite !</h2><p data-k="successText">Je te confirme ton créneau rapidement. D’ici là, réfléchis à ce que tu aimerais avoir changé dans 3 mois : on partira de là.</p></div>
+  <div id="closed" class="closed"><h2 data-k="closedTitle">Les réservations sont momentanément fermées.</h2><p data-k="closedText">Reviens très vite !</p></div>
+</div></div></section>
+
+<footer><div class="wrap"><p data-k="footerText">DELTA Performance — Coaching individualisé par David Pellier, préparateur physique.</p><a href="index.html">Espace client</a></div></footer>
+<div class="sticky" id="sticky"><a class="btn primary" href="#reserver"><span data-k="stickyCta">Réserver mon bilan offert</span> →</a></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script><script src="firebase-init.js"></script><script src="tunnel-config.js"></script><script>
 (function(){
 const APP='delta-perf-v2';
 const col=name=>window.db.collection('apps').doc(APP).collection(name);
 let cfg=Object.assign({},window.TUNNEL_DEFAULTS);
+const media={};
 const EDIT=/[?&]edit\b/.test(location.search);
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,'0');
 const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 
 const LEGACY_KEYS=['eyebrow','title','titleHighlight','subtitle','formTitle','formSubtitle','ctaLabel','successTitle','successText'];
-const DEFAULT_TEXTS={};
+const DEFAULT_TEXTS={},DEFAULT_IMGS={};
+function applyOptional(){
+  document.querySelectorAll('[data-opt-group]').forEach(g=>{g.style.display=EDIT||[...g.querySelectorAll('[data-opt]')].some(e=>e.textContent.trim())?'':'none';});
+  document.querySelectorAll('[data-opt-section]').forEach(s=>{s.style.display=EDIT||[...s.querySelectorAll('[data-opt-group]')].some(g=>g.style.display!=='none')?'':'none';});
+}
 function applyConfig(){
-  document.querySelectorAll('[data-k]').forEach(el=>{const k=el.dataset.k;if(!(k in DEFAULT_TEXTS))DEFAULT_TEXTS[k]=el.textContent;const v=(cfg.texts&&cfg.texts[k])||(LEGACY_KEYS.includes(k)&&cfg[k])||DEFAULT_TEXTS[k];el.textContent=v;});
-  document.querySelectorAll('.goal').forEach((g,i)=>{const o=$('f-goal').options[i+1];if(o)o.textContent=g.querySelector('h3').textContent;});
+  document.querySelectorAll('[data-k]').forEach(el=>{const k=el.dataset.k;if(!(k in DEFAULT_TEXTS))DEFAULT_TEXTS[k]=el.textContent;const t=cfg.texts||{};el.textContent=(k in t&&typeof t[k]==='string')?t[k]:DEFAULT_TEXTS[k];});
+  document.querySelectorAll('[data-img]').forEach(el=>{const k=el.dataset.img;if(!(k in DEFAULT_IMGS))DEFAULT_IMGS[k]=el.getAttribute('src');el.src=media[k]||DEFAULT_IMGS[k];});
+  applyOptional();
+  document.querySelectorAll('.goal').forEach(g=>{const o=[...$('f-goal').options].find(o=>o.value===g.dataset.goal);if(o)o.textContent=g.querySelector('h3').textContent;});
   if(cfg.enabled===false&&!EDIT){$('form-wrap').style.display='none';$('closed').style.display='block';}
+  if(EDIT)document.querySelectorAll('details').forEach(d=>d.open=true);
   const today=new Date();
   $('f-date').min=ymd(today);
   const max=new Date();max.setDate(max.getDate()+(Number(cfg.maxDaysAhead)||30));$('f-date').max=ymd(max);
@@ -54,24 +334,29 @@ async function notify(data){
   try{
     await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({
       access_key:cfg.web3formsKey,subject:'Nouvelle réservation tunnel : '+data.name+' ('+data.objectiveType+') — '+data.date+' '+data.time,from_name:'DELTA Performance — Tunnel',replyto:data.email,
-      'Nom':data.name,'Email':data.email,'Téléphone':data.phone,'Date':data.date,'Créneau':data.time,'Accompagnement':data.objectiveType,'Objectif':data.objective,'Blocage':data.blocker||'-'})});
+      'Nom':data.name,'Email':data.email,'Téléphone':data.phone,'Date':data.date,'Créneau':data.time,'Accompagnement':data.objectiveType,'Niveau':data.level||'-','Objectif':data.objective,'Blocage':data.blocker||'-'})});
   }catch(e){console.warn('Notification email non envoyée',e);}
 }
 
-const GOAL_HINTS={'Préparation physique & performance':'Ex : gagner en explosivité pour la saison de foot','Transformation physique':'Ex : perdre 8 kg et prendre du muscle d\'ici l\'été','Forme & bien-être':'Ex : retrouver de l\'énergie et ne plus avoir mal au dos'};
+const GOAL_HINTS={'Préparation physique & performance':'Ex : gagner en explosivité pour ma saison de foot','Transformation physique':'Ex : perdre 8 kg et prendre du muscle d\'ici l\'été','Forme & bien-être':'Ex : retrouver de l\'énergie et ne plus avoir mal au dos'};
 function setGoal(g){$('f-goal').value=g;document.querySelectorAll('.goal').forEach(b=>b.classList.toggle('on',b.dataset.goal===g));$('f-objective').placeholder=GOAL_HINTS[g]||'Ce que tu veux atteindre';}
-document.querySelectorAll('.goal').forEach(b=>{const go=()=>{if(EDIT)return;setGoal(b.dataset.goal);$('form-wrap').scrollIntoView({behavior:'smooth',block:'start'});};b.addEventListener('click',go);b.addEventListener('keydown',e=>{if(!EDIT&&(e.key==='Enter'||e.key===' ')){e.preventDefault();go();}});});
+function showStep(n){$('fs1').classList.toggle('on',n===1);$('fs2').classList.toggle('on',n===2);$('st1').classList.toggle('on',n===1);$('st2').classList.toggle('on',n===2);}
+function checkFields(ids){for(const id of ids){const el=$(id);if(!el.checkValidity()){el.reportValidity();el.focus();return false;}}return true;}
+document.querySelectorAll('.goal').forEach(b=>{const go=()=>{if(EDIT)return;setGoal(b.dataset.goal);showStep(1);$('reserver').scrollIntoView({behavior:'smooth',block:'start'});};b.addEventListener('click',go);b.addEventListener('keydown',e=>{if(!EDIT&&e.target===b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();go();}});});
 $('f-goal').addEventListener('change',e=>setGoal(e.target.value));
 $('f-date').addEventListener('change',refreshSlots);
+$('f-next').addEventListener('click',()=>{if(EDIT)return;if(checkFields(['f-goal','f-level','f-objective']))showStep(2);});
+$('f-back').addEventListener('click',()=>showStep(1));
 $('lead-form').addEventListener('submit',async e=>{
   e.preventDefault();
   if(EDIT)return;
+  if(!$('fs2').classList.contains('on')){if(checkFields(['f-goal','f-level','f-objective']))showStep(2);return;}
+  if(!checkFields(['f-date','f-time','f-name','f-email','f-phone']))return;
   const data=Object.fromEntries(new FormData(e.target).entries());
   Object.keys(data).forEach(k=>data[k]=String(data[k]).trim());
   data.email=data.email.toLowerCase();
   const closed=dayClosed(data.date);
   if(closed){alert(closed);return;}
-  if(!data.time){alert('Choisis un créneau.');return;}
   const btn=$('t-cta');btn.disabled=true;
   const id='tunnel_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
   const createdAt=new Date().toISOString();
@@ -80,8 +365,8 @@ $('lead-form').addEventListener('submit',async e=>{
       const slotRef=col('tunnel_slots').doc(data.date+'_'+data.time);
       if((await tx.get(slotRef)).exists)throw new Error('SLOT_TAKEN');
       tx.set(slotRef,{date:data.date,time:data.time,createdAt});
-      tx.set(col('prospects').doc(id),{name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType,objective:data.objective,blocker:data.blocker||'',date:data.date,time:data.time,status:'booked',source:'tunnel',createdAt});
-      tx.set(col('appointments').doc(id),{name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType,objective:data.objective,date:data.date,time:data.time,prospectId:id,status:'booked',source:'tunnel',createdAt});
+      tx.set(col('prospects').doc(id),{name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType,level:data.level||'',objective:data.objective,blocker:data.blocker||'',date:data.date,time:data.time,status:'booked',source:'tunnel',createdAt});
+      tx.set(col('appointments').doc(id),{name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType,level:data.level||'',objective:data.objective,date:data.date,time:data.time,prospectId:id,status:'booked',source:'tunnel',createdAt});
     });
   }catch(err){
     btn.disabled=false;
@@ -90,9 +375,20 @@ $('lead-form').addEventListener('submit',async e=>{
   }
   await notify(data);
   $('form-wrap').style.display='none';$('success').style.display='block';
+  $('reserver').scrollIntoView({behavior:'smooth',block:'start'});
 });
 
-window.TUNNEL={col,LEGACY_KEYS,DEFAULT_TEXTS,get cfg(){return cfg;}};
-col('settings').doc('tunnel').get().then(d=>{if(d.exists)cfg=Object.assign(cfg,d.data());}).catch(e=>console.warn('Config tunnel non chargée',e)).finally(()=>{applyConfig();if(EDIT){const s=document.createElement('script');s.src='tunnel-editor.js';document.body.appendChild(s);}});
+if('IntersectionObserver' in window){
+  const vis={hero:true,form:false};
+  const upd=()=>$('sticky').classList.toggle('show',!vis.hero&&!vis.form);
+  new IntersectionObserver(es=>{es.forEach(en=>{vis[en.target===$('reserver')?'form':'hero']=en.isIntersecting;});upd();}).observe(document.querySelector('.hero'));
+  new IntersectionObserver(es=>{es.forEach(en=>{vis.form=en.isIntersecting;});upd();}).observe($('reserver'));
+}
+
+window.TUNNEL={col,LEGACY_KEYS,DEFAULT_TEXTS,DEFAULT_IMGS,media,applyOptional,get cfg(){return cfg;}};
+Promise.all([
+  col('settings').doc('tunnel').get().then(d=>{if(d.exists)cfg=Object.assign(cfg,d.data());}).catch(e=>console.warn('Config tunnel non chargée',e)),
+  col('tunnel_media').get().then(s=>s.forEach(d=>{const v=d.data();if(v&&v.src)media[d.id]=v.src;})).catch(e=>console.warn('Photos non chargées',e))
+]).finally(()=>{applyConfig();if(EDIT){const s=document.createElement('script');s.src='tunnel-editor.js';document.body.appendChild(s);}});
 })();
 </script></body></html>

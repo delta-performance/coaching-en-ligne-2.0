@@ -94,7 +94,7 @@ function renderProspects() {
   const statuses = { new: 'Nouveau', contacted: 'Contacté', booked: 'RDV pris', proposal: 'Proposition', converted: 'Client', lost: 'Perdu' };
   el.innerHTML = crmState.prospects.sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt))).map(p => `
     <div class="card" style="padding:1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
-      <div style="flex:1;min-width:220px"><strong>${h(p.name)}</strong><div style="font-size:.75rem;color:var(--muted)">${h(p.email)} ${p.phone ? '· ' + h(p.phone) : ''}</div><div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${p.objectiveType ? `<b style="color:var(--gold)">${h(p.objectiveType)}</b> · ` : ''}${h(p.objective || 'Objectif non renseigné')}</div></div>
+      <div style="flex:1;min-width:220px"><strong>${h(p.name)}</strong><div style="font-size:.75rem;color:var(--muted)">${h(p.email)} ${p.phone ? '· ' + h(p.phone) : ''}</div><div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${p.objectiveType ? `<b style="color:var(--gold)">${h(p.objectiveType)}</b> · ` : ''}${h(p.objective || 'Objectif non renseigné')}</div>${p.level || p.blocker ? `<div style="font-size:.75rem;color:var(--muted);margin-top:.25rem">${p.level ? h(p.level) : ''}${p.level && p.blocker ? ' · ' : ''}${p.blocker ? 'Frein : ' + h(p.blocker) : ''}</div>` : ''}</div>
       <select class="inp" style="width:auto" onchange="updateProspectStatus('${p.id}', this.value)">${Object.entries(statuses).map(([k, v]) => `<option value="${k}" ${p.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
       ${p.status !== 'converted' && !isExistingClientEmail(p.email) ? `<button class="btn btn-gold btn-sm" onclick="convertProspect('${p.id}')">+ Créer le client</button>` : '<span class="badge badge-client">CLIENT</span>'}
     </div>`).join('') || '<p style="color:var(--muted);font-style:italic">Aucun prospect pour le moment.</p>';
@@ -166,7 +166,7 @@ function renderAppointments() {
 }
 
 const WEEKDAYS = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-const TUNNEL_TEXT_FIELDS = ['eyebrow', 'title', 'titleHighlight', 'subtitle', 'formTitle', 'formSubtitle', 'ctaLabel', 'successTitle', 'successText', 'web3formsKey', 'publicUrl'];
+const TUNNEL_TEXT_FIELDS = ['web3formsKey', 'publicUrl'];
 
 function renderTunnelSettings() {
   const t = crmState.tunnel;
