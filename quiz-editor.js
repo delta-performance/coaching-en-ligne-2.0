@@ -61,9 +61,10 @@
     const root = document.getElementById('qe-root'); if (!root) return;
     num = {}; S.qs.forEach((q, i) => { num[q.id] = i + 1; });
     const roots = S.qs.filter(q => !parentOf(q));
-    root.innerHTML = `<div class="qe-tree">${roots.map(nodeHtml).join('')}
+    root.innerHTML = `<div class="qe-tree"><div class="qe-node" style="opacity:.75"><div class="qe-head"><span class="qe-n">✓</span><b>Prénom → question 1 (objectif) → créneau → coordonnées : la réservation est enregistrée</b><span class="qe-tag">avant la réservation</span></div></div>
+      <div class="qe-cond" style="margin:.2rem 0 0">Juste après la réservation : les sous-questions de la question 1, puis les questions suivantes</div>${roots.map(nodeHtml).join('')}
       <button type="button" class="qe-add" onclick="qeAdd(null,'')">+ Question pour tout le monde</button>
-      <div class="qe-node" style="opacity:.7"><div class="qe-head"><span class="qe-n">✓</span><b>Choix du créneau, puis coordonnées</b><span class="qe-tag">fixe</span></div></div></div>`;
+      <div class="qe-node" style="opacity:.7"><div class="qe-head"><span class="qe-n">✓</span><b>Message de remerciement</b><span class="qe-tag">fin</span></div></div></div>`;
     bar('qe-bar', S.dirtyQ);
   }
   function nodeHtml(q) {
@@ -93,6 +94,7 @@
     return `<div class="qe-form">
       <div><label class="l">Question</label><div class="qe-row"><input class="inp" value="${esc(q.title)}" oninput="qeSet('${q.id}','title',this.value)"></div></div>
       <div><label class="l">Sous-titre (facultatif)</label><div class="qe-row"><input class="inp" value="${esc(q.sub)}" oninput="qeSet('${q.id}','sub',this.value)"></div></div>
+      <div><label class="l">Nom de l'étape affiché au-dessus (facultatif, ex : Ton sport). Vide = celui de la question d'avant</label><div class="qe-row"><input class="inp" value="${esc(q.section)}" oninput="qeSet('${q.id}','section',this.value)"></div></div>
       <div class="qe-row">
         <div><label class="l">Type</label><select class="inp" style="min-width:150px" onchange="qeType('${q.id}',this.value)">${Object.entries(TYPES).map(([k, v]) => `<option value="${k}" ${q.type === k ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
         <label class="qe-ck"><input type="checkbox" ${q.optional ? 'checked' : ''} onchange="qeSet('${q.id}','optional',this.checked)"> Facultative</label>

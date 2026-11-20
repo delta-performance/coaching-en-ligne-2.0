@@ -27,9 +27,15 @@
       allow create: if id.matches('tunnel_.*')
                     && request.resource.data.source == 'tunnel'
                     && request.resource.data.status == 'booked';
+      allow update: if id.matches('tunnel_.*') && resource.data.source == 'tunnel'
+                    && !('answeredAt' in resource.data)
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['answers', 'level', 'objective', 'blocker', 'answeredAt']);
     }
     match /apps/delta-perf-v2/appointments/{id} {
       allow create: if id.matches('tunnel_.*')
                     && request.resource.data.source == 'tunnel'
                     && request.resource.data.status == 'booked';
+      allow update: if id.matches('tunnel_.*') && resource.data.source == 'tunnel'
+                    && !('answeredAt' in resource.data)
+                    && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['answers', 'level', 'objective', 'blocker', 'answeredAt']);
     }

@@ -113,6 +113,9 @@ h1,h2,h3{font-family:var(--head);text-transform:uppercase;letter-spacing:.01em;l
 .qstep .chips+.inp{margin-top:2px}
 .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.scale .opt{justify-content:center;font:800 24px var(--head);padding:12px 0}
 .scale-l{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:8px}
+.qstage{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:-12px 0 16px;min-height:18px;font-size:12px}.qstage b{color:var(--gold);text-transform:uppercase;letter-spacing:.12em;font-size:11px}.qstage span{color:var(--muted);font-weight:600}
+.success .when{color:var(--gold);font-weight:800;font-size:18px;margin:6px 0 10px}.frow.center{justify-content:center}.frow.center .btn{flex:0 1 auto}.success .skip{margin-top:14px}
+.p2 .sec-head{display:none}
 .ed-hint{display:none}body.editing .ed-hint{display:block;margin:16px auto;max-width:640px;text-align:center;font-size:13px;color:#1a0900;background:var(--gold);border-radius:10px;padding:10px 14px}
 body.editing #q-dyn{display:none}
 .quiz.all .qstep[data-label]::before{content:attr(data-label);display:inline-block;margin-bottom:10px;font:700 11px Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#1a0900;background:var(--gold);border-radius:6px;padding:3px 8px}
@@ -151,7 +154,7 @@ body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-s
   <div class="sec-head"><span class="eyebrow" data-k="trackEyebrow">Mon parcours</span><h2 data-k="trackTitle">Du haut niveau à ton quotidien</h2></div>
   <div class="proofs">
     <div class="proof"><b data-k="pr1T">Rugby pro</b><span data-k="pr1S">Sporting Club Albigeois et Toulouse Olympique XIII, en Super League.</span></div>
-    <div class="proof"><b data-k="pr2T">Structures</b><span data-k="pr2S">Papa Inshape, CrossFit, volley, judo, golf, MMA, athlétisme.</span></div>
+    <div class="proof"><b data-k="pr2T">Judoka</b><span data-k="pr2S">15 ans de compétition : je sais ce que la performance demande.</span></div>
     <div class="proof"><b data-k="pr3T">Depuis 2018</b><span data-k="pr3S">Des sportifs amateurs et des actifs accompagnés en transformation physique et en forme.</span></div>
   </div>
   <div class="sub-eyebrow" data-k="clubsEyebrow">Clubs et structures</div>
@@ -159,7 +162,7 @@ body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-s
   <div class="sub-eyebrow" data-k="certsEyebrow">Diplômes et certifications</div>
   <div class="certs" id="certs"></div>
   <p class="ed-hint" data-k="expHint">Les expériences, logos et certifications se modifient dans Admin → CRM &amp; RDV → Tunnel.</p>
-  <div class="me"><div class="ph"><img data-img="aboutPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><p data-k="meText">Moi, c’est David : préparateur physique et papa de deux jeunes enfants. Ton plan sera construit pour ta vraie vie, pas pour une vie idéale.</p></div>
+  <div class="me"><div class="ph"><img data-img="aboutPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><p data-k="meText">Moi, c’est David : judoka à la base, préparateur physique aujourd’hui, et papa de deux jeunes enfants. Ton plan sera construit pour ta vraie vie, pas pour une vie idéale.</p></div>
 </div></section>
 
 <section class="sec alt" data-opt-section><div class="wrap">
@@ -173,16 +176,18 @@ body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-s
 
 <section class="sec" id="reserver"><div class="wrap">
   <div id="form-wrap">
-    <div class="sec-head"><span class="eyebrow" data-k="formEyebrow">Bilan découverte offert</span><h2 data-k="formTitle">Réserve ton bilan avec moi</h2><p data-k="formSubtitle">Quelques questions rapides pour que je prépare notre échange.</p></div>
+    <div class="sec-head"><span class="eyebrow" data-k="formEyebrow">Bilan découverte offert</span><h2 data-k="formTitle">Réserve ton bilan avec moi</h2><p data-k="formSubtitle">4 étapes pour réserver, puis quelques questions pour préparer notre échange.</p></div>
     <div class="quiz" id="quiz">
       <div class="qtop"><button type="button" class="qback hide" id="q-back" aria-label="Retour">←</button><div class="qbar"><i id="q-bar"></i></div><div class="qcount" id="q-count"></div></div>
+      <div class="qstage"><b id="q-stage"></b><span id="q-enc"></span></div>
       <form id="lead-form" novalidate>
         <input type="hidden" id="f-date"><input type="hidden" id="f-time">
         <p class="ed-hint" data-k="quizHint">Les questions se modifient dans Admin → CRM &amp; RDV → Tunnel → Questionnaire. Ici, seuls le créneau et les coordonnées sont modifiables.</p>
+        <div class="qstep" data-step="prenom" data-type="name"><h3 data-k="cFnT">Avant de commencer, c’est quoi ton prénom ?</h3><p class="qsub" data-k="cFnS" data-opt>4 étapes pour réserver ton bilan, puis quelques questions pour que je le prépare.</p><input class="inp" id="f-first" maxlength="60" autocomplete="given-name" placeholder="Ton prénom"><div class="frow"><button type="button" class="btn primary" data-next>Continuer →</button></div></div>
         <div id="q-dyn"></div>
         <div class="qstep" data-step="slot" data-type="slot"><h3 data-k="cStT">Choisis ton créneau</h3><p class="qsub" data-k="cStS" data-opt>30 minutes en visio ou par téléphone, avec moi.</p><div class="days" id="days"></div><div class="slots" id="slots"></div><div class="hint" id="date-hint"></div></div>
-        <div class="qstep" data-step="contact" data-type="contact"><h3 data-k="cCtT">Dernière étape !</h3><p class="qsub" data-k="cCtS" data-opt>Pour te confirmer le rendez-vous.</p><div class="fields">
-            <div><label for="f-name">Prénom et nom</label><input class="inp" name="name" id="f-name" required maxlength="120" autocomplete="name" placeholder="Ton nom"></div>
+        <div class="qstep" data-step="contact" data-type="contact"><h3 data-k="cCtT">Dernière étape, {prenom} !</h3><p class="qsub" data-k="cCtS" data-opt>Pour te confirmer le rendez-vous.</p><div class="fields">
+            <div><label for="f-last">Nom (facultatif)</label><input class="inp" id="f-last" maxlength="80" autocomplete="family-name" placeholder="Ton nom"></div>
             <div><label for="f-email">Email</label><input class="inp" type="email" name="email" id="f-email" required maxlength="160" autocomplete="email" placeholder="toi@email.com"></div>
             <div><label for="f-phone">Téléphone</label><input class="inp" type="tel" name="phone" id="f-phone" required maxlength="30" autocomplete="tel" placeholder="06..."></div>
           </div>
@@ -191,7 +196,9 @@ body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-s
       </form>
     </div>
   </div>
-  <div id="success" class="success quiz"><h2 data-k="successTitle">C’est noté, à très vite !</h2><p data-k="successText">Je te confirme ton créneau rapidement. D’ici là, réfléchis à ce que tu aimerais avoir changé dans 3 mois : on partira de là.</p></div>
+  <div id="bridge" class="success quiz"><h2 data-k="bridgeTitle">C’est réservé, {prenom} !</h2><p class="when" id="bridge-when"></p><p data-k="bridgeText">Pour que je prépare ton bilan sur mesure, réponds à quelques questions sur toi, ton sport et ton quotidien. Environ 2 minutes.</p><div class="frow center"><button type="button" class="btn primary" id="b-go"><span data-k="bridgeGo">C’est parti</span> →</button></div><button type="button" class="skip" id="b-later"><span data-k="bridgeLater">Plus tard</span></button></div>
+  <div id="later" class="success quiz"><h2 data-k="laterTitle">Pas de souci, {prenom} !</h2><p data-k="laterText">Ton créneau est bien réservé. Reviens sur cette page quand tu veux pour finir le questionnaire : tes réponses sont gardées.</p><div class="frow center"><button type="button" class="btn ghost" id="l-resume"><span data-k="laterGo">Reprendre le questionnaire</span></button></div></div>
+  <div id="success" class="success quiz"><h2 data-k="successTitle">Merci {prenom}, j’ai tout ce qu’il me faut !</h2><p data-k="successText">Je prépare ton bilan à partir de tes réponses. À très vite !</p></div>
   <div id="closed" class="closed quiz"><h2 data-k="closedTitle">Les réservations sont momentanément fermées.</h2><p data-k="closedText">Reviens très vite !</p></div>
 </div></section>
 
@@ -219,14 +226,14 @@ function applyOptional(){
   document.querySelectorAll('[data-opt-section]').forEach(s=>{s.style.display=EDIT||[...s.querySelectorAll('[data-opt-group]')].some(g=>g.style.display!=='none')?'':'none';});
 }
 function applyConfig(){
-  document.querySelectorAll('[data-k]').forEach(el=>{const k=el.dataset.k;if(!(k in DEFAULT_TEXTS))DEFAULT_TEXTS[k]=el.textContent;const t=cfg.texts||{};el.textContent=(k in t&&typeof t[k]==='string')?t[k]:DEFAULT_TEXTS[k];});
+  document.querySelectorAll('[data-k]').forEach(el=>{const k=el.dataset.k;if(!(k in DEFAULT_TEXTS))DEFAULT_TEXTS[k]=el.textContent;const t=cfg.texts||{};el.textContent=(k in t&&typeof t[k]==='string')?t[k]:DEFAULT_TEXTS[k];if(!EDIT)el.dataset.tpl=el.textContent;});
   document.querySelectorAll('[data-img]').forEach(el=>{const k=el.dataset.img;if(!(k in DEFAULT_IMGS))DEFAULT_IMGS[k]=el.getAttribute('src');el.src=media[k]||DEFAULT_IMGS[k];});
   applyOptional();renderParcours();buildQuiz();
   if(cfg.enabled===false&&!EDIT){$('form-wrap').style.display='none';$('closed').style.display='block';}
   if(EDIT)$('quiz').classList.add('all');
   const max=new Date();max.setDate(max.getDate()+(Number(cfg.maxDaysAhead)||30));
   minDate=ymd(new Date());maxDate=ymd(max);
-  buildDays();go(0);
+  buildDays();go(0);restore();
 }
 
 function dayClosed(dateStr){
@@ -267,21 +274,23 @@ async function refreshSlots(){
     b.onclick=()=>{if(EDIT)return;$('f-time').value=t;box.querySelectorAll('.slot').forEach(x=>x.classList.toggle('on',x===b));setTimeout(next,250);};box.appendChild(b);});
 }
 
-async function notify(data){
-  if(!cfg.web3formsKey)return;
-  try{
-    await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({
-      access_key:cfg.web3formsKey,subject:'Nouvelle réservation tunnel : '+data.name+' ('+data.objectiveType+') — '+data.date+' '+data.time,from_name:'DELTA Performance — Tunnel',replyto:data.email,
-      'Nom':data.name,'Email':data.email,'Téléphone':data.phone,'Date':data.date,'Créneau':data.time,'Accompagnement':data.objectiveType,'Niveau':data.level||'-','Objectif':data.objective,'Blocage':data.blocker||'-','Entretien':(data.answers||[]).map(x=>'• '+x.q+' → '+x.a).join('\n')||'-'})});
-  }catch(e){console.warn('Notification email non envoyée',e);}
-}
 
 const GOAL_HINTS={perf:'Ex : être plus explosif et ne plus me blesser cette saison',transfo:'Ex : perdre 8 kg et me sentir bien en maillot cet été',forme:'Ex : avoir de l’énergie le soir et ne plus avoir mal au dos'};
+const STORE='delta-quiz-v1';
+let phase=1,booking=null,goalQ=null,finishing=false,resumeStep='',ready=false;
 const txt=el=>el.textContent.replace(/\s+/g,' ').trim();
 const step=id=>STEPS.find(x=>x.dataset.step===id);
 const qOf=st=>QM[st.dataset.step];
 const picked=st=>[...st.querySelectorAll('.opt.on,.chip.on')];
 const byRole=r=>Q.filter(q=>q.role===r).map(q=>step(q.id)).filter(Boolean);
+const first=()=>$('f-first').value.trim();
+function fill(t){
+  const n=first();
+  let v=String(t).replace(/\{prenom\}/g,n);
+  if(!n)v=v.replace(/^\s*,\s*/,'').replace(/\s*,(\s*[!?.:])/g,'$1').replace(/\s+([!?])/g,' $1');
+  return v.replace(/\s{2,}/g,' ').replace(/^./,c=>c.toUpperCase());
+}
+function personalize(root){if(EDIT)return;root.querySelectorAll('[data-tpl]').forEach(el=>{const t=el.dataset.tpl;if(t.includes('{prenom}'))el.textContent=fill(t);});}
 function renderParcours(){
   const ex=Array.isArray(cfg.experiences)?cfg.experiences:window.EXP_DEFAULT,ce=Array.isArray(cfg.certs)?cfg.certs:window.CERT_DEFAULT;
   $('clubs').innerHTML=ex.filter(e=>e&&e.name).map(e=>{const lg=media['exp_'+e.id];return '<div class="club'+(lg?' has-logo':'')+'">'+(lg?'<div class="lg"><img src="'+esc(lg)+'" alt="'+esc(e.name)+'"></div>':'')+'<b>'+esc(e.name)+'</b>'+(e.detail?'<small>'+esc(e.detail)+'</small>':'')+'</div>';}).join('');
@@ -292,7 +301,7 @@ function renderParcours(){
 function nextRow(q){return '<div class="frow">'+(q.optional?'<button type="button" class="skip" data-skip>Passer</button>':'')+'<button type="button" class="btn primary" data-next>Continuer →</button></div>';}
 function stepHtml(q){
   const opts=Array.isArray(q.options)?q.options:[];
-  let h='<div class="qstep" data-step="'+esc(q.id)+'" data-type="'+esc(q.type)+'"><h3>'+esc(q.title)+'</h3>'+(q.sub?'<p class="qsub">'+esc(q.sub)+'</p>':'');
+  let h='<div class="qstep" data-step="'+esc(q.id)+'" data-type="'+esc(q.type)+'"><h3 data-tpl="'+esc(q.title)+'">'+esc(q.title)+'</h3>'+(q.sub?'<p class="qsub" data-tpl="'+esc(q.sub)+'">'+esc(q.sub)+'</p>':'');
   if(q.type==='one'){
     const big=opts.some(o=>o.sub||o.icon);
     h+='<div class="opts'+(q.grid&&!big?' grid':'')+'">'+opts.map(o=>'<button type="button" class="opt" data-o="'+esc(o.id)+'"'+(o.other?' data-other':'')+'>'+(o.icon?'<span class="ico">'+esc(o.icon)+'</span>':'')+'<span><b>'+esc(o.label)+'</b>'+(o.sub?'<small>'+esc(o.sub)+'</small>':'')+'</span></button>').join('')+'</div>';
@@ -311,9 +320,12 @@ function stepHtml(q){
 function buildQuiz(){
   const src=cfg.quiz&&Array.isArray(cfg.quiz.questions)&&cfg.quiz.questions.length?cfg.quiz.questions:window.QUIZ_DEFAULT.questions;
   Q=src.filter(q=>q&&q.id&&q.title&&['one','many','text','scale'].includes(q.type));QM={};Q.forEach(q=>{QM[q.id]=q;});
+  goalQ=Q.find(q=>q.role==='objectiveType'&&!(q.if&&q.if.q))||null;
   $('q-dyn').innerHTML=Q.map(stepHtml).join('');
-  STEPS=[...$('q-dyn').querySelectorAll('.qstep'),document.querySelector('.qstep[data-step=slot]'),document.querySelector('.qstep[data-step=contact]')];
+  STEPS=[step0('prenom'),...$('q-dyn').querySelectorAll('.qstep'),step0('slot'),step0('contact')];
 }
+function step0(id){return document.querySelector('.qstep[data-step='+id+']');}
+const inP1=st=>['prenom','slot','contact'].includes(st.dataset.step)||(!!goalQ&&st.dataset.step===goalQ.id);
 function shown(st,est,depth){
   const q=qOf(st);if(!q||!q.if||!q.if.q)return true;
   if((depth||0)>40)return false;
@@ -323,10 +335,10 @@ function shown(st,est,depth){
   if(!sel.length&&est&&ref.options&&ref.options[0])sel=[ref.options[0].id];
   return sel.some(x=>(q.if.in||[]).includes(x));
 }
-const flow=est=>STEPS.filter(st=>shown(st,est));
+const flow=est=>STEPS.filter(st=>phase===1?inP1(st):(!inP1(st)&&shown(st,est)));
 function answer(st){
   const t=st.dataset.type;
-  if(t==='text'){const el=st.querySelector('.inp');return el?el.value.trim():'';}
+  if(t==='text'||t==='name'){const el=st.querySelector('.inp');return el?el.value.trim():'';}
   if(t==='one'||t==='scale'){
     const b=st.querySelector('.opt.on');if(!b)return '';
     let v=txt(b.querySelector('b')||b);
@@ -338,17 +350,30 @@ function answer(st){
   if(t==='slot')return $('f-date').value&&$('f-time').value?'ok':'';
   return 'ok';
 }
+function sectionOf(F,i){
+  if(phase===1)return 'Ta réservation';
+  for(let j=i;j>=0;j--){const q=qOf(F[j]);if(q&&q.section)return q.section;}
+  return 'Ton bilan';
+}
 function go(n){
   if(EDIT)return;
   const F=flow();
+  if(phase===2&&n>=F.length){finish();return;}
   cur=Math.max(0,Math.min(n,F.length-1));
-  STEPS.forEach(s=>s.classList.toggle('on',s===F[cur]));
-  const total=Math.max(F.length,flow(true).length);
+  const st=F[cur];
+  STEPS.forEach(s=>s.classList.toggle('on',s===st));
+  personalize(st);
+  const total=phase===2?Math.max(F.length,flow(true).length):F.length;
   $('q-bar').style.width=((cur+1)/total*100)+'%';
   $('q-count').textContent=(cur+1)+'/'+total;
   $('q-back').classList.toggle('hide',cur===0);
-  const inp=F[cur].querySelector('input.inp,textarea.inp');
-  if(inp&&F[cur].dataset.type==='text'&&matchMedia('(hover:hover)').matches)inp.focus({preventScroll:true});
+  const left=total-cur;
+  $('q-stage').textContent=sectionOf(F,cur);
+  $('q-enc').textContent=phase===1?(cur===0?'2 minutes':''):left===1?'Dernière question !':left<=3?'Plus que '+left+' questions':cur===Math.floor(total/2)?'Tu es à mi-chemin 💪':'';
+  st.querySelectorAll('[data-next]').forEach(b=>{b.textContent=phase===2&&cur===F.length-1&&left===1?'Envoyer mes réponses →':'Continuer →';});
+  const inp=st.querySelector('input.inp,textarea.inp');
+  if(inp&&(st.dataset.type==='text'||st.dataset.type==='name')&&matchMedia('(hover:hover)').matches)inp.focus({preventScroll:true});
+  save();
 }
 const next=()=>go(cur+1);
 function stepValid(st){
@@ -358,11 +383,88 @@ function stepValid(st){
   if(st.dataset.type==='contact'||q.optional)return true;
   if(answer(st))return true;
   const inp=st.querySelector('.inp');
-  if(st.dataset.type==='text'&&inp){inp.setCustomValidity('Réponds en quelques mots 🙂');inp.reportValidity();inp.focus();setTimeout(()=>inp.setCustomValidity(''),1500);}
+  if((st.dataset.type==='text'||st.dataset.type==='name')&&inp){inp.setCustomValidity(st.dataset.type==='name'?'Ton prénom 🙂':'Réponds en quelques mots 🙂');inp.reportValidity();inp.focus();setTimeout(()=>inp.setCustomValidity(''),1500);}
   else{const g=st.querySelector('.chips,.opts,.scale');if(g&&g.animate)g.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:250});}
   return false;
 }
-$('q-dyn').addEventListener('click',e=>{
+function save(){
+  if(EDIT||!ready)return;
+  try{
+    const sel={};
+    STEPS.forEach(st=>{
+      if(['slot','contact'].includes(st.dataset.type))return;
+      const o=picked(st).map(b=>b.dataset.o),t=[...st.querySelectorAll('.inp')].map(i=>i.value);
+      if(o.length||t.some(Boolean))sel[st.dataset.step]={o,t};
+    });
+    const F=flow();
+    localStorage.setItem(STORE,JSON.stringify({v:1,ts:Date.now(),phase,booking,cur:F[cur]?F[cur].dataset.step:'',sel,last:$('f-last').value,email:$('f-email').value,phone:$('f-phone').value}));
+  }catch(e){}
+}
+function restore(){
+  if(EDIT||cfg.enabled===false)return;
+  let d=null;try{d=JSON.parse(localStorage.getItem(STORE)||'null');}catch(e){}
+  ready=true;
+  if(!d||d.v!==1)return;
+  if(Date.now()-d.ts>30*864e5||(d.booking&&d.booking.date<minDate)){try{localStorage.removeItem(STORE);}catch(e){}return;}
+  Object.entries(d.sel||{}).forEach(([id,v])=>{
+    const st=step(id);if(!st)return;
+    st.querySelectorAll('.opt,.chip').forEach(b=>b.classList.toggle('on',(v.o||[]).includes(b.dataset.o)));
+    if(st.querySelector('.opt.on[data-other]'))st.classList.add('other');
+    st.querySelectorAll('.inp').forEach((i,k)=>{if(v.t&&v.t[k]!=null)i.value=v.t[k];});
+  });
+  $('f-last').value=d.last||'';$('f-email').value=d.email||'';$('f-phone').value=d.phone||'';
+  const g=goalQ&&step(goalQ.id),gb=g&&g.querySelector('.opt.on'),oi=byRole('objective')[0];
+  if(gb&&oi&&oi.querySelector('.inp'))oi.querySelector('.inp').placeholder=GOAL_HINTS[gb.dataset.o]||oi.querySelector('.inp').placeholder;
+  if(d.phase===2&&d.booking){phase=2;booking=d.booking;resumeStep=d.cur||'';showBridge(true);return;}
+  const F=flow();let i=F.findIndex(s=>s.dataset.step===d.cur);
+  if(i<0)i=0;
+  if(F[i]&&F[i].dataset.type==='contact'&&!answer(step('slot')))i=F.indexOf(step('slot'));
+  go(i);
+}
+const fmtDate=d=>new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+function showBridge(resume){
+  $('form-wrap').style.display='none';$('later').style.display='none';
+  if(!flow().length){$('success').style.display='block';personalize($('success'));return;}
+  $('bridge-when').textContent='📅 '+fmtDate(booking.date)+' à '+booking.time;
+  personalize($('bridge'));$('bridge').style.display='block';
+  if(!resume)$('reserver').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function startPhase2(){
+  $('bridge').style.display='none';$('later').style.display='none';
+  $('form-wrap').style.display='';$('form-wrap').classList.add('p2');
+  const F=flow();let i=F.findIndex(s=>s.dataset.step===resumeStep);resumeStep='';
+  go(i<0?0:i);
+  $('reserver').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('b-go').addEventListener('click',()=>{if(!EDIT)startPhase2();});
+$('l-resume').addEventListener('click',()=>{if(!EDIT)startPhase2();});
+$('b-later').addEventListener('click',()=>{if(EDIT)return;$('bridge').style.display='none';personalize($('later'));$('later').style.display='block';});
+async function notify(data,kind){
+  if(!cfg.web3formsKey)return;
+  const done=kind==='answers';
+  try{
+    await fetch('https://api.web3forms.com/submit',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(Object.assign({
+      access_key:cfg.web3formsKey,subject:(done?'Questionnaire complété : ':'Nouvelle réservation tunnel : ')+data.name+' ('+data.objectiveType+') — '+data.date+' '+data.time,from_name:'DELTA Performance — Tunnel',replyto:data.email,
+      'Nom':data.name,'Email':data.email,'Téléphone':data.phone,'Date':data.date,'Créneau':data.time,'Accompagnement':data.objectiveType||'-'},
+      done?{'Niveau':data.level||'-','Objectif':data.objective||'-','Blocage':data.blocker||'-','Entretien':(data.answers||[]).map(x=>'• '+x.q+' → '+x.a).join('\n')||'-'}:{'Questionnaire':'Le prospect remplit le questionnaire juste après : tu recevras un 2e mail avec ses réponses.'}))});
+  }catch(e){console.warn('Notification email non envoyée',e);}
+}
+async function finish(){
+  if(finishing||!booking)return;
+  const F=flow();
+  const bad=F.findIndex(st=>!stepValid(st));
+  if(bad>=0){go(bad);return;}
+  finishing=true;
+  const role=r=>{const st=byRole(r).find(x=>F.includes(x)&&answer(x));return st?answer(st):'';};
+  const upd={answers:F.map(st=>({q:txt(st.querySelector('h3')),a:answer(st)})).filter(x=>x.a),level:role('level'),objective:role('objective'),blocker:role('blocker'),answeredAt:new Date().toISOString()};
+  try{await Promise.all(['prospects','appointments'].map(c=>col(c).doc(booking.id).set(upd,{merge:true})));}
+  catch(e){finishing=false;console.error(e);alert('Tes réponses n’ont pas pu être envoyées. Réessaie dans un instant.');return;}
+  notify(Object.assign({},booking,upd),'answers');
+  try{localStorage.removeItem(STORE);}catch(e){}
+  $('form-wrap').style.display='none';personalize($('success'));$('success').style.display='block';
+  $('reserver').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('lead-form').addEventListener('click',e=>{
   if(EDIT)return;
   const st=e.target.closest('.qstep');if(!st)return;
   const b=e.target.closest('.opt'),c=e.target.closest('.chip');
@@ -370,43 +472,43 @@ $('q-dyn').addEventListener('click',e=>{
     st.querySelectorAll('.opt').forEach(x=>x.classList.toggle('on',x===b));
     const q=qOf(st);
     if(q&&q.role==='objectiveType'){const o=byRole('objective')[0];const i=o&&o.querySelector('.inp');if(i)i.placeholder=GOAL_HINTS[b.dataset.o]||(QM[o.dataset.step].placeholder||'');}
-    if(b.hasAttribute('data-other')){st.classList.add('other');const m=st.querySelector('.more .inp');if(m)setTimeout(()=>m.focus(),50);return;}
-    st.classList.remove('other');
+    if(b.hasAttribute('data-other')){st.classList.add('other');const m=st.querySelector('.more .inp');if(m)setTimeout(()=>m.focus(),50);save();return;}
+    st.classList.remove('other');save();
     setTimeout(next,250);return;
   }
   if(c){
     c.classList.toggle('on');
     if(c.classList.contains('on'))st.querySelectorAll('.chip').forEach(x=>{if(x!==c&&(x.hasAttribute('data-excl')||c.hasAttribute('data-excl')))x.classList.remove('on');});
-    return;
+    save();return;
   }
   if(e.target.closest('[data-next]')){if(stepValid(st))next();return;}
   if(e.target.closest('[data-skip]')){st.querySelectorAll('.inp').forEach(i=>{i.value='';});st.querySelectorAll('.chip.on').forEach(x=>x.classList.remove('on'));next();}
 });
-$('q-dyn').addEventListener('keydown',e=>{
+$('lead-form').addEventListener('input',()=>save());
+$('lead-form').addEventListener('keydown',e=>{
   if(e.key!=='Enter'||e.target.tagName!=='INPUT')return;
-  e.preventDefault();const st=e.target.closest('.qstep');if(stepValid(st))next();
+  const st=e.target.closest('.qstep');if(!st||st.dataset.type==='contact')return;
+  e.preventDefault();if(stepValid(st))next();
 });
 $('q-back').addEventListener('click',()=>go(cur-1));
 $('lead-form').addEventListener('submit',async e=>{
   e.preventDefault();
-  if(EDIT)return;
+  if(EDIT||phase!==1)return;
   const F=flow();
   if(F[cur].dataset.type!=='contact'){if(stepValid())next();return;}
-  for(const id of ['f-name','f-email','f-phone']){const el=$(id);if(!el.checkValidity()||!el.value.trim()){el.reportValidity();el.focus();return;}}
+  for(const id of ['f-email','f-phone']){const el=$(id);if(!el.checkValidity()||!el.value.trim()){el.reportValidity();el.focus();return;}}
   const bad=F.findIndex(st=>!stepValid(st));
   if(bad>=0){go(bad);return;}
-  const role=r=>{const st=byRole(r).find(x=>F.includes(x)&&answer(x));return st?answer(st):'';};
-  const qa=F.filter(st=>{const q=qOf(st);return q&&q.role!=='objectiveType';}).map(st=>({q:txt(st.querySelector('h3')),a:answer(st)})).filter(x=>x.a);
   const data={
-    objectiveType:role('objectiveType'),level:role('level'),objective:role('objective'),blocker:role('blocker'),
-    date:$('f-date').value,time:$('f-time').value,name:$('f-name').value.trim(),email:$('f-email').value.trim().toLowerCase(),phone:$('f-phone').value.trim(),answers:qa
+    objectiveType:goalQ?answer(step(goalQ.id)):'',level:'',objective:'',blocker:'',answers:[],
+    date:$('f-date').value,time:$('f-time').value,name:(first()+' '+$('f-last').value.trim()).trim(),email:$('f-email').value.trim().toLowerCase(),phone:$('f-phone').value.trim()
   };
   const closed=dayClosed(data.date);
   if(closed){alert(closed);go(F.indexOf(step('slot')));return;}
   const btn=$('t-cta');if(btn.disabled)return;btn.disabled=true;
   const id='tunnel_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
   const createdAt=new Date().toISOString();
-  const base={name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType,level:data.level,objective:data.objective,blocker:data.blocker,answers:data.answers,date:data.date,time:data.time,status:'booked',source:'tunnel',createdAt};
+  const base={name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType,level:'',objective:'',blocker:'',answers:[],date:data.date,time:data.time,status:'booked',source:'tunnel',createdAt};
   try{
     await window.db.runTransaction(async tx=>{
       const slotRef=col('tunnel_slots').doc(data.date+'_'+data.time);
@@ -420,9 +522,10 @@ $('lead-form').addEventListener('submit',async e=>{
     if(String(err&&err.message).includes('SLOT_TAKEN')){alert('Ce créneau vient d\'être réservé. Choisis-en un autre.');$('f-time').value='';go(F.indexOf(step('slot')));refreshSlots();return;}
     console.error(err);alert('La demande n\u2019a pas pu être envoyée. Réessaie dans quelques instants.');return;
   }
-  await notify(data);
-  $('form-wrap').style.display='none';$('success').style.display='block';
-  $('reserver').scrollIntoView({behavior:'smooth',block:'start'});
+  booking={id,date:data.date,time:data.time,name:data.name,email:data.email,phone:data.phone,objectiveType:data.objectiveType};
+  phase=2;cur=0;save();
+  notify(data,'booking');
+  showBridge(false);
 });
 
 if('IntersectionObserver' in window){

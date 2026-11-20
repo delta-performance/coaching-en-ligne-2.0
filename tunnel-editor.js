@@ -15,9 +15,10 @@
     body.editing [data-k]{outline:1px dashed rgba(240,165,0,.45);outline-offset:3px;border-radius:4px;cursor:text}
     body.editing [data-k]:hover{outline-color:var(--gold)}
     body.editing [data-k]:focus{outline:2px solid var(--gold);background:rgba(240,165,0,.08)}
-    body.editing #success,body.editing #closed{display:block!important;margin-top:28px;padding-top:22px;border-top:1px dashed var(--border)}
-    body.editing #success::before,body.editing #closed::before{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
-    body.editing #success::before{content:"Message affiché après la réservation"}
+    body.editing #success,body.editing #closed,body.editing #bridge,body.editing #later{display:block!important;margin-top:28px;padding-top:22px;border-top:1px dashed var(--border)}
+    body.editing #bridge::before{content:"Message affiché juste après la réservation"}body.editing #later::before{content:"Message si le prospect clique « Plus tard »"}
+    body.editing #success::before,body.editing #closed::before,body.editing #bridge::before,body.editing #later::before{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+    body.editing #success::before{content:"Message affiché quand le questionnaire est terminé"}
     body.editing #closed::before{content:"Message affiché si le tunnel est fermé"}
     #te-bar{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#0b111a;border-top:1px solid var(--gold);padding:12px 18px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:14px;box-shadow:0 -10px 40px #000a}
     #te-bar .te-msg{flex:1;min-width:200px;color:var(--muted)}#te-bar .te-msg b{color:var(--gold)}

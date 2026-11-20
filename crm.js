@@ -91,7 +91,7 @@ async function crmAfterClientCreated(email, clientId) {
 
 function answersHtml(x) {
   const qa = Array.isArray(x.answers) ? x.answers : [];
-  if (!qa.length) return '';
+  if (!qa.length) return x.source === 'tunnel' ? '<div style="font-size:.72rem;color:var(--muted);margin-top:.35rem;font-style:italic">Questionnaire pas encore rempli</div>' : '';
   return `<details style="font-size:.75rem;color:var(--muted);margin-top:.35rem"><summary style="cursor:pointer;color:var(--gold)">Voir l'entretien (${qa.length} réponses)</summary><div style="margin-top:.35rem;display:grid;gap:.25rem">${qa.map(r => `<div><span style="opacity:.75">${h(r.q)}</span><br><b style="color:var(--text);font-weight:600">${h(r.a)}</b></div>`).join('')}</div></details>`;
 }
 
