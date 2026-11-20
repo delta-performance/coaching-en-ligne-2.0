@@ -39,13 +39,54 @@ async function updateProspectStatus(id, status) {
   renderProspects();
 }
 
-async function convertProspect(id) {
+function convertProspect(id) {
   const p = crmState.prospects.find(x => x.id === id); if (!p) return;
-  document.getElementById('nc-prenom').value = p.name || '';
-  document.getElementById('nc-email').value = p.email || '';
-  document.getElementById('nc-objectif').value = p.objective || '';
+  openClientFromLead(p, { prospectId: id });
+}
+
+function convertAppointment(id) {
+  const a = crmState.appointments.find(x => x.id === id); if (!a) return;
+  openClientFromLead(a, { appointmentId: id, prospectId: a.prospectId || '' });
+}
+
+function isExistingClientEmail(email) {
+  const e = String(email || '').toLowerCase();
+  return !!e && typeof allClients !== 'undefined' && allClients.some(c => String(c.email || '').toLowerCase() === e);
+}
+
+function generateClientPassword() {
+  const chars = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const pwd = Array.from(crypto.getRandomValues(new Uint32Array(10)), n => chars[n % chars.length]).join('');
+  const el = document.getElementById('nc-password');
+  if (el) { el.value = pwd; el.type = 'text'; }
+}
+
+function openClientFromLead(lead, refs) {
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+  set('nc-prenom', lead.name);
+  set('nc-email', lead.email);
+  set('nc-phone', lead.phone);
+  set('nc-code', '');
+  set('nc-objectif', [lead.objectiveType, lead.objective].filter(Boolean).join(' — '));
+  generateClientPassword();
+  window._crmPendingConversion = { email: String(lead.email || '').toLowerCase(), ...refs };
   openModal('modal-add-client');
-  await updateProspectStatus(id, 'converted');
+}
+
+async function crmAfterClientCreated(email, clientId) {
+  const pending = window._crmPendingConversion;
+  window._crmPendingConversion = null;
+  if (!pending || pending.email !== String(email || '').toLowerCase()) return;
+  const now = new Date().toISOString();
+  try {
+    if (pending.prospectId) {
+      await crmRef('prospects', pending.prospectId).set({ status: 'converted', clientId, updatedAt: now }, { merge: true });
+      const p = crmState.prospects.find(x => x.id === pending.prospectId); if (p) Object.assign(p, { status: 'converted', clientId });
+    }
+    const appts = crmState.appointments.filter(a => a.id === pending.appointmentId || (pending.prospectId && a.prospectId === pending.prospectId));
+    for (const a of appts) { await crmRef('appointments', a.id).set({ clientId, updatedAt: now }, { merge: true }); a.clientId = clientId; }
+  } catch (e) { console.error(e); }
+  renderProspects(); renderAppointments();
 }
 
 function renderProspects() {
@@ -55,7 +96,7 @@ function renderProspects() {
     <div class="card" style="padding:1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
       <div style="flex:1;min-width:220px"><strong>${h(p.name)}</strong><div style="font-size:.75rem;color:var(--muted)">${h(p.email)} ${p.phone ? '· ' + h(p.phone) : ''}</div><div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${p.objectiveType ? `<b style="color:var(--gold)">${h(p.objectiveType)}</b> · ` : ''}${h(p.objective || 'Objectif non renseigné')}</div></div>
       <select class="inp" style="width:auto" onchange="updateProspectStatus('${p.id}', this.value)">${Object.entries(statuses).map(([k, v]) => `<option value="${k}" ${p.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
-      ${p.status !== 'converted' ? `<button class="btn btn-gold btn-sm" onclick="convertProspect('${p.id}')">Convertir</button>` : '<span class="badge badge-client">CLIENT</span>'}
+      ${p.status !== 'converted' && !isExistingClientEmail(p.email) ? `<button class="btn btn-gold btn-sm" onclick="convertProspect('${p.id}')">+ Créer le client</button>` : '<span class="badge badge-client">CLIENT</span>'}
     </div>`).join('') || '<p style="color:var(--muted);font-style:italic">Aucun prospect pour le moment.</p>';
 }
 
@@ -119,6 +160,7 @@ function renderAppointments() {
         ${a.objective || a.objectiveType ? `<div style="font-size:.75rem;color:var(--muted);margin-top:.35rem">${a.objectiveType ? `<b style="color:var(--gold)">${h(a.objectiveType)}</b> · ` : ''}${h(a.objective || '')}</div>` : ''}</div>
       <span class="badge" style="background:rgba(16,185,129,.12);color:${colors[a.status] || 'var(--green)'}">${h(a.date)} · ${h(a.time)}</span>
       <select class="inp" style="width:auto" onchange="updateAppointmentStatus('${a.id}', this.value)">${Object.entries(APPOINTMENT_STATUSES).map(([k, v]) => `<option value="${k}" ${(a.status || 'booked') === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
+      ${a.clientId || isExistingClientEmail(a.email) ? '<span class="badge badge-client">CLIENT</span>' : `<button class="btn btn-gold btn-sm" onclick="convertAppointment('${a.id}')">+ Créer le client</button>`}
       <button class="btn btn-ghost btn-sm" title="Supprimer" onclick="deleteAppointment('${a.id}')">✕</button>
     </div>`).join('') || '<p style="color:var(--muted);font-style:italic">Aucun rendez-vous.</p>';
 }
@@ -164,7 +206,7 @@ async function saveTunnelSettings() {
   if (!t.slots.length) { toast('Ajoute au moins un créneau (ex : 09:00, 14:30)', 'w'); return; }
   t.updatedAt = new Date().toISOString();
   try {
-    await window.fdb.setDoc(crmRef('settings', 'tunnel'), t);
+    await crmRef('settings', 'tunnel').set(t, { merge: true });
     crmState.tunnel = Object.assign({}, window.TUNNEL_DEFAULTS || {}, t);
     renderTunnelSettings(); toast('Tunnel mis à jour', 's');
   } catch (e) { console.error(e); toast('Erreur d\'enregistrement (règles Firestore ?)', 'e'); }

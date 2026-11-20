@@ -211,7 +211,7 @@ _auth.onAuthStateChanged(async (fbUser) => {
     }
     if (await restoreEmailClientSession(fbUser)) return;
     await _auth.signOut();
-    toast('Compte non reconnu. Demande à ton coach de vérifier ton profil.', 'e', 6000);
+    toast('Compte non reconnu' + (fbUser.email ? ' (' + fbUser.email + ')' : '') + '. Demande à ton coach de vérifier ton profil.', 'e', 6000);
   } catch (e) {
     console.error('Auth profile error', e);
     await _auth.signOut();
@@ -299,6 +299,32 @@ async function doClientLogin() {
     if (errEl) { errEl.textContent = 'Connexion impossible. Vérifie tes identifiants.'; errEl.classList.remove('hidden'); }
   }
 }
+
+async function doGoogleLogin() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  try {
+    localStorage.removeItem(_CODE_SESSION_KEY);
+    await _auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+    await _auth.signInWithPopup(provider);
+  } catch (e) {
+    if (['auth/popup-blocked', 'auth/operation-not-supported-in-this-environment'].includes(e.code)) return _auth.signInWithRedirect(provider);
+    _googleLoginError(e);
+  }
+}
+
+function _googleLoginError(e) {
+  if (!e || ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(e.code)) return;
+  console.error(e);
+  const msgs = {
+    'auth/operation-not-allowed': 'Connexion Google pas encore activée (console Firebase).',
+    'auth/unauthorized-domain': 'Ce site n\'est pas autorisé dans Firebase (domaines autorisés).',
+    'auth/account-exists-with-different-credential': 'Un compte existe déjà avec cet email : connecte-toi avec ton mot de passe.'
+  };
+  toast(msgs[e.code] || 'Connexion Google impossible. Réessaie.', 'e', 6000);
+}
+
+if (_auth) _auth.getRedirectResult().catch(_googleLoginError);
 
 async function doCoachLogin() {
   const email = document.getElementById('login-email')?.value.trim() || '';
