@@ -179,6 +179,7 @@ async function createClient() {
   const password = document.getElementById('nc-password')?.value || '';
   const code = document.getElementById('nc-code').value.trim().toUpperCase();
   const objectif = document.getElementById('nc-objectif').value.trim();
+  const phone = document.getElementById('nc-phone')?.value.trim() || '';
   const group = document.getElementById('nc-group').value;
   const selectedCoachUid = document.getElementById('nc-coach')?.value || '';
   
@@ -199,6 +200,7 @@ async function createClient() {
   
   const clientPayload = {
     name, email, authUid,
+    phone,
     code,
     objectif,
     group,
@@ -247,8 +249,10 @@ async function createClient() {
   await window.fdb.setDoc(window.fdb.doc(window.db,'apps',APP_ID,'clients',newId,'data','unlock'), { unlocked: [1], archived: [] });
   
   closeModal('modal-add-client');
-  ['nc-prenom','nc-email','nc-password','nc-code','nc-objectif'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  toast(name + ' créé ! Compte: ' + email, 's');
+  ['nc-prenom','nc-email','nc-phone','nc-password','nc-code','nc-objectif'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const pwdEl = document.getElementById('nc-password'); if (pwdEl) pwdEl.type = 'password';
+  toast(h(name) + ' créé ! Identifiants : ' + h(email) + ' / ' + h(password), 's', 10000);
+  if (typeof crmAfterClientCreated === 'function') crmAfterClientCreated(email, newId);
   await loadAllData();
 }
 
