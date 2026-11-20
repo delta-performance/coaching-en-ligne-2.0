@@ -52,94 +52,60 @@ h1,h2,h3{font-family:var(--head);text-transform:uppercase;letter-spacing:.01em;l
 .hero-photo .tag b{display:block;font:800 22px var(--head);text-transform:uppercase;color:var(--gold)}.hero-photo .tag span{font-size:12.5px;color:var(--muted)}
 @media(max-width:520px){.logo{font-size:19px;gap:8px}.logo img{width:30px;height:30px}.client-link{padding:8px 12px;font-size:12px}.client-link .cl-pre{display:none}}
 @media(max-width:860px){.hero{padding-top:96px}.hero-grid{grid-template-columns:1fr}.hero-photo{display:none}}
-/* proofs */
-.proofs{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-top:8px;position:relative;z-index:2}
-.proof{background:var(--card);padding:20px 18px}
-.proof b{display:block;font:800 21px var(--head);text-transform:uppercase;color:var(--text);line-height:1.05}
-.proof span{display:block;color:var(--muted);font-size:13px;margin-top:4px}
-@media(max-width:860px){.proofs{grid-template-columns:1fr 1fr}}
-/* pains */
-.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.pain{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 20px 20px 52px;position:relative;font-size:15.5px;color:#d3dce7}
-.pain::before{content:"✕";position:absolute;left:18px;top:18px;width:22px;height:22px;border-radius:50%;background:rgba(200,16,46,.16);color:#ff6b81;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
-.pains-close{text-align:center;font:800 clamp(24px,3.4vw,34px) var(--head);text-transform:uppercase;margin:38px auto 0;max-width:760px;line-height:1.1}
-.pains-close em{color:var(--gold);font-style:italic}
-@media(max-width:860px){.pains{grid-template-columns:1fr}}
-/* about */
-.about{display:grid;grid-template-columns:.8fr 1.2fr;gap:52px;align-items:start}
-.about-photo{position:sticky;top:24px}
-.about-photo .ph{border-radius:24px;overflow:hidden;border:1px solid var(--border);aspect-ratio:1/1;background:#151c26}
-.about-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
-.about-photo .sign{margin-top:14px;font:800 italic 26px var(--head);text-transform:uppercase}.about-photo .sign small{display:block;font:500 13px Inter,sans-serif;text-transform:none;color:var(--muted)}
-.about h2{font-size:clamp(38px,5.6vw,60px);margin:10px 0 18px}
-.about p{color:#c9d3df;font-size:16.5px;margin:0 0 16px}
-.quote{border-left:3px solid var(--gold);padding:6px 0 6px 18px;margin:24px 0;font:800 italic 24px var(--head);text-transform:uppercase;line-height:1.15;color:var(--text)}
-.creds{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
-.cred{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
-.cred b{display:block;font-size:14.5px}.cred span{display:block;color:var(--muted);font-size:13px;margin-top:3px}
-@media(max-width:860px){.about{grid-template-columns:1fr;gap:28px}.about-photo{position:static;max-width:340px}.creds{grid-template-columns:1fr}}
-/* method */
-.method{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:m}
-.mstep{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;position:relative;overflow:hidden}
-.mstep::before{counter-increment:m;content:"0" counter(m);font:800 54px var(--head);color:rgba(240,165,0,.16);position:absolute;right:14px;top:6px;line-height:1}
-.mstep h3{font-size:26px;color:var(--gold);margin-bottom:10px}
-.mstep p{color:var(--muted);font-size:14.5px;margin:0}
-@media(max-width:860px){.method{grid-template-columns:1fr 1fr}}@media(max-width:540px){.method{grid-template-columns:1fr}}
-/* goals */
-.goals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.goal{display:flex;flex-direction:column;text-align:left;padding:26px;border:1px solid var(--border);border-radius:20px;background:linear-gradient(180deg,#141e2c,var(--card));cursor:pointer;color:var(--text);transition:.18s}
-.goal:hover,.goal.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset,0 20px 50px #0008;transform:translateY(-2px)}
-.goal .ico{font-size:30px;width:56px;height:56px;border-radius:14px;background:rgba(240,165,0,.1);display:flex;align-items:center;justify-content:center}
-.goal h3{margin:16px 0 8px;font-size:28px}
-.goal .for{color:#c9d3df;font-size:14.5px;margin:0}
-.goal ul{list-style:none;padding:0;margin:16px 0;color:var(--muted);font-size:14px}
-.goal li{padding:7px 0 7px 26px;position:relative;border-top:1px solid #1d2a3a}
-.goal li::before{content:"✓";position:absolute;left:2px;color:var(--gold);font-weight:800}
-.goal .gain{margin-top:auto;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.25);border-radius:12px;padding:12px 14px;font-size:13.5px;color:#f5d48a}
-.goal .gcta{margin-top:14px;font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--gold)}
-@media(max-width:860px){.goals{grid-template-columns:1fr}}
-/* bilan */
-.bilan{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;background:radial-gradient(600px 300px at 100% 0,rgba(200,16,46,.2),transparent 70%),var(--card);border:1px solid var(--border);border-radius:26px;padding:44px}
-.bilan h2{font-size:clamp(34px,5vw,54px);margin:10px 0 14px}.bilan>div>p{color:var(--muted);font-size:16.5px;margin:0}
-.bilan ol{list-style:none;padding:0;margin:0;counter-reset:b}
-.bilan li{counter-increment:b;position:relative;padding:14px 0 14px 50px;border-bottom:1px solid var(--border);color:#d3dce7;font-size:15px}
-.bilan li:last-child{border:0}
-.bilan li::before{content:counter(b);position:absolute;left:0;top:12px;width:34px;height:34px;border-radius:50%;background:var(--gold);color:#1a0900;font-weight:800;display:flex;align-items:center;justify-content:center}
-@media(max-width:860px){.bilan{grid-template-columns:1fr;padding:28px 22px}}
+/* parcours */
+.proofs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.proof{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
+.proof b{display:block;font:800 30px var(--head);text-transform:uppercase;color:var(--gold);line-height:1}
+.proof span{display:block;color:#c9d3df;font-size:14.5px;margin-top:8px}
+.me{display:flex;gap:22px;align-items:center;max-width:780px;margin:34px auto 0;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:22px}
+.me .ph{width:96px;height:96px;border-radius:50%;overflow:hidden;flex:none;border:2px solid var(--gold)}
+.me img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.me p{margin:0;color:#c9d3df;font-size:15.5px}.me b{color:var(--text)}
+@media(max-width:860px){.proofs{grid-template-columns:1fr}}
+@media(max-width:560px){.me{flex-direction:column;text-align:center}}
 /* testimonials */
 .testis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .testi{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px}
 .testi p{margin:0 0 14px;color:#d3dce7;font-size:15px}.testi p::before{content:"“";color:var(--gold);font:800 40px/0 var(--head);vertical-align:-14px;margin-right:4px}
 .testi b{display:block}.testi small{color:var(--gold);font-weight:600}
 @media(max-width:860px){.testis{grid-template-columns:1fr}}
-/* faq */
-.faq{max-width:780px;margin:auto}
-.faq details{border:1px solid var(--border);border-radius:14px;background:var(--card);margin-bottom:10px}
-.faq summary{cursor:pointer;list-style:none;padding:18px 52px 18px 20px;font-weight:700;position:relative}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";position:absolute;right:20px;top:14px;font-size:24px;color:var(--gold);transition:.2s}
-.faq details[open] summary::after{transform:rotate(45deg)}
-.faq details p{margin:0;padding:0 20px 18px;color:var(--muted)}
-/* form */
-.form-card{max-width:760px;margin:auto;background:var(--card);border:1px solid var(--border);border-radius:26px;padding:36px;box-shadow:0 30px 80px #0009}
-.form-card h2{font-size:clamp(34px,5vw,50px);margin:8px 0 10px;text-align:center}
-.form-card .fsub{color:var(--muted);text-align:center;margin:0 auto 26px;max-width:560px}
-.stepper{display:flex;gap:10px;margin-bottom:22px}
-.stepper div{flex:1;padding:10px 12px;border-radius:12px;border:1px solid var(--border);color:var(--muted);font-size:13px;font-weight:700;text-align:center}
-.stepper div.on{border-color:var(--gold);color:var(--gold);background:rgba(240,165,0,.07)}
-.fstep{display:none}.fstep.on{display:block}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.full{grid-column:1/-1}
-@media(max-width:650px){.grid{grid-template-columns:1fr}.form-card{padding:26px 18px}}
-label{display:block;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin:4px 0 7px}
-label i{text-transform:none;font-style:normal;font-weight:500;opacity:.8}
+/* quiz */
+.quiz{max-width:640px;margin:auto;background:var(--card);border:1px solid var(--border);border-radius:26px;padding:28px;box-shadow:0 30px 80px #0009}
+@media(max-width:560px){.quiz{padding:20px 16px;border-radius:20px}}
+.qtop{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.qback{border:1px solid var(--border);background:transparent;color:var(--text);width:40px;height:40px;border-radius:12px;cursor:pointer;font-size:18px;flex:none}
+.qback.hide{visibility:hidden}
+.qbar{flex:1;height:6px;border-radius:99px;background:#1b2635;overflow:hidden}.qbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),#ffcc4d);transition:width .35s}
+.qcount{font-size:12px;color:var(--muted);font-weight:700;min-width:30px;text-align:right}
+.qstep{display:none}.qstep.on{display:block;animation:qin .35s ease}
+@keyframes qin{from{opacity:0;transform:translateX(22px)}to{opacity:1;transform:none}}
+.qstep h3{font-size:clamp(28px,4.4vw,38px);margin:0 0 6px}
+.qsub{color:var(--muted);margin:0 0 20px;font-size:15px}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:15px 16px;border:1px solid var(--border);border-radius:16px;background:var(--surface);color:var(--text);cursor:pointer;font:inherit;transition:.15s}
+.opt:hover{border-color:#3a5370}.opt.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:rgba(240,165,0,.07)}
+.opt .ico{font-size:22px;width:46px;height:46px;flex:none;border-radius:12px;background:rgba(240,165,0,.1);display:flex;align-items:center;justify-content:center}
+.opt b{display:block;font-size:16px}.opt small{display:block;color:var(--muted);font-size:13.5px;margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip{padding:10px 14px;border:1px solid var(--border);border-radius:999px;background:var(--surface);color:var(--text);cursor:pointer;font:600 14px Inter,sans-serif}
+.chip.on{border-color:var(--gold);color:var(--gold);background:rgba(240,165,0,.08)}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.day{flex:none;width:66px;padding:10px 0;border:1px solid var(--border);border-radius:14px;background:var(--surface);color:var(--text);cursor:pointer;text-align:center;font:inherit;scroll-snap-align:start}
+.day small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;font-weight:700}.day b{display:block;font:800 26px/1.1 var(--head)}.day.on{border-color:var(--gold);background:rgba(240,165,0,.08)}.day.on small{color:var(--gold)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px;margin-top:14px}
+.slot{padding:12px 0;border:1px solid var(--border);border-radius:12px;background:var(--surface);color:var(--text);font:700 15px Inter,sans-serif;cursor:pointer}.slot.on{border-color:var(--gold);color:var(--gold);background:rgba(240,165,0,.08)}
+.quiz.all .qstep{display:block;margin-bottom:26px;padding-bottom:22px;border-bottom:1px dashed var(--border)}
+.fields{display:grid;gap:12px}
+label{display:block;color:var(--muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin:0 0 6px}
 .inp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;color:var(--text);font:16px Inter,Arial,sans-serif}
 .inp:focus{outline:none;border-color:var(--gold)}
-.frow{display:flex;gap:10px;margin-top:22px}.frow .btn{flex:1}
-.hint{color:var(--muted);font-size:12px;margin-top:6px;min-height:15px}.err{color:#fca5a5}
-.success,.closed{display:none;text-align:center;font-size:17px}.success h2{color:#6ee7b7}.closed p,.success p{color:var(--muted)}
+.frow{display:flex;gap:10px;margin-top:20px}.frow .btn{flex:1}
+.skip{background:none;border:0;color:var(--muted);font:600 14px Inter,sans-serif;cursor:pointer;text-decoration:underline;flex:0 0 auto!important;padding:0 8px}
+.hint{color:var(--muted);font-size:13px;margin-top:10px;min-height:16px}.err{color:#fca5a5}
+.sec-head .eyebrow+h2{margin-top:10px}
+.success,.closed{display:none;text-align:center;font-size:17px}.success h2,.closed h2{font-size:clamp(32px,5vw,46px);margin-bottom:10px}.success h2{color:#6ee7b7}.closed p,.success p{color:var(--muted)}
 footer{padding:40px 0 110px;color:var(--muted);font-size:13px;text-align:center;border-top:1px solid #121c29}
 footer a{color:var(--gold);text-decoration:none}
-/* sticky mobile cta */
 .sticky{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:50;display:none}
 .sticky .btn{width:100%;box-shadow:0 12px 40px #000c}
 @media(max-width:860px){.sticky.show{display:block}}
@@ -154,78 +120,20 @@ body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-s
   <div class="coach-chip"><div class="ph"><img data-img="heroPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><div><b data-k="coachName">David Pellier</b><small data-k="coachRole">Préparateur physique · Rugby professionnel</small></div></div>
   <div class="eyebrow" data-k="eyebrow">Coaching en ligne 100 % individualisé</div>
   <h1><span data-k="title">La méthode d’un prépa physique pro,</span> <span class="hl" data-k="titleHighlight">construite pour toi.</span></h1>
-  <p class="lead" data-k="subtitle">Je prépare chaque semaine les joueurs d’une équipe de rugby professionnelle. J’applique la même exigence à ton projet — performance, transformation physique ou forme — avec un plan pensé pour ton corps, ton niveau et ta vie.</p>
+  <p class="lead" data-k="subtitle">Performance, transformation physique ou forme : je construis ton programme autour de ton corps, de ton niveau et de ta vie.</p>
   <a class="btn primary" href="#reserver"><span data-k="cta1">Réserver mon bilan offert</span> →</a>
-  <div class="reassure"><span data-k="re1">Gratuit</span><span data-k="re2">Sans engagement</span><span data-k="re3">100 % en ligne</span></div>
-</div><div class="hero-photo"><div class="ph"><img data-img="heroPhoto" src="img/david-pellier.jpg" alt="David Pellier, préparateur physique"></div><div class="tag"><b data-k="tagTitle">Rugby pro</b><span data-k="tagText">Préparateur physique au Sporting Club Albigeois</span></div></div></div>
-<div class="proofs">
-  <div class="proof"><b data-k="pr1T">Rugby pro</b><span data-k="pr1S">Préparateur physique de l’équipe pro du SC Albi</span></div>
-  <div class="proof"><b data-k="pr2T">Super League</b><span data-k="pr2S">Ex-responsable force &amp; puissance au Toulouse Olympique XIII</span></div>
-  <div class="proof"><b data-k="pr3T">Master STAPS</b><span data-k="pr3S">Préparation physique &amp; réathlétisation</span></div>
-  <div class="proof"><b data-k="pr4T">Depuis 2018</b><span data-k="pr4S">Athlètes, sportifs amateurs et actifs</span></div>
-</div></div></section>
+  <div class="reassure"><span data-k="re1">Gratuit</span><span data-k="re2">Sans engagement</span><span data-k="re3">2 minutes</span></div>
+</div><div class="hero-photo"><div class="ph"><img data-img="heroPhoto" src="img/david-pellier.jpg" alt="David Pellier, préparateur physique"></div><div class="tag"><b data-k="tagTitle">Rugby pro</b><span data-k="tagText">Préparateur physique au Sporting Club Albigeois</span></div></div></div></div></section>
 
-<section class="sec"><div class="wrap">
-  <div class="sec-head"><span class="eyebrow" data-k="painsEyebrow">Tu te reconnais ?</span><h2 data-k="painsTitle">Tu fais des efforts, mais ça ne suit pas</h2></div>
-  <div class="pains">
-    <div class="pain" data-k="p1">Tu t’entraînes, mais tu stagnes depuis des mois.</div>
-    <div class="pain" data-k="p2">Tu as testé des programmes tout faits, sans résultat qui dure.</div>
-    <div class="pain" data-k="p3">Entre le travail, la famille et le reste, tu manques de temps.</div>
-    <div class="pain" data-k="p4">Tu ne sais pas si tu fais les bons exercices, au bon volume.</div>
-    <div class="pain" data-k="p5">Une douleur ou une ancienne blessure te freine.</div>
-    <div class="pain" data-k="p6">Tu as une saison ou une compétition à préparer et tu veux arriver prêt.</div>
+<section class="sec" id="parcours"><div class="wrap">
+  <div class="sec-head"><span class="eyebrow" data-k="trackEyebrow">Mon parcours</span><h2 data-k="trackTitle">Du haut niveau à ton quotidien</h2></div>
+  <div class="proofs">
+    <div class="proof"><b data-k="pr1T">Rugby pro</b><span data-k="pr1S">Sporting Club Albigeois et Toulouse Olympique XIII, en Super League.</span></div>
+    <div class="proof"><b data-k="pr2T">Structures</b><span data-k="pr2S">Papa Inshape, CrossFit, clubs de volley, judo, golf, MMA et athlétisme.</span></div>
+    <div class="proof"><b data-k="pr3T">Depuis 2018</b><span data-k="pr3S">Des sportifs amateurs et des actifs accompagnés en transformation physique et en forme.</span></div>
   </div>
-  <p class="pains-close" data-k="painsClose">Le problème n’est pas ta motivation. C’est l’absence d’un plan construit pour toi.</p>
+  <div class="me"><div class="ph"><img data-img="aboutPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><p data-k="meText">Moi, c’est David : préparateur physique, Master STAPS, et papa de deux jeunes enfants. Ton plan sera construit pour ta vraie vie, pas pour une vie idéale.</p></div>
 </div></section>
-
-<section class="sec alt" id="qui"><div class="wrap"><div class="about">
-  <div class="about-photo"><div class="ph"><img data-img="aboutPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><div class="sign"><span data-k="signName">David Pellier</span><small data-k="signRole">Fondateur de DELTA Performance</small></div></div>
-  <div>
-    <span class="eyebrow" data-k="aboutEyebrow">Qui suis-je ?</span>
-    <h2 data-k="aboutTitle">Moi, c’est David.</h2>
-    <p data-k="ab1">Je suis préparateur physique de l’équipe professionnelle du Sporting Club Albigeois, en rugby. Avant ça, j’étais responsable de la force et de la puissance au Toulouse Olympique XIII, en Super League. Je viens moi-même du judo et du rugby.</p>
-    <p data-k="ab2">J’ai aussi travaillé chez Papa Inshape. Depuis 2018, j’accompagne des sportifs de tous horizons — judo (dont des athlètes olympiques), golf, MMA, volley, athlétisme, CrossFit — et des personnes qui veulent simplement se sentir mieux dans leur corps.</p>
-    <p data-k="ab3">Je suis aussi papa de deux jeunes enfants. Je sais ce que c’est de caser ses séances entre le travail et la famille. Mon rôle, c’est de construire un plan qui fonctionne dans ta vie réelle, pas dans une vie idéale.</p>
-    <div class="quote" data-k="aboutQuote">Pas de transformation miracle. Un plan intelligent, des ajustements réguliers et des résultats qui durent.</div>
-    <div class="creds">
-      <div class="cred"><b data-k="c1T">Préparateur physique — Rugby pro</b><span data-k="c1S">Sporting Club Albigeois, depuis 2023</span></div>
-      <div class="cred"><b data-k="c2T">Super League</b><span data-k="c2S">Toulouse Olympique XIII : musculation, force, prévention des blessures</span></div>
-      <div class="cred"><b data-k="c3T">Licence &amp; Master STAPS</b><span data-k="c3S">Préparation physique, mentale et réathlétisation (Lyon 1)</span></div>
-      <div class="cred"><b data-k="c4T">Certifications</b><span data-k="c4S">EXOS Performance Specialist · Préparateur physique rugby (FFR) · BF1 Haltérophilie</span></div>
-    </div>
-  </div>
-</div></div></section>
-
-<section class="sec"><div class="wrap">
-  <div class="sec-head"><span class="eyebrow" data-k="methodEyebrow">Ma méthode</span><h2 data-k="methodTitle">La rigueur du haut niveau, adaptée à toi</h2><p data-k="methodSub">Les mêmes principes que j’utilise avec des athlètes pros : partir de la personne, mesurer, ajuster.</p></div>
-  <div class="method">
-    <div class="mstep"><h3 data-k="m1T">Analyser</h3><p data-k="m1S">On part de toi : ton niveau, ton historique, tes douleurs, ton emploi du temps et ton matériel.</p></div>
-    <div class="mstep"><h3 data-k="m2T">Construire</h3><p data-k="m2S">Je t’écris un programme sur mesure, planifié selon ton objectif. Rien de copié-collé.</p></div>
-    <div class="mstep"><h3 data-k="m3T">Suivre</h3><p data-k="m3S">Tes séances sont dans l’appli DELTA, sur ton téléphone. Tu notes tes séances et tes ressentis, je les vois.</p></div>
-    <div class="mstep"><h3 data-k="m4T">Ajuster</h3><p data-k="m4S">Le plan évolue avec tes retours et tes progrès. C’est là que se font les vrais résultats.</p></div>
-  </div>
-</div></section>
-
-<section class="sec alt" id="accompagnements"><div class="wrap">
-  <div class="sec-head"><span class="eyebrow" data-k="goalsEyebrow">Accompagnements</span><h2 data-k="goalsTitle">Quel est ton objectif ?</h2><p data-k="goalsSub">Trois accompagnements, une même exigence : un plan construit autour de toi.</p></div>
-  <div class="goals">
-    <div class="goal" role="button" tabindex="0" data-goal="Préparation physique &amp; performance"><div class="ico">⚡</div><h3 data-k="g1Title">Préparation physique &amp; performance</h3><p class="for" data-k="g1Text">Pour toi si tu fais du sport en club ou en compétition et que tu veux passer un cap — ou revenir de blessure plus fort.</p><ul><li data-k="g1L1">Force, vitesse, explosivité, endurance spécifique à ton sport</li><li data-k="g1L2">Planification calée sur ta saison et tes compétitions</li><li data-k="g1L3">Prévention des blessures et réathlétisation</li></ul><div class="gain" data-k="g1Gain">La méthode que j’applique avec des athlètes pros, adaptée à ton niveau.</div><div class="gcta" data-k="g1Cta">Choisir cet accompagnement →</div></div>
-    <div class="goal" role="button" tabindex="0" data-goal="Transformation physique"><div class="ico">🔥</div><h3 data-k="g2Title">Transformation physique</h3><p class="for" data-k="g2Text">Pour toi si tu veux perdre du gras, prendre du muscle ou changer de silhouette — durablement, sans régime extrême.</p><ul><li data-k="g2L1">Programme de musculation construit pour toi</li><li data-k="g2L2">Repères nutrition simples, compatibles avec ta vie</li><li data-k="g2L3">Mesures régulières et ajustements</li></ul><div class="gain" data-k="g2Gain">Des résultats visibles et mesurables, qui tiennent dans le temps.</div><div class="gcta" data-k="g2Cta">Choisir cet accompagnement →</div></div>
-    <div class="goal" role="button" tabindex="0" data-goal="Forme &amp; bien-être"><div class="ico">🌿</div><h3 data-k="g3Title">Forme &amp; bien-être</h3><p class="for" data-k="g3Text">Pour toi si tu veux retrouver de l’énergie, bouger sans douleur et reprendre une activité régulière, même avec peu de temps.</p><ul><li data-k="g3L1">Séances adaptées à ton emploi du temps</li><li data-k="g3L2">Mobilité, posture et renforcement progressif</li><li data-k="g3L3">Des habitudes qui s’installent pour de bon</li></ul><div class="gain" data-k="g3Gain">Te sentir mieux dans ton corps, semaine après semaine.</div><div class="gcta" data-k="g3Cta">Choisir cet accompagnement →</div></div>
-  </div>
-</div></section>
-
-<section class="sec"><div class="wrap"><div class="bilan">
-  <div><span class="eyebrow" data-k="bilanEyebrow">Bilan découverte offert</span><h2 data-k="bilanTitle">30 minutes pour faire le point, ensemble</h2><p data-k="bilanSub">Un vrai échange avec moi, en visio ou par téléphone. Pas un commercial, pas un script.</p>
-    <a class="btn primary" href="#reserver" style="margin-top:24px"><span data-k="cta2">Je réserve mon créneau</span> →</a>
-    <div class="reassure"><span data-k="re4">100 % gratuit</span><span data-k="re5">Sans engagement</span><span data-k="re6">Aucune pression</span></div></div>
-  <ol>
-    <li data-k="b1">On fait le point sur ta situation, ton historique et tes contraintes.</li>
-    <li data-k="b2">Je t’explique ce qui te freine aujourd’hui, selon moi.</li>
-    <li data-k="b3">Tu repars avec tes priorités et les premières actions à mettre en place.</li>
-    <li data-k="b4">Si on est faits pour travailler ensemble, je te présente l’accompagnement adapté. Sinon, je te le dis franchement.</li>
-  </ol>
-</div></div></section>
 
 <section class="sec alt" data-opt-section><div class="wrap">
   <div class="sec-head"><span class="eyebrow" data-k="testiEyebrow">Témoignages</span><h2 data-k="testiTitle">Ils m’ont fait confiance</h2></div>
@@ -236,43 +144,51 @@ body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-s
   </div>
 </div></section>
 
-<section class="sec"><div class="wrap">
-  <div class="sec-head"><span class="eyebrow" data-k="faqEyebrow">Questions fréquentes</span><h2 data-k="faqTitle">Tu te poses sûrement la question</h2></div>
-  <div class="faq">
-    <details><summary data-k="q1">Je débute complètement, c’est pour moi ?</summary><p data-k="a1">Oui. Le programme part de ton niveau réel. J’accompagne aussi bien des débutants que des athlètes pros : seul le point de départ change.</p></details>
-    <details><summary data-k="q2">J’ai très peu de temps, ça peut marcher ?</summary><p data-k="a2">C’est justement le principe : on construit le plan autour de ton emploi du temps, pas l’inverse. Deux séances par semaine bien construites font déjà la différence.</p></details>
-    <details><summary data-k="q3">Il me faut une salle de sport ?</summary><p data-k="a3">Non. Le programme s’adapte à ton matériel : salle, maison ou extérieur.</p></details>
-    <details><summary data-k="q4">Comment se passe le suivi ?</summary><p data-k="a4">Tes séances sont dans l’appli DELTA, sur ton téléphone. Tu notes ce que tu fais et tes ressentis, et j’ajuste ton programme au fil des semaines.</p></details>
-    <details><summary data-k="q5">Combien coûte l’accompagnement ?</summary><p data-k="a5">Ça dépend de ton objectif et du niveau de suivi dont tu as besoin. On en parle pendant le bilan, sans engagement.</p></details>
-  </div>
-</div></section>
-
-<section class="sec alt" id="reserver"><div class="wrap"><div class="form-card">
+<section class="sec" id="reserver"><div class="wrap">
   <div id="form-wrap">
-    <div style="text-align:center"><span class="eyebrow" data-k="formEyebrow">Bilan découverte offert</span></div>
-    <h2 data-k="formTitle">Réserve ton bilan avec moi</h2>
-    <p class="fsub" data-k="formSubtitle">2 minutes pour me parler de toi et choisir ton créneau. Je prépare notre échange à partir de tes réponses.</p>
-    <div class="stepper"><div class="on" id="st1" data-k="step1Label">1 · Parle-moi de toi</div><div id="st2" data-k="step2Label">2 · Ton créneau</div></div>
-    <form id="lead-form" novalidate>
-      <div class="fstep on" id="fs1"><div class="grid">
-        <div><label for="f-goal">Ton objectif</label><select class="inp" name="objectiveType" id="f-goal" required><option value="">Choisir</option><option value="Préparation physique &amp; performance">Préparation physique &amp; performance</option><option value="Transformation physique">Transformation physique</option><option value="Forme &amp; bien-être">Forme &amp; bien-être</option></select></div>
-        <div><label for="f-level">Ton niveau aujourd’hui</label><select class="inp" name="level" id="f-level" required><option value="">Choisir</option><option>Je débute ou je reprends</option><option>Je m’entraîne de temps en temps</option><option>Je m’entraîne régulièrement</option><option>Je suis compétiteur</option></select></div>
-        <div class="full"><label for="f-objective">Ce que tu veux atteindre</label><input class="inp" name="objective" id="f-objective" required maxlength="300" placeholder="Ex : perdre 8 kg et me sentir plus fort d’ici l’été"></div>
-        <div class="full"><label for="f-blocker">Ce qui te bloque aujourd’hui <i>(facultatif)</i></label><textarea class="inp" name="blocker" id="f-blocker" rows="3" maxlength="1500" placeholder="Manque de temps, douleur, pas de résultats…"></textarea></div>
-      </div><div class="frow"><button type="button" class="btn primary" id="f-next"><span data-k="nextLabel">Continuer</span> →</button></div></div>
-      <div class="fstep" id="fs2"><div class="grid">
-        <div><label for="f-date">Date souhaitée</label><input class="inp" type="date" name="date" id="f-date" required><div class="hint" id="date-hint"></div></div>
-        <div><label for="f-time">Créneau</label><select class="inp" name="time" id="f-time" required><option value="">Choisis d’abord une date</option></select></div>
-        <div class="full"><label for="f-name">Prénom et nom</label><input class="inp" name="name" id="f-name" required maxlength="120" autocomplete="name" placeholder="Ton nom"></div>
-        <div><label for="f-email">Email</label><input class="inp" type="email" name="email" id="f-email" required maxlength="160" autocomplete="email" placeholder="toi@email.com"></div>
-        <div><label for="f-phone">Téléphone</label><input class="inp" type="tel" name="phone" id="f-phone" required maxlength="30" autocomplete="tel" placeholder="06..."></div>
-      </div><div class="frow"><button type="button" class="btn ghost" id="f-back" style="flex:0 0 auto">←</button><button class="btn primary" id="t-cta"><span data-k="ctaLabel">Je réserve mon bilan offert</span></button></div></div>
-      <div class="reassure" style="justify-content:center"><span data-k="re7">Gratuit</span><span data-k="re8">Sans engagement</span><span data-k="re9">Tes infos restent entre nous</span></div>
-    </form>
+    <div class="sec-head"><span class="eyebrow" data-k="formEyebrow">Bilan découverte offert</span><h2 data-k="formTitle">Réserve ton bilan avec moi</h2><p data-k="formSubtitle">Quelques questions rapides pour que je prépare notre échange.</p></div>
+    <div class="quiz" id="quiz">
+      <div class="qtop"><button type="button" class="qback hide" id="q-back" aria-label="Retour">←</button><div class="qbar"><i id="q-bar"></i></div><div class="qcount" id="q-count">1/6</div></div>
+      <form id="lead-form" novalidate>
+        <input type="hidden" name="objectiveType" id="f-goal"><input type="hidden" name="level" id="f-level"><input type="hidden" name="date" id="f-date"><input type="hidden" name="time" id="f-time"><input type="hidden" name="blocker" id="f-blocker">
+        <div class="qstep on" data-step="goal"><h3 data-k="q1T">Quel est ton objectif ?</h3><p class="qsub" data-k="q1S">Choisis ce qui te correspond le plus.</p>
+          <div class="opts" data-field="f-goal">
+            <button type="button" class="opt" data-v="Préparation physique &amp; performance"><span class="ico">⚡</span><span><b data-k="g1Title">Préparation physique &amp; performance</b><small data-k="g1Text">Passer un cap dans ton sport ou revenir de blessure.</small></span></button>
+            <button type="button" class="opt" data-v="Transformation physique"><span class="ico">🔥</span><span><b data-k="g2Title">Transformation physique</b><small data-k="g2Text">Perdre du gras, prendre du muscle, durablement.</small></span></button>
+            <button type="button" class="opt" data-v="Forme &amp; bien-être"><span class="ico">🌿</span><span><b data-k="g3Title">Forme &amp; bien-être</b><small data-k="g3Text">Retrouver de l’énergie et bouger sans douleur.</small></span></button>
+          </div></div>
+        <div class="qstep" data-step="level"><h3 data-k="q2T">Où en es-tu aujourd’hui ?</h3><p class="qsub" data-k="q2S">Pas de mauvaise réponse : on part de là où tu es.</p>
+          <div class="opts" data-field="f-level">
+            <button type="button" class="opt" data-v="Je débute ou je reprends"><span class="ico">🌱</span><b data-k="l1">Je débute ou je reprends</b></button>
+            <button type="button" class="opt" data-v="Je m’entraîne de temps en temps"><span class="ico">🚶</span><b data-k="l2">Je m’entraîne de temps en temps</b></button>
+            <button type="button" class="opt" data-v="Je m’entraîne régulièrement"><span class="ico">🏋️</span><b data-k="l3">Je m’entraîne régulièrement</b></button>
+            <button type="button" class="opt" data-v="Je suis compétiteur"><span class="ico">🏆</span><b data-k="l4">Je suis compétiteur</b></button>
+          </div></div>
+        <div class="qstep" data-step="objective"><h3 data-k="q3T">Qu’est-ce que tu veux atteindre ?</h3><p class="qsub" data-k="q3S">Sois précis : c’est ce qu’on travaillera ensemble.</p>
+          <input class="inp" name="objective" id="f-objective" required maxlength="300" placeholder="Ex : perdre 8 kg et me sentir plus fort d’ici l’été">
+          <div class="frow"><button type="button" class="btn primary" data-next><span data-k="nextLabel">Continuer</span> →</button></div></div>
+        <div class="qstep" data-step="blocker"><h3 data-k="q4T">Qu’est-ce qui te freine aujourd’hui ?</h3><p class="qsub" data-k="q4S">Plusieurs choix possibles.</p>
+          <div class="chips" id="chips">
+            <button type="button" class="chip" data-k="c1">Manque de temps</button><button type="button" class="chip" data-k="c2">Pas de résultats</button><button type="button" class="chip" data-k="c3">Douleur ou blessure</button><button type="button" class="chip" data-k="c4">Motivation</button><button type="button" class="chip" data-k="c5">Nutrition</button><button type="button" class="chip" data-k="c6">Je ne sais pas par où commencer</button>
+          </div>
+          <textarea class="inp" id="f-blocker-txt" rows="2" maxlength="1200" placeholder="Autre chose ? (facultatif)"></textarea>
+          <div class="frow"><button type="button" class="btn primary" data-next><span data-k="nextLabel2">Continuer</span> →</button></div></div>
+        <div class="qstep" data-step="slot"><h3 data-k="q5T">Choisis ton créneau</h3><p class="qsub" data-k="q5S">30 minutes en visio ou par téléphone, avec moi.</p>
+          <div class="days" id="days"></div><div class="slots" id="slots"></div><div class="hint" id="date-hint"></div></div>
+        <div class="qstep" data-step="contact"><h3 data-k="q6T">Dernière étape !</h3><p class="qsub" data-k="q6S">Pour te confirmer le rendez-vous.</p>
+          <div class="fields">
+            <div><label for="f-name">Prénom et nom</label><input class="inp" name="name" id="f-name" required maxlength="120" autocomplete="name" placeholder="Ton nom"></div>
+            <div><label for="f-email">Email</label><input class="inp" type="email" name="email" id="f-email" required maxlength="160" autocomplete="email" placeholder="toi@email.com"></div>
+            <div><label for="f-phone">Téléphone</label><input class="inp" type="tel" name="phone" id="f-phone" required maxlength="30" autocomplete="tel" placeholder="06..."></div>
+          </div>
+          <div class="frow"><button class="btn primary" id="t-cta"><span data-k="ctaLabel">Je réserve mon bilan offert</span></button></div>
+          <div class="reassure" style="justify-content:center"><span data-k="re7">Gratuit</span><span data-k="re8">Sans engagement</span><span data-k="re9">Tes infos restent entre nous</span></div></div>
+      </form>
+    </div>
   </div>
-  <div id="success" class="success"><h2 data-k="successTitle">C’est noté, à très vite !</h2><p data-k="successText">Je te confirme ton créneau rapidement. D’ici là, réfléchis à ce que tu aimerais avoir changé dans 3 mois : on partira de là.</p></div>
-  <div id="closed" class="closed"><h2 data-k="closedTitle">Les réservations sont momentanément fermées.</h2><p data-k="closedText">Reviens très vite !</p></div>
-</div></div></section>
+  <div id="success" class="success quiz"><h2 data-k="successTitle">C’est noté, à très vite !</h2><p data-k="successText">Je te confirme ton créneau rapidement. D’ici là, réfléchis à ce que tu aimerais avoir changé dans 3 mois : on partira de là.</p></div>
+  <div id="closed" class="closed quiz"><h2 data-k="closedTitle">Les réservations sont momentanément fermées.</h2><p data-k="closedText">Reviens très vite !</p></div>
+</div></section>
 
 <footer><div class="wrap"><p data-k="footerText">DELTA Performance — Coaching individualisé par David Pellier, préparateur physique.</p><a href="index.html">Espace client</a></div></footer>
 <div class="sticky" id="sticky"><a class="btn primary" href="#reserver"><span data-k="stickyCta">Réserver mon bilan offert</span> →</a></div>
@@ -287,9 +203,11 @@ const EDIT=/[?&]edit\b/.test(location.search);
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,'0');
 const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
-
 const LEGACY_KEYS=['eyebrow','title','titleHighlight','subtitle','formTitle','formSubtitle','ctaLabel','successTitle','successText'];
 const DEFAULT_TEXTS={},DEFAULT_IMGS={};
+const STEPS=[...document.querySelectorAll('.qstep')];
+let cur=0,minDate='',maxDate='';
+
 function applyOptional(){
   document.querySelectorAll('[data-opt-group]').forEach(g=>{g.style.display=EDIT||[...g.querySelectorAll('[data-opt]')].some(e=>e.textContent.trim())?'':'none';});
   document.querySelectorAll('[data-opt-section]').forEach(s=>{s.style.display=EDIT||[...s.querySelectorAll('[data-opt-group]')].some(g=>g.style.display!=='none')?'':'none';});
@@ -298,35 +216,49 @@ function applyConfig(){
   document.querySelectorAll('[data-k]').forEach(el=>{const k=el.dataset.k;if(!(k in DEFAULT_TEXTS))DEFAULT_TEXTS[k]=el.textContent;const t=cfg.texts||{};el.textContent=(k in t&&typeof t[k]==='string')?t[k]:DEFAULT_TEXTS[k];});
   document.querySelectorAll('[data-img]').forEach(el=>{const k=el.dataset.img;if(!(k in DEFAULT_IMGS))DEFAULT_IMGS[k]=el.getAttribute('src');el.src=media[k]||DEFAULT_IMGS[k];});
   applyOptional();
-  document.querySelectorAll('.goal').forEach(g=>{const o=[...$('f-goal').options].find(o=>o.value===g.dataset.goal);if(o)o.textContent=g.querySelector('h3').textContent;});
   if(cfg.enabled===false&&!EDIT){$('form-wrap').style.display='none';$('closed').style.display='block';}
-  if(EDIT)document.querySelectorAll('details').forEach(d=>d.open=true);
-  const today=new Date();
-  $('f-date').min=ymd(today);
-  const max=new Date();max.setDate(max.getDate()+(Number(cfg.maxDaysAhead)||30));$('f-date').max=ymd(max);
+  if(EDIT)$('quiz').classList.add('all');
+  const max=new Date();max.setDate(max.getDate()+(Number(cfg.maxDaysAhead)||30));
+  minDate=ymd(new Date());maxDate=ymd(max);
+  buildDays();go(0);
 }
 
 function dayClosed(dateStr){
   const d=new Date(dateStr+'T12:00:00');
   if((cfg.closedWeekdays||[]).map(Number).includes(d.getDay()))return 'Pas de rendez-vous ce jour-là.';
   if((cfg.blockedDates||[]).includes(dateStr))return 'Cette date est indisponible.';
-  if(dateStr<$('f-date').min||dateStr>$('f-date').max)return 'Choisis une date dans la période proposée.';
+  if(dateStr<minDate||dateStr>maxDate)return 'Choisis une date dans la période proposée.';
   return '';
 }
-
+const DOW=['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],MON=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+function buildDays(){
+  const box=$('days');box.innerHTML='';
+  const d=new Date();d.setHours(12,0,0,0);
+  for(let i=0;i<=(Number(cfg.maxDaysAhead)||30);i++,d.setDate(d.getDate()+1)){
+    const v=ymd(d);if(dayClosed(v))continue;
+    const b=document.createElement('button');b.type='button';b.className='day';b.dataset.v=v;
+    b.innerHTML='<small>'+DOW[d.getDay()]+'</small><b>'+d.getDate()+'</b><small>'+MON[d.getMonth()]+'</small>';
+    b.onclick=()=>{if(EDIT)return;$('f-date').value=v;$('f-time').value='';box.querySelectorAll('.day').forEach(x=>x.classList.toggle('on',x===b));refreshSlots();};
+    box.appendChild(b);
+  }
+  if(!box.children.length)$('date-hint').textContent='Aucune date disponible pour le moment.';
+}
 async function refreshSlots(){
-  const sel=$('f-time'),hint=$('date-hint'),date=$('f-date').value;
-  sel.innerHTML='<option value="">Choisis d\'abord une date</option>';hint.textContent='';hint.classList.remove('err');
+  const box=$('slots'),hint=$('date-hint'),date=$('f-date').value;
+  box.innerHTML='';hint.textContent='';hint.classList.remove('err');
   if(!date)return;
   const closed=dayClosed(date);
   if(closed){hint.textContent=closed;hint.classList.add('err');return;}
+  hint.textContent='Chargement des créneaux…';
   let taken=new Set();
   try{const snap=await col('tunnel_slots').where('date','==',date).get();snap.forEach(d=>taken.add(d.data().time));}catch(e){console.warn(e);}
+  if($('f-date').value!==date)return;
   const now=new Date(),minLead=(Number(cfg.minHoursBefore)||0)*3600e3;
   const free=(cfg.slots||[]).filter(t=>!taken.has(t)&&new Date(date+'T'+t+':00').getTime()-now.getTime()>minLead);
-  if(!free.length){sel.innerHTML='<option value="">Aucun créneau libre</option>';hint.textContent='Tous les créneaux de ce jour sont pris.';hint.classList.add('err');return;}
-  sel.innerHTML='<option value="">Choisir</option>'+free.map(t=>'<option>'+t+'</option>').join('');
+  if(!free.length){hint.textContent='Plus de créneau libre ce jour-là, choisis un autre jour.';hint.classList.add('err');return;}
   hint.textContent=free.length+' créneau'+(free.length>1?'x':'')+' disponible'+(free.length>1?'s':'');
+  free.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='slot';b.textContent=t;
+    b.onclick=()=>{$('f-time').value=t;box.querySelectorAll('.slot').forEach(x=>x.classList.toggle('on',x===b));setTimeout(()=>go(cur+1),250);};box.appendChild(b);});
 }
 
 async function notify(data){
@@ -339,24 +271,53 @@ async function notify(data){
 }
 
 const GOAL_HINTS={'Préparation physique & performance':'Ex : gagner en explosivité pour ma saison de foot','Transformation physique':'Ex : perdre 8 kg et prendre du muscle d\'ici l\'été','Forme & bien-être':'Ex : retrouver de l\'énergie et ne plus avoir mal au dos'};
-function setGoal(g){$('f-goal').value=g;document.querySelectorAll('.goal').forEach(b=>b.classList.toggle('on',b.dataset.goal===g));$('f-objective').placeholder=GOAL_HINTS[g]||'Ce que tu veux atteindre';}
-function showStep(n){$('fs1').classList.toggle('on',n===1);$('fs2').classList.toggle('on',n===2);$('st1').classList.toggle('on',n===1);$('st2').classList.toggle('on',n===2);}
-function checkFields(ids){for(const id of ids){const el=$(id);if(!el.checkValidity()){el.reportValidity();el.focus();return false;}}return true;}
-document.querySelectorAll('.goal').forEach(b=>{const go=()=>{if(EDIT)return;setGoal(b.dataset.goal);showStep(1);$('reserver').scrollIntoView({behavior:'smooth',block:'start'});};b.addEventListener('click',go);b.addEventListener('keydown',e=>{if(!EDIT&&e.target===b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();go();}});});
-$('f-goal').addEventListener('change',e=>setGoal(e.target.value));
-$('f-date').addEventListener('change',refreshSlots);
-$('f-next').addEventListener('click',()=>{if(EDIT)return;if(checkFields(['f-goal','f-level','f-objective']))showStep(2);});
-$('f-back').addEventListener('click',()=>showStep(1));
+function go(n){
+  if(EDIT)return;
+  cur=Math.max(0,Math.min(n,STEPS.length-1));
+  STEPS.forEach((s,i)=>s.classList.toggle('on',i===cur));
+  $('q-bar').style.width=((cur+1)/STEPS.length*100)+'%';
+  $('q-count').textContent=(cur+1)+'/'+STEPS.length;
+  $('q-back').classList.toggle('hide',cur===0);
+  const inp=STEPS[cur].querySelector('input.inp');
+  if(inp&&matchMedia('(hover:hover)').matches)inp.focus({preventScroll:true});
+}
+function stepValid(){
+  const s=STEPS[cur].dataset.step;
+  if(s==='objective'){const el=$('f-objective');if(!el.value.trim()){el.reportValidity();el.focus();return false;}}
+  if(s==='slot'&&!($('f-date').value&&$('f-time').value)){const h=$('date-hint');h.textContent='Choisis un jour puis un horaire.';h.classList.add('err');return false;}
+  return true;
+}
+function updBlocker(){
+  const picked=[...document.querySelectorAll('#chips .chip.on')].map(c=>c.textContent.trim());
+  const txt=$('f-blocker-txt').value.trim();if(txt)picked.push(txt);
+  $('f-blocker').value=picked.join(' · ');
+}
+document.querySelectorAll('.opts').forEach(g=>g.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+  if(EDIT)return;
+  $(g.dataset.field).value=b.dataset.v;
+  g.querySelectorAll('.opt').forEach(x=>x.classList.toggle('on',x===b));
+  if(g.dataset.field==='f-goal')$('f-objective').placeholder=GOAL_HINTS[b.dataset.v]||'Ce que tu veux atteindre';
+  setTimeout(()=>go(cur+1),250);
+})));
+document.querySelectorAll('#chips .chip').forEach(c=>c.addEventListener('click',()=>{if(EDIT)return;c.classList.toggle('on');updBlocker();}));
+$('f-blocker-txt').addEventListener('input',updBlocker);
+document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{if(!EDIT&&stepValid())go(cur+1);}));
+$('f-objective').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();if(stepValid())go(cur+1);}});
+$('q-back').addEventListener('click',()=>go(cur-1));
 $('lead-form').addEventListener('submit',async e=>{
   e.preventDefault();
   if(EDIT)return;
-  if(!$('fs2').classList.contains('on')){if(checkFields(['f-goal','f-level','f-objective']))showStep(2);return;}
-  if(!checkFields(['f-date','f-time','f-name','f-email','f-phone']))return;
+  if(STEPS[cur].dataset.step!=='contact'){if(stepValid())go(cur+1);return;}
+  for(const id of ['f-name','f-email','f-phone']){const el=$(id);if(!el.checkValidity()||!el.value.trim()){el.reportValidity();el.focus();return;}}
+  const need={'f-goal':0,'f-level':1,'f-objective':2};
+  for(const id in need)if(!$(id).value.trim()){go(need[id]);return;}
+  if(!$('f-date').value||!$('f-time').value){go(4);return;}
+  updBlocker();
   const data=Object.fromEntries(new FormData(e.target).entries());
   Object.keys(data).forEach(k=>data[k]=String(data[k]).trim());
   data.email=data.email.toLowerCase();
   const closed=dayClosed(data.date);
-  if(closed){alert(closed);return;}
+  if(closed){alert(closed);go(4);return;}
   const btn=$('t-cta');btn.disabled=true;
   const id='tunnel_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
   const createdAt=new Date().toISOString();
@@ -370,7 +331,7 @@ $('lead-form').addEventListener('submit',async e=>{
     });
   }catch(err){
     btn.disabled=false;
-    if(String(err&&err.message).includes('SLOT_TAKEN')){alert('Ce créneau vient d\'être réservé. Choisis-en un autre.');refreshSlots();return;}
+    if(String(err&&err.message).includes('SLOT_TAKEN')){alert('Ce créneau vient d\'être réservé. Choisis-en un autre.');$('f-time').value='';go(4);refreshSlots();return;}
     console.error(err);alert('La demande n\u2019a pas pu être envoyée. Réessaie dans quelques instants.');return;
   }
   await notify(data);
@@ -381,7 +342,7 @@ $('lead-form').addEventListener('submit',async e=>{
 if('IntersectionObserver' in window){
   const vis={hero:true,form:false};
   const upd=()=>$('sticky').classList.toggle('show',!vis.hero&&!vis.form);
-  new IntersectionObserver(es=>{es.forEach(en=>{vis[en.target===$('reserver')?'form':'hero']=en.isIntersecting;});upd();}).observe(document.querySelector('.hero'));
+  new IntersectionObserver(es=>{es.forEach(en=>{vis.hero=en.isIntersecting;});upd();}).observe(document.querySelector('.hero'));
   new IntersectionObserver(es=>{es.forEach(en=>{vis.form=en.isIntersecting;});upd();}).observe($('reserver'));
 }
 
