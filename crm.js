@@ -192,6 +192,7 @@ function renderTunnelSettings() {
     const fromTunnel = crmState.appointments.filter(a => a.source === 'tunnel');
     stats.textContent = `${fromTunnel.filter(a => String(a.createdAt).startsWith(month)).length} résa(s) ce mois · ${fromTunnel.length} au total`;
   }
+  if (typeof renderQuizEditor === 'function') renderQuizEditor(t);
 }
 
 function readTunnelForm() {

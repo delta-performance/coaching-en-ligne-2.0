@@ -99,7 +99,7 @@ h1,h2,h3{font-family:var(--head);text-transform:uppercase;letter-spacing:.01em;l
 .clubs{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
 .club{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
 .club .lg{width:64px;height:64px;display:none;align-items:center;justify-content:center;margin-bottom:6px}.club .lg img{max-width:100%;max-height:100%;object-fit:contain}
-.club.has-logo .lg,body.editing .club .lg{display:flex}body.editing .club .lg{border-radius:12px;background:#0b111a}
+.club.has-logo .lg{display:flex}
 .club img[src=""]{display:none}
 .club b{font:800 17px/1.05 var(--head);text-transform:uppercase}.club small{color:var(--muted);font-size:12px}
 .certs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
@@ -113,6 +113,8 @@ h1,h2,h3{font-family:var(--head);text-transform:uppercase;letter-spacing:.01em;l
 .qstep .chips+.inp{margin-top:2px}
 .scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.scale .opt{justify-content:center;font:800 24px var(--head);padding:12px 0}
 .scale-l{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-top:8px}
+.ed-hint{display:none}body.editing .ed-hint{display:block;margin:16px auto;max-width:640px;text-align:center;font-size:13px;color:#1a0900;background:var(--gold);border-radius:10px;padding:10px 14px}
+body.editing #q-dyn{display:none}
 .quiz.all .qstep[data-label]::before{content:attr(data-label);display:inline-block;margin-bottom:10px;font:700 11px Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#1a0900;background:var(--gold);border-radius:6px;padding:3px 8px}
 .quiz.all .more{display:block}
 .fields{display:grid;gap:12px}
@@ -153,9 +155,10 @@ body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-s
     <div class="proof"><b data-k="pr3T">Depuis 2018</b><span data-k="pr3S">Des sportifs amateurs et des actifs accompagnés en transformation physique et en forme.</span></div>
   </div>
   <div class="sub-eyebrow" data-k="clubsEyebrow">Clubs et structures</div>
-  <div class="clubs"><div class="club"><div class="ph lg"><img data-img="logo1" src="" alt=""></div><b data-k="club1">Sporting Club Albigeois</b><small data-k="club1S" data-opt>Rugby pro</small></div><div class="club"><div class="ph lg"><img data-img="logo2" src="" alt=""></div><b data-k="club2">Toulouse Olympique XIII</b><small data-k="club2S" data-opt>Super League</small></div><div class="club"><div class="ph lg"><img data-img="logo3" src="" alt=""></div><b data-k="club3">Papa Inshape</b><small data-k="club3S" data-opt>Coaching</small></div><div class="club"><div class="ph lg"><img data-img="logo4" src="" alt=""></div><b data-k="club4">R2</b><small data-k="club4S" data-opt>CrossFit</small></div><div class="club"><div class="ph lg"><img data-img="logo5" src="" alt=""></div><b data-k="club5">ABD Coach</b><small data-k="club5S" data-opt>Golf, judo…</small></div><div class="club"><div class="ph lg"><img data-img="logo6" src="" alt=""></div><b data-k="club6">Volley</b><small data-k="club6S" data-opt>Élite féminin · N3</small></div></div>
+  <div class="clubs" id="clubs"></div>
   <div class="sub-eyebrow" data-k="certsEyebrow">Diplômes et certifications</div>
-  <div class="certs"><div class="cert"><span class="cico">🎓</span><div><b data-k="cert1">Master STAPS</b><small data-k="cert1S" data-opt>Prépa physique et réathlétisation</small></div></div><div class="cert"><span class="cico">🎓</span><div><b data-k="cert2">CC PPR – FFR</b><small data-k="cert2S" data-opt>Préparateur physique rugby</small></div></div><div class="cert"><span class="cico">🎓</span><div><b data-k="cert3">EXOS</b><small data-k="cert3S" data-opt>Performance Specialist</small></div></div><div class="cert"><span class="cico">🎓</span><div><b data-k="cert4">BF1 Haltérophilie</b><small data-k="cert4S" data-opt>FFHM</small></div></div></div>
+  <div class="certs" id="certs"></div>
+  <p class="ed-hint" data-k="expHint">Les expériences, logos et certifications se modifient dans Admin → CRM &amp; RDV → Tunnel.</p>
   <div class="me"><div class="ph"><img data-img="aboutPhoto" src="img/david-pellier.jpg" alt="David Pellier"></div><p data-k="meText">Moi, c’est David : préparateur physique et papa de deux jeunes enfants. Ton plan sera construit pour ta vraie vie, pas pour une vie idéale.</p></div>
 </div></section>
 
@@ -175,37 +178,8 @@ body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-s
       <div class="qtop"><button type="button" class="qback hide" id="q-back" aria-label="Retour">←</button><div class="qbar"><i id="q-bar"></i></div><div class="qcount" id="q-count"></div></div>
       <form id="lead-form" novalidate>
         <input type="hidden" id="f-date"><input type="hidden" id="f-time">
-        <div class="qstep on" data-step="goal" data-type="goal"><h3 data-k="q1T">Quel est ton objectif ?</h3><p class="qsub" data-k="q1S" data-opt>Choisis ce qui te correspond le plus.</p><div class="opts">
-            <button type="button" class="opt" data-v="Préparation physique &amp; performance" data-b="perf"><span class="ico">⚡</span><span><b data-k="g1Title">Préparation physique &amp; performance</b><small data-k="g1Text">Passer un cap dans ton sport ou revenir de blessure.</small></span></button>
-            <button type="button" class="opt" data-v="Transformation physique" data-b="transfo"><span class="ico">🔥</span><span><b data-k="g2Title">Transformation physique</b><small data-k="g2Text">Perdre du gras, prendre du muscle, durablement.</small></span></button>
-            <button type="button" class="opt" data-v="Forme &amp; bien-être" data-b="forme"><span class="ico">🌿</span><span><b data-k="g3Title">Forme &amp; bien-être</b><small data-k="g3Text">Retrouver de l’énergie et bouger sans douleur.</small></span></button>
-          </div></div>
-        <div class="qstep" data-step="sport" data-type="one" data-only="perf" data-label="Si Performance"><h3 data-k="pSpT">Quel est ton sport ?</h3><p class="qsub" data-k="pSpS" data-opt>Je m’adapte à ses exigences : appuis, contacts, durée, saison.</p><div class="opts grid"><button type="button" class="opt"><b data-k="pSp1">Rugby</b></button><button type="button" class="opt"><b data-k="pSp2">Football</b></button><button type="button" class="opt"><b data-k="pSp3">Sport de combat</b></button><button type="button" class="opt"><b data-k="pSp4">Course / endurance</b></button><button type="button" class="opt"><b data-k="pSp5">CrossFit / Hyrox</b></button><button type="button" class="opt" data-other><b data-k="pSp6">Autre sport</b></button></div><div class="more"><input class="inp" maxlength="300" placeholder="Précise"><div class="frow"><button type="button" class="btn primary" data-next><span data-k="pSpN">Continuer</span> →</button></div></div></div>
-        <div class="qstep" data-step="rugbyPos" data-type="one" data-only="perf" data-label="Si Performance · question conditionnelle" data-if="sport:0"><h3 data-k="pRpT">Tu joues à quel poste ?</h3><p class="qsub" data-k="pRpS" data-opt>Un avant et un trois-quarts ne se préparent pas pareil.</p><div class="opts grid"><button type="button" class="opt"><b data-k="pRp1">Avant</b></button><button type="button" class="opt"><b data-k="pRp2">Trois-quarts</b></button></div></div>
-        <div class="qstep" data-step="footPos" data-type="one" data-only="perf" data-label="Si Performance · question conditionnelle" data-if="sport:1"><h3 data-k="pFpT">Tu joues à quel poste ?</h3><p class="qsub" data-k="pFpS" data-opt>Chaque poste a ses propres efforts.</p><div class="opts grid"><button type="button" class="opt"><b data-k="pFp1">Gardien</b></button><button type="button" class="opt"><b data-k="pFp2">Défenseur</b></button><button type="button" class="opt"><b data-k="pFp3">Milieu</b></button><button type="button" class="opt"><b data-k="pFp4">Attaquant</b></button></div></div>
-        <div class="qstep" data-step="perfLevel" data-type="one" data-only="perf" data-label="Si Performance" data-level><h3 data-k="pLvT">À quel niveau tu pratiques ?</h3><p class="qsub" data-k="pLvS" data-opt></p><div class="opts"><button type="button" class="opt"><b data-k="pLv1">Loisir</b></button><button type="button" class="opt"><b data-k="pLv2">Compétition régionale</b></button><button type="button" class="opt"><b data-k="pLv3">Niveau national</b></button><button type="button" class="opt"><b data-k="pLv4">Professionnel ou centre de formation</b></button></div></div>
-        <div class="qstep" data-step="perfGoal" data-type="many" data-only="perf" data-label="Si Performance"><h3 data-k="pGoT">Qu’est-ce que tu veux améliorer ?</h3><p class="qsub" data-k="pGoS" data-opt>Plusieurs choix possibles.</p><div class="chips"><button type="button" class="chip" data-k="pGo1">Force</button><button type="button" class="chip" data-k="pGo2">Vitesse / explosivité</button><button type="button" class="chip" data-k="pGo3">Endurance / cardio</button><button type="button" class="chip" data-k="pGo4">Prévenir les blessures</button><button type="button" class="chip" data-k="pGo5">Revenir de blessure</button><button type="button" class="chip" data-k="pGo6">Préparer ma saison</button></div><div class="frow"><button type="button" class="btn primary" data-next><span data-k="pGoN">Continuer</span> →</button></div></div>
-        <div class="qstep" data-step="perfDeadline" data-type="one" data-only="perf" data-label="Si Performance"><h3 data-k="pDlT">Tu as une échéance ?</h3><p class="qsub" data-k="pDlS" data-opt>Compétition, reprise, sélection, test physique…</p><div class="opts"><button type="button" class="opt"><b data-k="pDl1">Dans moins d’un mois</b></button><button type="button" class="opt"><b data-k="pDl2">Dans 1 à 3 mois</b></button><button type="button" class="opt"><b data-k="pDl3">Dans plus de 3 mois</b></button><button type="button" class="opt"><b data-k="pDl4">Pas d’échéance précise</b></button></div></div>
-        <div class="qstep" data-step="perfNow" data-type="one" data-only="perf" data-label="Si Performance"><h3 data-k="pNwT">Comment tu te prépares aujourd’hui ?</h3><p class="qsub" data-k="pNwS" data-opt></p><div class="opts"><button type="button" class="opt"><b data-k="pNw1">Seulement avec mon club</b></button><button type="button" class="opt"><b data-k="pNw2">Seul, avec mes propres séances</b></button><button type="button" class="opt"><b data-k="pNw3">Avec un programme trouvé en ligne</b></button><button type="button" class="opt"><b data-k="pNw4">Rien de spécifique</b></button></div></div>
-        <div class="qstep" data-step="tGoal" data-type="one" data-only="transfo" data-label="Si Transformation"><h3 data-k="tGoT">Quelle transformation tu vises ?</h3><p class="qsub" data-k="tGoS" data-opt></p><div class="opts"><button type="button" class="opt"><b data-k="tGo1">Perdre du gras</b></button><button type="button" class="opt"><b data-k="tGo2">Prendre du muscle</b></button><button type="button" class="opt"><b data-k="tGo3">Les deux : perdre et me muscler</b></button><button type="button" class="opt"><b data-k="tGo4">Me raffermir, me tonifier</b></button></div></div>
-        <div class="qstep" data-step="tKg" data-type="one" data-only="transfo" data-label="Si Transformation · question conditionnelle" data-if="tGoal:0,2"><h3 data-k="tKgT">Combien de kilos tu aimerais perdre ?</h3><p class="qsub" data-k="tKgS" data-opt>Approximativement, ça me donne un ordre d’idée.</p><div class="opts grid"><button type="button" class="opt"><b data-k="tKg1">Moins de 5 kg</b></button><button type="button" class="opt"><b data-k="tKg2">5 à 10 kg</b></button><button type="button" class="opt"><b data-k="tKg3">10 à 20 kg</b></button><button type="button" class="opt"><b data-k="tKg4">Plus de 20 kg</b></button></div></div>
-        <div class="qstep" data-step="tLevel" data-type="one" data-only="transfo" data-label="Si Transformation" data-level><h3 data-k="tLvT">Tu fais du sport en ce moment ?</h3><p class="qsub" data-k="tLvS" data-opt></p><div class="opts"><button type="button" class="opt"><b data-k="tLv1">Pas du tout</b></button><button type="button" class="opt"><b data-k="tLv2">1 à 2 fois par semaine</b></button><button type="button" class="opt"><b data-k="tLv3">3 fois ou plus par semaine</b></button></div></div>
-        <div class="qstep" data-step="tTried" data-type="many" data-only="transfo" data-label="Si Transformation"><h3 data-k="tTrT">Qu’est-ce que tu as déjà essayé ?</h3><p class="qsub" data-k="tTrS" data-opt>Plusieurs choix possibles.</p><div class="chips"><button type="button" class="chip" data-k="tTr1">Des régimes</button><button type="button" class="chip" data-k="tTr2">La salle, seul</button><button type="button" class="chip" data-k="tTr3">Une appli ou un programme en ligne</button><button type="button" class="chip" data-k="tTr4">Un coach</button><button type="button" class="chip" data-excl data-k="tTr5">Rien encore</button></div><div class="frow"><button type="button" class="btn primary" data-next><span data-k="tTrN">Continuer</span> →</button></div></div>
-        <div class="qstep" data-step="tFood" data-type="one" data-only="transfo" data-label="Si Transformation"><h3 data-k="tFdT">Et ton alimentation, honnêtement ?</h3><p class="qsub" data-k="tFdS" data-opt>Aucun jugement : c’est juste notre point de départ.</p><div class="opts"><button type="button" class="opt"><b data-k="tFd1">Je ne fais pas vraiment attention</b></button><button type="button" class="opt"><b data-k="tFd2">Plutôt équilibrée mais irrégulière</b></button><button type="button" class="opt"><b data-k="tFd3">Je fais déjà attention</b></button><button type="button" class="opt"><b data-k="tFd4">Beaucoup de repas sur le pouce ou au resto</b></button></div></div>
-        <div class="qstep" data-step="fGoal" data-type="many" data-only="forme" data-label="Si Forme &amp; bien-être"><h3 data-k="fGoT">Qu’est-ce qui compte le plus pour toi ?</h3><p class="qsub" data-k="fGoS" data-opt>Plusieurs choix possibles.</p><div class="chips"><button type="button" class="chip" data-k="fGo1">Plus d’énergie</button><button type="button" class="chip" data-k="fGo2">Moins de douleurs</button><button type="button" class="chip" data-k="fGo3">Mieux dormir, moins de stress</button><button type="button" class="chip" data-k="fGo4">Reprendre une activité</button><button type="button" class="chip" data-k="fGo5">Rester en forme en vieillissant</button></div><div class="frow"><button type="button" class="btn primary" data-next><span data-k="fGoN">Continuer</span> →</button></div></div>
-        <div class="qstep" data-step="fPain" data-type="many" data-only="forme" data-label="Si Forme &amp; bien-être · question conditionnelle" data-if="fGoal:1"><h3 data-k="fPnT">Où as-tu mal ?</h3><p class="qsub" data-k="fPnS" data-opt>Plusieurs choix possibles.</p><div class="chips"><button type="button" class="chip" data-k="fPn1">Dos</button><button type="button" class="chip" data-k="fPn2">Nuque / épaules</button><button type="button" class="chip" data-k="fPn3">Genoux</button><button type="button" class="chip" data-k="fPn4">Hanches</button><button type="button" class="chip" data-k="fPn5">Ailleurs</button></div><div class="frow"><button type="button" class="btn primary" data-next><span data-k="fPnN">Continuer</span> →</button></div></div>
-        <div class="qstep" data-step="fLevel" data-type="one" data-only="forme" data-label="Si Forme &amp; bien-être" data-level><h3 data-k="fLvT">Ton niveau d’activité actuel ?</h3><p class="qsub" data-k="fLvS" data-opt></p><div class="opts"><button type="button" class="opt"><b data-k="fLv1">Plutôt sédentaire</b></button><button type="button" class="opt"><b data-k="fLv2">Un peu actif (marche, vélo…)</b></button><button type="button" class="opt"><b data-k="fLv3">Actif régulièrement</b></button></div></div>
-        <div class="qstep" data-step="fDay" data-type="one" data-only="forme" data-label="Si Forme &amp; bien-être"><h3 data-k="fDyT">À quoi ressemble ta journée type ?</h3><p class="qsub" data-k="fDyS" data-opt></p><div class="opts"><button type="button" class="opt"><b data-k="fDy1">Assis, au bureau</b></button><button type="button" class="opt"><b data-k="fDy2">Debout ou physique</b></button><button type="button" class="opt"><b data-k="fDy3">Horaires décalés</b></button><button type="button" class="opt"><b data-k="fDy4">À la maison, avec les enfants</b></button></div></div>
-        <div class="qstep" data-step="fSleep" data-type="one" data-only="forme" data-label="Si Forme &amp; bien-être"><h3 data-k="fSlT">Comment tu dors ?</h3><p class="qsub" data-k="fSlS" data-opt></p><div class="opts grid"><button type="button" class="opt"><b data-k="fSl1">Bien</b></button><button type="button" class="opt"><b data-k="fSl2">Moyen</b></button><button type="button" class="opt"><b data-k="fSl3">Mal</b></button></div></div>
-        <div class="qstep" data-step="fPast" data-type="one" data-only="forme" data-label="Si Forme &amp; bien-être"><h3 data-k="fPsT">Tu as déjà fait du sport ?</h3><p class="qsub" data-k="fPsS" data-opt></p><div class="opts"><button type="button" class="opt"><b data-k="fPs1">Oui, régulièrement</b></button><button type="button" class="opt"><b data-k="fPs2">Il y a longtemps</b></button><button type="button" class="opt"><b data-k="fPs3">Jamais vraiment</b></button></div></div>
-        <div class="qstep" data-step="age" data-type="one"><h3 data-k="cAgT">Quel âge as-tu ?</h3><p class="qsub" data-k="cAgS" data-opt></p><div class="opts grid"><button type="button" class="opt"><b data-k="cAg1">Moins de 25 ans</b></button><button type="button" class="opt"><b data-k="cAg2">25 à 35 ans</b></button><button type="button" class="opt"><b data-k="cAg3">35 à 45 ans</b></button><button type="button" class="opt"><b data-k="cAg4">45 à 55 ans</b></button><button type="button" class="opt"><b data-k="cAg5">Plus de 55 ans</b></button></div></div>
-        <div class="qstep" data-step="injury" data-type="one"><h3 data-k="cInT">Une blessure ou une douleur à prendre en compte ?</h3><p class="qsub" data-k="cInS" data-opt>Opération, entorse, tendinite, mal de dos…</p><div class="opts grid"><button type="button" class="opt"><b data-k="cIn1">Non, rien</b></button><button type="button" class="opt" data-other><b data-k="cIn2">Oui</b></button></div><div class="more"><input class="inp" maxlength="300" placeholder="Dis-m’en plus (où, depuis quand…)"><div class="frow"><button type="button" class="btn primary" data-next><span data-k="cInN">Continuer</span> →</button></div></div></div>
-        <div class="qstep" data-step="freq" data-type="one"><h3 data-k="cFqT">Combien de séances par semaine c’est réaliste pour toi ?</h3><p class="qsub" data-k="cFqS" data-opt>Réaliste, pas idéal : on construit sur ta vraie vie.</p><div class="opts grid"><button type="button" class="opt"><b data-k="cFq1">2</b></button><button type="button" class="opt"><b data-k="cFq2">3</b></button><button type="button" class="opt"><b data-k="cFq3">4</b></button><button type="button" class="opt"><b data-k="cFq4">5 ou plus</b></button></div></div>
-        <div class="qstep" data-step="place" data-type="many"><h3 data-k="cPlT">Où peux-tu t’entraîner ?</h3><p class="qsub" data-k="cPlS" data-opt>Plusieurs choix possibles.</p><div class="chips"><button type="button" class="chip" data-k="cPl1">En salle</button><button type="button" class="chip" data-k="cPl2">À la maison avec du matériel</button><button type="button" class="chip" data-k="cPl3">À la maison sans matériel</button><button type="button" class="chip" data-k="cPl4">En extérieur</button><button type="button" class="chip" data-k="cPl5">Au club</button></div><div class="frow"><button type="button" class="btn primary" data-next><span data-k="cPlN">Continuer</span> →</button></div></div>
-        <div class="qstep" data-step="blocker" data-type="many" data-optional><h3 data-k="cBlT">Qu’est-ce qui t’a freiné jusqu’ici ?</h3><p class="qsub" data-k="cBlS" data-opt>Plusieurs choix possibles.</p><div class="chips"><button type="button" class="chip" data-k="cBl1">Manque de temps</button><button type="button" class="chip" data-k="cBl2">Pas de résultats</button><button type="button" class="chip" data-k="cBl3">Douleur ou blessure</button><button type="button" class="chip" data-k="cBl4">Motivation</button><button type="button" class="chip" data-k="cBl5">Nutrition</button><button type="button" class="chip" data-k="cBl6">Je ne sais pas par où commencer</button></div><textarea class="inp" rows="2" maxlength="600" placeholder="Autre chose ? (facultatif)"></textarea><div class="frow"><button type="button" class="btn primary" data-next><span data-k="cBlN">Continuer</span> →</button></div></div>
-        <div class="qstep" data-step="objective" data-type="text"><h3 data-k="cObT">Dans 3 mois, qu’est-ce qui aura changé ?</h3><p class="qsub" data-k="cObS" data-opt>En une phrase, avec tes mots. C’est ce qu’on travaillera ensemble.</p><input class="inp" id="f-objective" maxlength="300" placeholder="Ce que tu veux atteindre"><div class="frow"><button type="button" class="btn primary" data-next><span data-k="cObN">Continuer</span> →</button></div></div>
-        <div class="qstep" data-step="why" data-type="text" data-optional><h3 data-k="cWhT">Pourquoi maintenant ?</h3><p class="qsub" data-k="cWhS" data-opt>Ce qui te décide aujourd’hui (facultatif).</p><textarea class="inp" rows="3" maxlength="600" placeholder="Ex : un mariage cet été, une saison qui reprend, un déclic…"></textarea><div class="frow"><button type="button" class="skip" data-skip data-k="cWhP">Passer</button><button type="button" class="btn primary" data-next><span data-k="cWhN">Continuer</span> →</button></div></div>
-        <div class="qstep" data-step="motivation" data-type="scale"><h3 data-k="cMoT">Sur 10, à quel point tu es prêt à t’y mettre ?</h3><p class="qsub" data-k="cMoS" data-opt></p><div class="scale"><button type="button" class="opt">1</button><button type="button" class="opt">2</button><button type="button" class="opt">3</button><button type="button" class="opt">4</button><button type="button" class="opt">5</button><button type="button" class="opt">6</button><button type="button" class="opt">7</button><button type="button" class="opt">8</button><button type="button" class="opt">9</button><button type="button" class="opt">10</button></div><div class="scale-l"><span data-k="cMoL">Pas vraiment</span><span data-k="cMoR">À fond</span></div></div>
+        <p class="ed-hint" data-k="quizHint">Les questions se modifient dans Admin → CRM &amp; RDV → Tunnel → Questionnaire. Ici, seuls le créneau et les coordonnées sont modifiables.</p>
+        <div id="q-dyn"></div>
         <div class="qstep" data-step="slot" data-type="slot"><h3 data-k="cStT">Choisis ton créneau</h3><p class="qsub" data-k="cStS" data-opt>30 minutes en visio ou par téléphone, avec moi.</p><div class="days" id="days"></div><div class="slots" id="slots"></div><div class="hint" id="date-hint"></div></div>
         <div class="qstep" data-step="contact" data-type="contact"><h3 data-k="cCtT">Dernière étape !</h3><p class="qsub" data-k="cCtS" data-opt>Pour te confirmer le rendez-vous.</p><div class="fields">
             <div><label for="f-name">Prénom et nom</label><input class="inp" name="name" id="f-name" required maxlength="120" autocomplete="name" placeholder="Ton nom"></div>
@@ -224,7 +198,7 @@ body.editing [data-opt]:empty::before{content:attr(data-ph);color:#56677d;font-s
 <footer><div class="wrap"><p data-k="footerText">DELTA Performance — Coaching individualisé par David Pellier, préparateur physique.</p><a href="index.html">Espace client</a></div></footer>
 <div class="sticky" id="sticky"><a class="btn primary" href="#reserver"><span data-k="stickyCta">Réserver mon bilan offert</span> →</a></div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script><script src="firebase-init.js"></script><script src="tunnel-config.js"></script><script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script><script src="firebase-init.js"></script><script src="tunnel-config.js"></script><script src="quiz-default.js"></script><script>
 (function(){
 const APP='delta-perf-v2';
 const col=name=>window.db.collection('apps').doc(APP).collection(name);
@@ -236,8 +210,8 @@ const pad=n=>String(n).padStart(2,'0');
 const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const LEGACY_KEYS=['eyebrow','title','titleHighlight','subtitle','formTitle','formSubtitle','ctaLabel','successTitle','successText'];
 const DEFAULT_TEXTS={},DEFAULT_IMGS={};
-const STEPS=[...document.querySelectorAll('.qstep')];
-function applyLogos(){document.querySelectorAll('.club').forEach(c=>{const i=c.querySelector('img');c.classList.toggle('has-logo',!!(i&&i.getAttribute('src')));});}
+let STEPS=[],Q=[],QM={};
+const esc=v=>String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let cur=0,minDate='',maxDate='';
 
 function applyOptional(){
@@ -247,7 +221,7 @@ function applyOptional(){
 function applyConfig(){
   document.querySelectorAll('[data-k]').forEach(el=>{const k=el.dataset.k;if(!(k in DEFAULT_TEXTS))DEFAULT_TEXTS[k]=el.textContent;const t=cfg.texts||{};el.textContent=(k in t&&typeof t[k]==='string')?t[k]:DEFAULT_TEXTS[k];});
   document.querySelectorAll('[data-img]').forEach(el=>{const k=el.dataset.img;if(!(k in DEFAULT_IMGS))DEFAULT_IMGS[k]=el.getAttribute('src');el.src=media[k]||DEFAULT_IMGS[k];});
-  applyOptional();applyLogos();
+  applyOptional();renderParcours();buildQuiz();
   if(cfg.enabled===false&&!EDIT){$('form-wrap').style.display='none';$('closed').style.display='block';}
   if(EDIT)$('quiz').classList.add('all');
   const max=new Date();max.setDate(max.getDate()+(Number(cfg.maxDaysAhead)||30));
@@ -304,29 +278,60 @@ async function notify(data){
 
 const GOAL_HINTS={perf:'Ex : être plus explosif et ne plus me blesser cette saison',transfo:'Ex : perdre 8 kg et me sentir bien en maillot cet été',forme:'Ex : avoir de l’énergie le soir et ne plus avoir mal au dos'};
 const txt=el=>el.textContent.replace(/\s+/g,' ').trim();
-const step=n=>STEPS.find(x=>x.dataset.step===n);
+const step=id=>STEPS.find(x=>x.dataset.step===id);
+const qOf=st=>QM[st.dataset.step];
 const picked=st=>[...st.querySelectorAll('.opt.on,.chip.on')];
-function branch(){const b=step('goal').querySelector('.opt.on');return b?b.dataset.b:'';}
-function shown(st){
-  const br=branch();
-  if(st.dataset.only&&st.dataset.only!==(br||'perf'))return false;
-  if(st.dataset.if){
-    const [n,ix]=st.dataset.if.split(':'),ref=step(n);
-    if(!ref||!shown(ref))return false;
-    const all=[...ref.querySelectorAll('.opt,.chip')],idx=ix.split(',').map(Number);
-    if(!picked(ref).some(b=>idx.includes(all.indexOf(b))))return false;
-  }
-  return true;
+const byRole=r=>Q.filter(q=>q.role===r).map(q=>step(q.id)).filter(Boolean);
+function renderParcours(){
+  const ex=Array.isArray(cfg.experiences)?cfg.experiences:window.EXP_DEFAULT,ce=Array.isArray(cfg.certs)?cfg.certs:window.CERT_DEFAULT;
+  $('clubs').innerHTML=ex.filter(e=>e&&e.name).map(e=>{const lg=media['exp_'+e.id];return '<div class="club'+(lg?' has-logo':'')+'">'+(lg?'<div class="lg"><img src="'+esc(lg)+'" alt="'+esc(e.name)+'"></div>':'')+'<b>'+esc(e.name)+'</b>'+(e.detail?'<small>'+esc(e.detail)+'</small>':'')+'</div>';}).join('');
+  $('certs').innerHTML=ce.filter(c=>c&&c.name).map(c=>'<div class="cert"><span class="cico">🎓</span><div><b>'+esc(c.name)+'</b>'+(c.detail?'<small>'+esc(c.detail)+'</small>':'')+'</div></div>').join('');
+  $('clubs').previousElementSibling.style.display=$('clubs').children.length?'':'none';
+  $('certs').previousElementSibling.style.display=$('certs').children.length?'':'none';
 }
-const flow=()=>STEPS.filter(shown);
+function nextRow(q){return '<div class="frow">'+(q.optional?'<button type="button" class="skip" data-skip>Passer</button>':'')+'<button type="button" class="btn primary" data-next>Continuer →</button></div>';}
+function stepHtml(q){
+  const opts=Array.isArray(q.options)?q.options:[];
+  let h='<div class="qstep" data-step="'+esc(q.id)+'" data-type="'+esc(q.type)+'"><h3>'+esc(q.title)+'</h3>'+(q.sub?'<p class="qsub">'+esc(q.sub)+'</p>':'');
+  if(q.type==='one'){
+    const big=opts.some(o=>o.sub||o.icon);
+    h+='<div class="opts'+(q.grid&&!big?' grid':'')+'">'+opts.map(o=>'<button type="button" class="opt" data-o="'+esc(o.id)+'"'+(o.other?' data-other':'')+'>'+(o.icon?'<span class="ico">'+esc(o.icon)+'</span>':'')+'<span><b>'+esc(o.label)+'</b>'+(o.sub?'<small>'+esc(o.sub)+'</small>':'')+'</span></button>').join('')+'</div>';
+    if(opts.some(o=>o.other))h+='<div class="more"><input class="inp" maxlength="300" placeholder="'+esc(q.otherPh||'Précise')+'">'+nextRow({})+'</div>';
+  }else if(q.type==='many'){
+    h+='<div class="chips">'+opts.map(o=>'<button type="button" class="chip" data-o="'+esc(o.id)+'"'+(o.excl?' data-excl':'')+'>'+esc(o.label)+'</button>').join('')+'</div>';
+    if(q.extraText)h+='<textarea class="inp" rows="2" maxlength="600" placeholder="'+esc(q.extraText)+'"></textarea>';
+    h+=nextRow(q);
+  }else if(q.type==='text'){
+    h+=(q.long?'<textarea class="inp" rows="3" maxlength="600"':'<input class="inp" maxlength="300"')+' placeholder="'+esc(q.placeholder||'')+'"'+(q.long?'></textarea>':'>')+nextRow(q);
+  }else if(q.type==='scale'){
+    h+='<div class="scale">'+[1,2,3,4,5,6,7,8,9,10].map(i=>'<button type="button" class="opt" data-o="'+i+'">'+i+'</button>').join('')+'</div><div class="scale-l"><span>'+esc(q.low||'')+'</span><span>'+esc(q.high||'')+'</span></div>';
+  }
+  return h+'</div>';
+}
+function buildQuiz(){
+  const src=cfg.quiz&&Array.isArray(cfg.quiz.questions)&&cfg.quiz.questions.length?cfg.quiz.questions:window.QUIZ_DEFAULT.questions;
+  Q=src.filter(q=>q&&q.id&&q.title&&['one','many','text','scale'].includes(q.type));QM={};Q.forEach(q=>{QM[q.id]=q;});
+  $('q-dyn').innerHTML=Q.map(stepHtml).join('');
+  STEPS=[...$('q-dyn').querySelectorAll('.qstep'),document.querySelector('.qstep[data-step=slot]'),document.querySelector('.qstep[data-step=contact]')];
+}
+function shown(st,est,depth){
+  const q=qOf(st);if(!q||!q.if||!q.if.q)return true;
+  if((depth||0)>40)return false;
+  const ref=QM[q.if.q],rs=ref&&step(ref.id);
+  if(!rs||!shown(rs,est,(depth||0)+1))return false;
+  let sel=picked(rs).map(b=>b.dataset.o);
+  if(!sel.length&&est&&ref.options&&ref.options[0])sel=[ref.options[0].id];
+  return sel.some(x=>(q.if.in||[]).includes(x));
+}
+const flow=est=>STEPS.filter(st=>shown(st,est));
 function answer(st){
   const t=st.dataset.type;
-  if(t==='text'){const el=st.querySelector('.inp');return el.value.trim();}
-  if(t==='one'||t==='scale'||t==='goal'){
+  if(t==='text'){const el=st.querySelector('.inp');return el?el.value.trim():'';}
+  if(t==='one'||t==='scale'){
     const b=st.querySelector('.opt.on');if(!b)return '';
-    let v=t==='goal'?b.dataset.v:txt(b);
+    let v=txt(b.querySelector('b')||b);
     const more=st.querySelector('.more .inp');
-    if(b.hasAttribute('data-other')&&more&&more.value.trim())v+=(t==='one'&&/^(Oui|Autre)/.test(v)?' : ':' — ')+more.value.trim();
+    if(b.hasAttribute('data-other')&&more&&more.value.trim())v+=' : '+more.value.trim();
     return t==='scale'?v+'/10':v;
   }
   if(t==='many'){const a=picked(st).map(txt);const ta=st.querySelector('textarea');if(ta&&ta.value.trim())a.push(ta.value.trim());return a.join(' · ');}
@@ -338,8 +343,9 @@ function go(n){
   const F=flow();
   cur=Math.max(0,Math.min(n,F.length-1));
   STEPS.forEach(s=>s.classList.toggle('on',s===F[cur]));
-  $('q-bar').style.width=((cur+1)/F.length*100)+'%';
-  $('q-count').textContent=(cur+1)+'/'+F.length;
+  const total=Math.max(F.length,flow(true).length);
+  $('q-bar').style.width=((cur+1)/total*100)+'%';
+  $('q-count').textContent=(cur+1)+'/'+total;
   $('q-back').classList.toggle('hide',cur===0);
   const inp=F[cur].querySelector('input.inp,textarea.inp');
   if(inp&&F[cur].dataset.type==='text'&&matchMedia('(hover:hover)').matches)inp.focus({preventScroll:true});
@@ -347,31 +353,38 @@ function go(n){
 const next=()=>go(cur+1);
 function stepValid(st){
   st=st||flow()[cur];
+  const q=qOf(st)||{};
   if(st.dataset.type==='slot'){if(!answer(st)){const h=$('date-hint');h.textContent='Choisis un jour puis un horaire.';h.classList.add('err');return false;}return true;}
-  if(st.dataset.type==='contact'||st.hasAttribute('data-optional'))return true;
+  if(st.dataset.type==='contact'||q.optional)return true;
   if(answer(st))return true;
   const inp=st.querySelector('.inp');
   if(st.dataset.type==='text'&&inp){inp.setCustomValidity('Réponds en quelques mots 🙂');inp.reportValidity();inp.focus();setTimeout(()=>inp.setCustomValidity(''),1500);}
-  else{const g=st.querySelector('.chips,.opts,.scale');g.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:250});}
+  else{const g=st.querySelector('.chips,.opts,.scale');if(g&&g.animate)g.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:250});}
   return false;
 }
-STEPS.forEach(st=>{
-  st.querySelectorAll('.opts .opt,.scale .opt').forEach(b=>b.addEventListener('click',()=>{
-    if(EDIT)return;
+$('q-dyn').addEventListener('click',e=>{
+  if(EDIT)return;
+  const st=e.target.closest('.qstep');if(!st)return;
+  const b=e.target.closest('.opt'),c=e.target.closest('.chip');
+  if(b){
     st.querySelectorAll('.opt').forEach(x=>x.classList.toggle('on',x===b));
-    if(st.dataset.step==='goal')$('f-objective').placeholder=GOAL_HINTS[b.dataset.b]||'';
+    const q=qOf(st);
+    if(q&&q.role==='objectiveType'){const o=byRole('objective')[0];const i=o&&o.querySelector('.inp');if(i)i.placeholder=GOAL_HINTS[b.dataset.o]||(QM[o.dataset.step].placeholder||'');}
     if(b.hasAttribute('data-other')){st.classList.add('other');const m=st.querySelector('.more .inp');if(m)setTimeout(()=>m.focus(),50);return;}
     st.classList.remove('other');
-    setTimeout(next,250);
-  }));
-  st.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
-    if(EDIT)return;
+    setTimeout(next,250);return;
+  }
+  if(c){
     c.classList.toggle('on');
     if(c.classList.contains('on'))st.querySelectorAll('.chip').forEach(x=>{if(x!==c&&(x.hasAttribute('data-excl')||c.hasAttribute('data-excl')))x.classList.remove('on');});
-  }));
-  st.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>{if(!EDIT&&stepValid(st))next();}));
-  st.querySelectorAll('[data-skip]').forEach(b=>b.addEventListener('click',()=>{if(EDIT)return;st.querySelectorAll('.inp').forEach(i=>i.value='');next();}));
-  st.querySelectorAll('input.inp').forEach(i=>{if(st.dataset.type!=='contact')i.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();if(stepValid(st))next();}});});
+    return;
+  }
+  if(e.target.closest('[data-next]')){if(stepValid(st))next();return;}
+  if(e.target.closest('[data-skip]')){st.querySelectorAll('.inp').forEach(i=>{i.value='';});st.querySelectorAll('.chip.on').forEach(x=>x.classList.remove('on'));next();}
+});
+$('q-dyn').addEventListener('keydown',e=>{
+  if(e.key!=='Enter'||e.target.tagName!=='INPUT')return;
+  e.preventDefault();const st=e.target.closest('.qstep');if(stepValid(st))next();
 });
 $('q-back').addEventListener('click',()=>go(cur-1));
 $('lead-form').addEventListener('submit',async e=>{
@@ -382,10 +395,10 @@ $('lead-form').addEventListener('submit',async e=>{
   for(const id of ['f-name','f-email','f-phone']){const el=$(id);if(!el.checkValidity()||!el.value.trim()){el.reportValidity();el.focus();return;}}
   const bad=F.findIndex(st=>!stepValid(st));
   if(bad>=0){go(bad);return;}
-  const qa=F.filter(st=>!['goal','slot','contact'].includes(st.dataset.type)).map(st=>({q:txt(st.querySelector('h3')),a:answer(st)})).filter(x=>x.a);
-  const lv=F.find(st=>st.hasAttribute('data-level'));
+  const role=r=>{const st=byRole(r).find(x=>F.includes(x)&&answer(x));return st?answer(st):'';};
+  const qa=F.filter(st=>{const q=qOf(st);return q&&q.role!=='objectiveType';}).map(st=>({q:txt(st.querySelector('h3')),a:answer(st)})).filter(x=>x.a);
   const data={
-    objectiveType:answer(step('goal')),level:lv?answer(lv):'',objective:answer(step('objective')),blocker:answer(step('blocker')),
+    objectiveType:role('objectiveType'),level:role('level'),objective:role('objective'),blocker:role('blocker'),
     date:$('f-date').value,time:$('f-time').value,name:$('f-name').value.trim(),email:$('f-email').value.trim().toLowerCase(),phone:$('f-phone').value.trim(),answers:qa
   };
   const closed=dayClosed(data.date);
@@ -419,7 +432,7 @@ if('IntersectionObserver' in window){
   new IntersectionObserver(es=>{es.forEach(en=>{vis.form=en.isIntersecting;});upd();}).observe($('reserver'));
 }
 
-window.TUNNEL={col,applyLogos,LEGACY_KEYS,DEFAULT_TEXTS,DEFAULT_IMGS,media,applyOptional,get cfg(){return cfg;}};
+window.TUNNEL={col,LEGACY_KEYS,DEFAULT_TEXTS,DEFAULT_IMGS,media,applyOptional,get cfg(){return cfg;}};
 Promise.all([
   col('settings').doc('tunnel').get().then(d=>{if(d.exists)cfg=Object.assign(cfg,d.data());}).catch(e=>console.warn('Config tunnel non chargée',e)),
   col('tunnel_media').get().then(s=>s.forEach(d=>{const v=d.data();if(v&&v.src)media[d.id]=v.src;})).catch(e=>console.warn('Photos non chargées',e))

@@ -25,8 +25,6 @@
     body.editing .ph{position:relative;cursor:pointer;outline:1px dashed rgba(240,165,0,.6);outline-offset:3px}
     body.editing .ph::after{content:"📷 Changer";position:absolute;left:50%;bottom:8px;transform:translateX(-50%);background:rgba(8,12,18,.85);color:var(--gold);font:700 11px Inter,sans-serif;padding:5px 9px;border-radius:999px;white-space:nowrap;pointer-events:none}
     body.editing .coach-chip .ph::after{content:"📷";padding:3px 5px;bottom:2px}
-    .te-x{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;border:1px solid var(--border);background:#0b111a;color:var(--text);font-size:11px;cursor:pointer;z-index:2;padding:0}
-    body.editing .club .ph::after{content:"📷";padding:3px 5px;bottom:2px}
     #te-bar .te-save{background:var(--gold);color:#1a0900;border-color:var(--gold)}#te-bar .te-save:disabled{opacity:.5;cursor:default}`;
   document.head.appendChild(css);
 
@@ -87,12 +85,6 @@
     imgKeys.forEach(k => { savedImg[k] = imgSrc(k); });
     imgEls.forEach(el => {
       (el.closest('.ph') || el).addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); pickKey = el.dataset.img; picker.value = ''; picker.click(); });
-    });
-    imgEls.filter(el => el.closest('.club')).forEach(el => {
-      const x = document.createElement('button');
-      x.type = 'button'; x.className = 'te-x'; x.textContent = '✕'; x.title = 'Retirer le logo';
-      x.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); setImg(el.dataset.img, ''); update(); });
-      el.closest('.ph').appendChild(x);
     });
     picker.addEventListener('change', async () => {
       const f = picker.files && picker.files[0]; if (!f || !pickKey) return;
